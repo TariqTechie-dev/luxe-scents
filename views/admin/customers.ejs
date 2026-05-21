@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/admin_head', {title: title}) %>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-background-light dark:bg-background-dark min-h-screen text-white">
+  <%
+    const customerList = Array.isArray(customers) ? customers : [];
+    const statValues = stats || { totalCustomers: 0, newThisMonth: 0, repeatCustomers: 0, vipCustomers: 0, averageCustomerValue: 0 };
+    const filterValues = filters || { q: '', segment: '', sort: 'newest' };
+    const hasActiveFilters = Boolean(filterValues.q || filterValues.segment || (filterValues.sort && filterValues.sort !== 'newest'));
+    const exportParams = new URLSearchParams();
+
+    if (filterValues.q) exportParams.set('q', filterValues.q);
+    if (filterValues.segment) exportParams.set('segment', filterValues.segment);
+    if (filterValues.sort && filterValues.sort !== 'newest') exportParams.set('sort', filterValues.sort);
+    exportParams.set('export', 'csv');
+
+    const exportUrl = `/admin/customers?${exportParams.toString()}`;
+    const formatCurrency = (value) => Number(value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    const formatDate = (value, fallback = 'Not available') => {
+      if (!value) return fallback;
+      return new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    };
+    const getInitials = (name) => {
+      const parts = String(name || 'Customer').split(' ').filter(Boolean);
+      return parts.map((part) => part[0]).slice(0, 2).join('').toUpperCase() || 'C';
+    };
+    const getLocation = (customer) => {
+      return [customer.address?.city, customer.address?.country].filter(Boolean).join(', ') || 'Not provided';
+    };
+    const segmentStyles = {
+      VIP: { icon: 'workspace_premium', className: 'bg-primary/10 text-primary border-primary/30' },
+      Repeat: { icon: 'loyalty', className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/25' },
+      New: { icon: 'person_add', className: 'bg-sky-500/10 text-sky-400 border-sky-500/25' },
+      Inactive: { icon: 'history', className: 'bg-slate-500/10 text-slate-400 border-slate-500/25' },
+      'No Orders': { icon: 'hourglass_empty', className: 'bg-amber-500/10 text-amber-400 border-amber-500/25' },
+      Standard: { icon: 'person', className: 'bg-[#493f22]/40 text-[#cbbc90] border-[#493f22]' }
+    };
+  %>
+
+  <div class="flex h-screen">
+    <%- include('../partials/admin_sidebar', {path: path}) %>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <%- include('../partials/admin_header', {title: title}) %>
+
+      <main class="flex-1 overflow-y-auto p-6 lg:p-8">
+        <div class="max-w-[1400px] mx-auto space-y-7">
+          <section class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2 text-sm text-[#cbbc90]">
+                <a href="/admin/analytics" class="hover:text-primary transition-colors">Dashboard</a>
+                <span class="material-symbols-outlined text-sm text-[#493f22]">chevron_right</span>
+                <span class="text-white">Customers</span>
+              </div>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.28em] text-primary">Clienteling</p>
+                <h1 class="mt-2 text-3xl md:text-4xl font-black tracking-tight text-[#c5a059] drop-shadow-md">
+                  Customer Directory
+                </h1>
+                <p class="mt-2 max-w-2xl text-sm md:text-base text-[#cbbc90]">
+                  Track customer value, purchase history, and relationship quality across Luxe Scents.
+                </p>
+              </div>
+            </div>
+
+            <a href="<%= exportUrl %>" class="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary px-5 text-sm font-bold text-background-dark shadow-[0_0_18px_rgba(244,192,37,0.18)] transition-all hover:bg-[#dca60b] hover:shadow-[0_0_26px_rgba(244,192,37,0.32)]">
+              <span class="material-symbols-outlined text-lg">download</span>
+              Export CSV
+            </a>
+          </section>
+
+          <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+            <div class="rounded-xl border border-[#493f22] bg-[#2d2616] p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#cbbc90]">Customers</p>
+                  <p class="mt-2 text-3xl font-black text-white"><%= statValues.totalCustomers %></p>
+                </div>
+                <span class="material-symbols-outlined rounded-lg bg-primary/10 p-2 text-primary">groups</span>
+              </div>
+            </div>
+
+            <div class="rounded-xl border border-[#493f22] bg-[#2d2616] p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#cbbc90]">New This Month</p>
+                  <p class="mt-2 text-3xl font-black text-white"><%= statValues.newThisMonth %></p>
+                </div>
+                <span class="material-symbols-outlined rounded-lg bg-sky-500/10 p-2 text-sky-400">person_add</span>
+              </div>
+            </div>
+
+            <div class="rounded-xl border border-[#493f22] bg-[#2d2616] p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#cbbc90]">Repeat Buyers</p>
+                  <p class="mt-2 text-3xl font-black text-white"><%= statValues.repeatCustomers %></p>
+                </div>
+                <span class="material-symbols-outlined rounded-lg bg-emerald-500/10 p-2 text-emerald-400">loyalty</span>
+              </div>
+            </div>
+
+            <div class="rounded-xl border border-[#493f22] bg-[#2d2616] p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#cbbc90]">VIP Clients</p>
+                  <p class="mt-2 text-3xl font-black text-white"><%= statValues.vipCustomers %></p>
+                </div>
+                <span class="material-symbols-outlined rounded-lg bg-primary/10 p-2 text-primary">workspace_premium</span>
+              </div>
+            </div>
+
+            <div class="rounded-xl border border-[#493f22] bg-[#2d2616] p-5">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#cbbc90]">Avg. Value</p>
+                  <p class="mt-2 text-3xl font-black text-white"><%= formatCurrency(statValues.averageCustomerValue) %></p>
+                </div>
+                <span class="material-symbols-outlined rounded-lg bg-emerald-500/10 p-2 text-emerald-400">paid</span>
+              </div>
+            </div>
+          </section>
+
+          <% if (success && success.length > 0) { %>
+          <div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-6 py-4 rounded-lg text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined">check_circle</span>
+            <%= success[0] %>
+          </div>
+          <% } %>
+          <% if (error && error.length > 0) { %>
+          <div class="bg-red-500/10 border border-red-500/20 text-red-400 px-6 py-4 rounded-lg text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined">error</span>
+            <%= error[0] %>
+          </div>
+          <% } %>
+
+          <section class="rounded-xl border border-[#493f22] bg-[#2d2616]">
+            <form method="GET" action="/admin/customers" class="grid grid-cols-1 gap-3 border-b border-[#493f22] p-4 lg:grid-cols-[minmax(260px,1fr)_190px_190px_auto]">
+              <label class="relative flex items-center">
+                <span class="material-symbols-outlined absolute left-4 text-[#cbbc90]">search</span>
+                <input name="q" value="<%= filterValues.q %>" class="h-11 w-full rounded-lg border border-[#493f22] bg-[#221e10] pl-12 pr-4 text-sm text-white placeholder:text-[#cbbc90]/55 outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Search name, email, or phone" type="text" />
+              </label>
+
+              <select name="segment" class="h-11 rounded-lg border border-[#493f22] bg-[#221e10] px-4 text-sm text-[#cbbc90] outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary">
+                <option value="" <%= !filterValues.segment ? 'selected' : '' %>>All Segments</option>
+                <option value="vip" <%= filterValues.segment === 'vip' ? 'selected' : '' %>>VIP</option>
+                <option value="repeat" <%= filterValues.segment === 'repeat' ? 'selected' : '' %>>Repeat</option>
+                <option value="new" <%= filterValues.segment === 'new' ? 'selected' : '' %>>New</option>
+                <option value="inactive" <%= filterValues.segment === 'inactive' ? 'selected' : '' %>>Inactive</option>
+                <option value="no-orders" <%= filterValues.segment === 'no-orders' ? 'selected' : '' %>>No Orders</option>
+                <option value="standard" <%= filterValues.segment === 'standard' ? 'selected' : '' %>>Standard</option>
+              </select>
+
+              <select name="sort" class="h-11 rounded-lg border border-[#493f22] bg-[#221e10] px-4 text-sm text-[#cbbc90] outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary">
+                <option value="newest" <%= filterValues.sort === 'newest' ? 'selected' : '' %>>Newest</option>
+                <option value="most_orders" <%= filterValues.sort === 'most_orders' ? 'selected' : '' %>>Most Orders</option>
+                <option value="highest_spend" <%= filterValues.sort === 'highest_spend' ? 'selected' : '' %>>Highest Spend</option>
+                <option value="last_order" <%= filterValues.sort === 'last_order' ? 'selected' : '' %>>Last Order</option>
+                <option value="name_asc" <%= filterValues.sort === 'name_asc' ? 'selected' : '' %>>Name A-Z</option>
+              </select>
+
+              <div class="flex gap-2">
+                <button type="submit" class="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-lg border border-primary/30 bg-primary px-4 text-sm font-bold text-background-dark transition-all hover:bg-[#dca60b] lg:flex-none">
+                  <span class="material-symbols-outlined text-lg">tune</span>
+                  Apply
+                </button>
+                <% if (hasActiveFilters) { %>
+                <a href="/admin/customers" class="inline-flex h-11 items-center justify-center rounded-lg border border-[#493f22] bg-[#221e10] px-4 text-sm font-semibold text-[#cbbc90] transition-colors hover:border-primary/60 hover:text-white">
+                  Clear
+                </a>
+                <% } %>
+              </div>
+            </form>
+
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[1100px] text-left">
+                <thead>
+                  <tr class="bg-[#231e10] border-b border-[#493f22]">
+                    <th class="px-5 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[#cbbc90]">Customer</th>
+                    <th class="px-5 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[#cbbc90]">Contact</th>
+                    <th class="px-5 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[#cbbc90]">Location</th>
+                    <th class="px-5 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[#cbbc90]">Orders</th>
+                    <th class="px-5 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[#cbbc90]">Lifetime Spend</th>
+                    <th class="px-5 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[#cbbc90]">Last Order</th>
+                    <th class="px-5 py-4 text-xs font-bold uppercase tracking-[0.16em] text-[#cbbc90]">Segment</th>
+                    <th class="px-5 py-4 text-right text-xs font-bold uppercase tracking-[0.16em] text-[#cbbc90]">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (customerList.length > 0) { %>
+                  <% customerList.forEach((customer) => {
+                      const segment = segmentStyles[customer.segment] || segmentStyles.Standard;
+                    %>
+                  <tr class="group bg-[#2d2616] border-b border-[#493f22] transition-colors hover:bg-[#493f22]/20">
+                    <td class="px-5 py-4">
+                      <div class="flex items-center gap-3">
+                        <div class="flex size-11 shrink-0 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-sm font-black text-primary">
+                          <%= getInitials(customer.name) %>
+                        </div>
+                        <div class="min-w-0">
+                          <p class="truncate text-sm font-bold text-white transition-colors group-hover:text-primary"><%= customer.name %></p>
+                          <p class="mt-0.5 text-xs text-[#cbbc90]/65">Customer ID #<%= customer._id.toString().slice(-6).toUpperCase() %></p>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-5 py-4">
+                      <div class="max-w-[240px]">
+                        <p class="truncate text-sm font-semibold text-white"><%= customer.email %></p>
+                        <p class="mt-0.5 text-xs text-[#cbbc90]/70"><%= customer.phone || 'No phone on file' %></p>
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 text-sm text-[#cbbc90]"><%= getLocation(customer) %></td>
+                    <td class="px-5 py-4">
+                      <div class="inline-flex items-center gap-2 rounded-lg border border-[#493f22] bg-[#221e10] px-3 py-1.5 text-sm">
+                        <span class="size-2 rounded-full <%= customer.totalOrders > 0 ? 'bg-emerald-400' : 'bg-slate-500' %>"></span>
+                        <span class="font-bold text-white"><%= customer.totalOrders %></span>
+                      </div>
+                    </td>
+                    <td class="px-5 py-4 text-sm font-bold text-white"><%= formatCurrency(customer.totalSpent) %></td>
+                    <td class="px-5 py-4">
+                      <div class="text-sm text-white"><%= formatDate(customer.lastOrderAt, 'No orders yet') %></div>
+                      <div class="mt-0.5 text-xs text-[#cbbc90]/65">Joined <%= formatDate(customer.createdAt) %></div>
+                    </td>
+                    <td class="px-5 py-4">
+                      <span class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold <%= segment.className %>">
+                        <span class="material-symbols-outlined text-sm"><%= segment.icon %></span>
+                        <%= customer.segment %>
+                      </span>
+                    </td>
+                    <td class="px-5 py-4 text-right">
+                      <a href="/admin/customers/<%= customer._id %>" class="inline-flex size-10 items-center justify-center rounded-lg border border-[#493f22] bg-[#221e10] text-[#cbbc90] transition-all hover:border-primary/60 hover:text-primary" title="View customer">
+                        <span class="material-symbols-outlined text-lg">visibility</span>
+                      </a>
+                    </td>
+                  </tr>
+                  <% }) %>
+                  <% } else { %>
+                  <tr class="bg-[#2d2616]">
+                    <td colspan="8" class="px-6 py-16 text-center">
+                      <span class="material-symbols-outlined mx-auto mb-4 block text-5xl text-[#cbbc90]/35">group</span>
+                      <h3 class="text-2xl font-bold text-white"><%= hasActiveFilters ? 'No matching customers' : 'No customers yet' %></h3>
+                      <p class="mx-auto mt-2 max-w-md text-sm text-[#cbbc90]/70">
+                        <%= hasActiveFilters ? 'Adjust the filters to reveal more customer profiles.' : 'Customer profiles will appear here once shoppers create accounts or place orders.' %>
+                      </p>
+                      <% if (hasActiveFilters) { %>
+                      <a href="/admin/customers" class="mt-6 inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 text-sm font-bold text-background-dark transition-colors hover:bg-[#dca60b]">Clear Filters</a>
+                      <% } %>
+                    </td>
+                  </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="flex flex-col gap-3 border-t border-[#493f22] bg-[#231e10] px-5 py-4 text-sm text-[#cbbc90] sm:flex-row sm:items-center sm:justify-between">
+              <p>
+                Showing <span class="font-bold text-white"><%= customerList.length %></span> of
+                <span class="font-bold text-white"><%= statValues.totalCustomers %></span> customers
+              </p>
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-base text-primary">verified</span>
+                <span>Live order history</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<aside class="w-72 flex-shrink-0 flex flex-col bg-surface-dark border-r border-[#4a4025] hidden md:flex">
+    <div class="p-6 flex flex-col items-center border-b border-[#4a4025]">
+        <!-- User Avatar -->
+        <div class="size-20 rounded-full bg-cover bg-center mb-4 ring-2 ring-primary ring-offset-2 ring-offset-background-dark shadow-lg"
+            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_FfoHx2khEPRAt6xMzOSEMSpDf4W5jh367-O38JUu-jTeQEf6alG9l4BIHbotmWcdZ96ARY_7rSzv77YmlS2bh2RwgksAZjeqKOlv2ulL0ZGMvOXQNhzJp92MUZudCn1771XW1KivlN5Bhv8a0RHgPvgw-8iMU_x1YLDEpKYgc2NWRB0UwGG8ebiVvqHXqiPnDJqB0gXgriROKgmlRk7a79gwdSq8EgW3qym4NDcVywgnnqfo2aWUU5rQziTMn3Bq4UbF1boe4-8O");'>
+        </div>
+        <h2 class="text-white text-lg font-bold">Isabelle Durant</h2>
+        <p class="text-[#cbbc90] text-sm font-medium">Gold Member</p>
+    </div>
+    <nav class="flex-1 flex flex-col gap-1 p-4 overflow-y-auto">
+        <!-- Dashboard Link (Active) -->
+        <a href="/dashboard"
+            class="flex items-center gap-3 px-4 py-3 rounded-lg group transition-colors <%= path === '/dashboard' ? 'bg-primary/10 border border-primary/20' : 'hover:bg-primary/20' %>">
+            <span
+                class="material-symbols-outlined <%= path === '/dashboard' ? 'text-primary' : 'text-[#cbbc90] group-hover:text-primary' %>">dashboard</span>
+            <span class="text-primary font-semibold text-sm">Dashboard</span>
+        </a>
+        <!-- Other Links -->
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg group hover:bg-[#38311e] transition-colors">
+            <span class="material-symbols-outlined text-[#cbbc90] group-hover:text-white">shopping_bag</span>
+            <span class="text-[#cbbc90] group-hover:text-white font-medium text-sm">My Orders</span>
+        </a>
+        <a href="/wishlist"
+            class="flex items-center gap-3 px-4 py-3 rounded-lg group transition-colors <%= path === '/wishlist' ? 'bg-primary/10 border border-primary/20' : 'hover:bg-[#38311e]' %>">
+            <span
+                class="material-symbols-outlined <%= path === '/wishlist' ? 'text-primary' : 'text-[#cbbc90] group-hover:text-white' %>">favorite</span>
+            <span
+                class="<%= path === '/wishlist' ? 'text-primary font-semibold' : 'text-[#cbbc90] group-hover:text-white font-medium' %> text-sm">Wishlist</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg group hover:bg-[#38311e] transition-colors">
+            <span class="material-symbols-outlined text-[#cbbc90] group-hover:text-white">location_on</span>
+            <span class="text-[#cbbc90] group-hover:text-white font-medium text-sm">Addresses</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-lg group hover:bg-[#38311e] transition-colors">
+            <span class="material-symbols-outlined text-[#cbbc90] group-hover:text-white">settings</span>
+            <span class="text-[#cbbc90] group-hover:text-white font-medium text-sm">Profile Settings</span>
+        </a>
+    </nav>
+    <div class="p-4 border-t border-[#4a4025]">
+        <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-lg group hover:bg-red-900/20 transition-colors">
+            <span class="material-symbols-outlined text-[#cbbc90] group-hover:text-red-400">logout</span>
+            <span class="text-[#cbbc90] group-hover:text-red-400 font-medium text-sm">Logout</span>
+        </a>
+    </div>
+</aside>

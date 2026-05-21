@@ -1,0 +1,77 @@
+<article
+  class="product-card group bg-white dark:bg-surface-dark rounded-lg overflow-hidden border border-gray-200 dark:border-border-dark/50 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+  data-product-id="<%= product._id %>"
+  data-category="<%= product.category %>"
+  data-price="<%= product.price %>"
+  data-name="<%= product.name.toLowerCase() %>">
+  <div class="relative aspect-[4/5] overflow-hidden bg-gray-100 dark:bg-[#1a160d]">
+    <img alt="<%= product.name %>" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" src="<%= product.imageUrl %>" />
+
+    <div class="absolute top-3 right-3">
+      <form action="/wishlist/add" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="productId" value="<%= product._id %>">
+        <button type="submit" class="flex items-center justify-center w-11 h-11 rounded-full bg-background-light/90 dark:bg-background-dark/80 text-slate-700 dark:text-white shadow-lg backdrop-blur-sm hover:bg-primary hover:text-slate-900 transition-all" aria-label="Add <%= product.name %> to wishlist">
+          <span class="material-symbols-outlined">favorite</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="absolute inset-x-4 bottom-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+      <div class="flex gap-3">
+        <a href="/product/<%= product._id %>" class="flex-1 inline-flex items-center justify-center rounded-full bg-white/95 text-slate-900 font-semibold px-4 py-3 hover:bg-white transition-colors">
+          View Details
+        </a>
+        <form action="/wishlist/add" method="POST" class="shrink-0">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <input type="hidden" name="productId" value="<%= product._id %>">
+          <button type="submit" class="inline-flex items-center justify-center rounded-full bg-primary text-slate-900 font-semibold px-4 py-3 shadow-lg hover:bg-white transition-colors" aria-label="Save <%= product.name %> to wishlist">
+            <span class="material-symbols-outlined">favorite</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <% const stockCount = Number(product.stock) || 0; %>
+    <% if (stockCount === 0) { %>
+      <div class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
+        Sold Out
+      </div>
+    <% } else if (stockCount >= 1 && stockCount <= 5) { %>
+      <div class="absolute top-3 left-3 bg-amber-500 text-slate-900 text-xs font-bold px-2 py-1 rounded">
+        Low Stock
+      </div>
+    <% } %>
+  </div>
+
+  <div class="p-5">
+    <div class="text-xs text-text-muted uppercase tracking-widest font-bold mb-1">
+      <%= product.category %>
+    </div>
+    <a href="/product/<%= product._id %>">
+      <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 hover:text-primary transition-colors">
+        <%= product.name %>
+      </h3>
+    </a>
+    <div class="flex items-center gap-1 mb-3">
+      <span class="material-symbols-outlined text-primary text-[18px] fill-current">star</span>
+      <span class="material-symbols-outlined text-primary text-[18px] fill-current">star</span>
+      <span class="material-symbols-outlined text-primary text-[18px] fill-current">star</span>
+      <span class="material-symbols-outlined text-primary text-[18px] fill-current">star</span>
+      <span class="material-symbols-outlined text-primary text-[18px] fill-current">star</span>
+      <span class="text-xs text-white/50">(<%= product.reviewCount || 0 %>)</span>
+    </div>
+    <div class="flex items-center justify-between gap-3">
+      <span class="text-xl font-bold text-primary">$<%= Number(product.price).toFixed(2) %></span>
+      <form action="/wishlist/add" method="POST" class="sm:hidden">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="productId" value="<%= product._id %>">
+        <button type="submit" class="inline-flex items-center gap-1 text-sm font-semibold text-slate-600 dark:text-text-muted hover:text-primary transition-colors" aria-label="Save <%= product.name %> to wishlist">
+          <span class="material-symbols-outlined text-[20px]">favorite</span>
+          Save
+        </button>
+      </form>
+      <span class="hidden sm:inline text-xs text-gray-400">50ml</span>
+    </div>
+  </div>
+</article>

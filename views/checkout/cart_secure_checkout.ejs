@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title><%= title %></title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
+    <!-- Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Main JS (Tailwind Config) -->
+    <script src="/js/tailwind-config.js"></script>
+    <style>
+        .glass-effect {
+            background: rgba(35, 30, 16, 0.7);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased min-h-screen flex flex-col">
+    <!-- Top Navigation -->
+    <header
+        class="sticky top-0 z-50 border-b border-surface-border bg-surface-dark/95 backdrop-blur supports-[backdrop-filter]:bg-surface-dark/60">
+        <div class="max-w-[1400px] mx-auto px-6 py-4 flex items-center justify-between gap-4">
+            <a class="flex items-center gap-3 text-white hover:text-primary transition-colors" href="/">
+                <span class="material-symbols-outlined text-primary text-[32px]">local_florist</span>
+                <div class="leading-tight">
+                    <span class="block text-xl font-bold tracking-widest uppercase font-display"><%= siteName %></span>
+                    <span class="block text-[11px] uppercase tracking-[0.25em] text-text-gold">Secure Checkout</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-3 sm:gap-4">
+                <div class="hidden sm:inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+                    <span class="material-symbols-outlined text-[16px]">lock</span>
+                    256-bit SSL
+                </div>
+
+                <a href="/cart" aria-label="Back to cart"
+                    class="inline-flex items-center gap-2 text-text-gold hover:text-primary transition-colors relative">
+                    <span class="material-symbols-outlined">shopping_bag</span>
+                    <span class="hidden sm:inline text-sm font-medium">Back to Cart</span>
+                    <% if (cart && cart.totalQty > 0) { %>
+                        <span class="absolute -top-1 -right-2 bg-primary text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                            <%= cart.totalQty %>
+                        </span>
+                    <% } %>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex justify-center py-8 px-4 sm:px-6 lg:px-8">
+        <div class="w-full max-w-[1200px] flex flex-col lg:flex-row gap-8 lg:gap-16">
+            <!-- Left Column: Checkout Flow -->
+            <div class="flex-1 min-w-0">
+                <!-- Breadcrumbs -->
+                <nav class="flex flex-wrap gap-2 mb-8 text-sm">
+                    <a class="text-text-gold hover:text-white transition-colors" href="/cart">Cart</a>
+                    <span class="text-surface-border">/</span>
+                    <span class="text-white font-medium">Information</span>
+                    <span class="text-surface-border">/</span>
+                    <span class="text-zinc-500">Shipping</span>
+                    <span class="text-surface-border">/</span>
+                    <span class="text-zinc-500">Payment</span>
+                </nav>
+
+                <!-- Page Heading -->
+                <div class="mb-8">
+                    <h2 class="text-3xl md:text-4xl font-light tracking-tight text-white mb-2">Secure Checkout</h2>
+                    <p class="text-text-gold text-sm">Please complete your details below to finalize your order.</p>
+                </div>
+
+                <!-- Flash Messages -->
+                <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+                    <div class="mb-6 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3" role="alert">
+                        <div class="flex items-center gap-2 text-red-400 text-sm">
+                            <span class="material-symbols-outlined text-base">error</span>
+                            <span><%= error[0] %></span>
+                        </div>
+                    </div>
+                <% } %>
+                <% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+                    <div class="mb-6 rounded-lg bg-green-500/10 border border-green-500/20 px-4 py-3" role="alert">
+                        <div class="flex items-center gap-2 text-green-400 text-sm">
+                            <span class="material-symbols-outlined text-base">check_circle</span>
+                            <span><%= success[0] %></span>
+                        </div>
+                    </div>
+                <% } %>
+
+                <!-- Checkout Form — POST /checkout, CSRF protected -->
+                <form action="/checkout" method="POST" class="flex flex-col gap-6">
+                    <!-- CSRF Token -->
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                    <!-- Section 1: Contact Info (from session) -->
+                    <div class="flex flex-col rounded-xl border border-surface-border bg-surface-dark overflow-hidden">
+                        <div class="px-6 py-4 border-b border-surface-border flex justify-between items-center bg-white/5">
+                            <h3 class="text-white text-lg font-medium">1. Contact Information</h3>
+                            <span class="material-symbols-outlined text-primary">check_circle</span>
+                        </div>
+                        <div class="p-6 gap-5 flex flex-col">
+                            <div class="flex flex-col gap-2">
+                                <label class="text-text-gold text-xs font-bold uppercase tracking-wider">Email Address</label>
+                                <input
+                                    class="w-full rounded-lg bg-input-bg border-surface-border text-white placeholder-zinc-500 focus:border-primary focus:ring-1 focus:ring-primary py-3 px-4 transition-all cursor-not-allowed"
+                                    type="email" value="<%= userEmail %>" disabled />
+                                <p class="text-xs text-zinc-500">Logged in as <strong class="text-text-gold"><%= userName %></strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Shipping Address (Active - User fills this) -->
+                    <div class="flex flex-col rounded-xl border border-surface-border bg-surface-dark overflow-hidden shadow-2xl ring-1 ring-primary/20">
+                        <div class="px-6 py-4 border-b border-surface-border flex justify-between items-center bg-primary/10">
+                            <h3 class="text-white text-lg font-medium">2. Shipping Address</h3>
+                            <span class="material-symbols-outlined text-primary">local_shipping</span>
+                        </div>
+                        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="flex flex-col gap-2 md:col-span-2">
+                                <label class="text-text-gold text-xs font-bold uppercase tracking-wider" for="street">Street Address</label>
+                                <input
+                                    class="w-full rounded-lg bg-input-bg border-surface-border text-white focus:border-primary focus:ring-1 focus:ring-primary py-3 px-4"
+                                    placeholder="123 Main Street, Apt 4B" type="text" name="street" id="street" required />
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-text-gold text-xs font-bold uppercase tracking-wider" for="city">City</label>
+                                <input
+                                    class="w-full rounded-lg bg-input-bg border-surface-border text-white focus:border-primary focus:ring-1 focus:ring-primary py-3 px-4"
+                                    placeholder="City" type="text" name="city" id="city" required />
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-text-gold text-xs font-bold uppercase tracking-wider" for="state">State / Province</label>
+                                <input
+                                    class="w-full rounded-lg bg-input-bg border-surface-border text-white focus:border-primary focus:ring-1 focus:ring-primary py-3 px-4"
+                                    placeholder="State (optional)" type="text" name="state" id="state" />
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-text-gold text-xs font-bold uppercase tracking-wider" for="zip">Postal Code</label>
+                                <input
+                                    class="w-full rounded-lg bg-input-bg border-surface-border text-white focus:border-primary focus:ring-1 focus:ring-primary py-3 px-4"
+                                    placeholder="Postal Code" type="text" name="zip" id="zip" required />
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-text-gold text-xs font-bold uppercase tracking-wider" for="country">Country</label>
+                                <input
+                                    class="w-full rounded-lg bg-input-bg border-surface-border text-white focus:border-primary focus:ring-1 focus:ring-primary py-3 px-4"
+                                    placeholder="Country" type="text" name="country" id="country" required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Payment (Simulated — COD ) -->
+                    <div class="flex flex-col rounded-xl border border-surface-border bg-surface-dark overflow-hidden">
+                        <div class="px-6 py-4 border-b border-surface-border flex justify-between items-center bg-white/5">
+                            <h3 class="text-white text-lg font-medium">3. Payment Method</h3>
+                            <span class="material-symbols-outlined text-primary">payments</span>
+                        </div>
+                        <div class="p-6">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input checked=""
+                                    class="form-radio border-surface-border bg-input-bg text-primary focus:ring-offset-0 focus:ring-primary size-5"
+                                    type="radio" name="paymentMethod" value="cod" />
+                                <div>
+                                    <span class="text-white font-medium">Cash on Delivery (COD)</span>
+                                    <p class="text-xs text-zinc-500 mt-0.5">Pay when your order arrives</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-2">
+                        <button type="submit"
+                            class="w-full md:w-auto px-10 py-4 bg-primary hover:bg-primary-hover text-black font-bold rounded-lg transition-all flex items-center justify-center gap-2 transform active:scale-[0.98] shadow-lg shadow-primary/20">
+                            <span class="material-symbols-outlined text-sm">lock</span>
+                            Place Order — $<%= cart.totalPrice.toFixed(2) %>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Trust Badges Mobile -->
+                <div class="mt-8 flex items-center justify-center gap-6 text-zinc-500 lg:hidden">
+                    <span class="material-symbols-outlined text-3xl">lock</span>
+                    <span class="material-symbols-outlined text-3xl">verified_user</span>
+                    <span class="material-symbols-outlined text-3xl">credit_card</span>
+                </div>
+            </div>
+
+            <!-- Right Column: Order Summary -->
+            <div class="lg:w-[420px] shrink-0">
+                <div class="sticky top-24 flex flex-col gap-6">
+                    <!-- Summary Card -->
+                    <div class="bg-surface-dark rounded-xl border border-surface-border p-6 shadow-xl relative overflow-hidden">
+                        <!-- Decorative gradient blob -->
+                        <div class="absolute -top-20 -right-20 w-40 h-40 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+                        <h3 class="text-xl font-display font-medium text-white mb-6 border-b border-surface-border pb-4">
+                            Your Collection (<%= cart.totalQty %> item<%= cart.totalQty !== 1 ? 's' : '' %>)
+                        </h3>
+
+                        <!-- Cart Items -->
+                        <div class="flex flex-col gap-6 mb-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                            <% cart.items.forEach(function(item) { %>
+                                <div class="flex gap-4 group">
+                                    <div class="relative size-20 shrink-0 bg-white/5 rounded-lg overflow-hidden border border-surface-border">
+                                        <div class="absolute inset-0 bg-gradient-to-tr from-black/40 to-transparent z-10"></div>
+                                        <% if (item.imageUrl) { %>
+                                            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                src="<%= item.imageUrl %>" alt="<%= item.name %>" />
+                                        <% } else { %>
+                                            <div class="w-full h-full flex items-center justify-center text-zinc-600">
+                                                <span class="material-symbols-outlined text-3xl">local_florist</span>
+                                            </div>
+                                        <% } %>
+                                        <span class="absolute top-1 right-1 bg-primary text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full z-20">
+                                            <%= item.quantity %>
+                                        </span>
+                                    </div>
+                                    <div class="flex flex-1 flex-col justify-center">
+                                        <div class="flex justify-between items-start mb-1">
+                                            <h4 class="text-white font-medium text-sm leading-tight"><%= item.name %></h4>
+                                            <p class="text-white font-bold text-sm">$<%= (item.price * item.quantity).toFixed(2) %></p>
+                                        </div>
+                                        <p class="text-text-gold text-xs mb-2"><%= item.category %></p>
+                                        <div class="flex items-center justify-between gap-3">
+                                            <p class="text-xs text-zinc-500">$<%= item.price.toFixed(2) %> each</p>
+                                            <form action="/cart/remove" method="POST">
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                <input type="hidden" name="productId" value="<%= item.productId %>">
+                                                <button type="submit" class="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors" aria-label="Remove <%= item.name %> from bag">
+                                                    <span class="material-symbols-outlined text-sm" aria-hidden="true">delete</span>
+                                                    Remove
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+
+                        <!-- Totals -->
+                        <div class="flex flex-col gap-3 pt-6 border-t border-surface-border">
+                            <div class="flex justify-between text-sm text-zinc-400">
+                                <span>Subtotal</span>
+                                <span class="text-white">$<%= cart.totalPrice.toFixed(2) %></span>
+                            </div>
+                            <div class="flex justify-between text-sm text-zinc-400">
+                                <span>Shipping</span>
+                                <span class="text-text-gold">Complimentary</span>
+                            </div>
+                            <div class="flex justify-between items-end mt-4 pt-4 border-t border-surface-border">
+                                <span class="text-base font-medium text-white">Total</span>
+                                <div class="flex flex-col items-end">
+                                    <span class="text-xs text-zinc-500 mb-1">USD</span>
+                                    <span class="text-3xl font-bold text-primary">$<%= cart.totalPrice.toFixed(2) %></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trust Badges Desktop -->
+                    <div class="hidden lg:flex flex-col gap-4 items-center justify-center p-4">
+                        <div class="flex gap-6 text-zinc-600">
+                            <div class="flex flex-col items-center gap-1 group">
+                                <span class="material-symbols-outlined group-hover:text-primary transition-colors">lock</span>
+                                <span class="text-[10px] uppercase tracking-wide">Secure</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1 group">
+                                <span class="material-symbols-outlined group-hover:text-primary transition-colors">verified_user</span>
+                                <span class="text-[10px] uppercase tracking-wide">Privacy</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-1 group">
+                                <span class="material-symbols-outlined group-hover:text-primary transition-colors">local_shipping</span>
+                                <span class="text-[10px] uppercase tracking-wide">Fast Ship</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-zinc-600 text-center max-w-[280px]">
+                            Secure 256-bit SSL encryption. Cash on Delivery available.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+</body>
+
+</html>

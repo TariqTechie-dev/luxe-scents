@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Luxe Scents — Create Account</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/tailwind-config.js"></script>
+</head>
+
+<body class="font-display bg-background-light dark:bg-background-dark antialiased overflow-hidden">
+  <a href="/" class="absolute top-6 left-6 z-50 flex items-center gap-2 text-white/80 hover:text-primary transition-colors">
+    <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+    <span class="text-sm font-medium tracking-wide">Back to Store</span>
+  </a>
+
+  <div class="flex h-screen w-full flex-col md:flex-row">
+    <!-- Left Side: Hero -->
+    <div class="hidden md:flex md:w-1/2 lg:w-3/5 bg-luxury-dark relative overflow-hidden group">
+      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 ease-in-out group-hover:scale-105" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDlMj-xwmtwG2XsuXIRnu9DwA2DPDzvB5YSIwgfBowRxB6a4cS-yRtrtEetr1la1hNe4RF8SCC2a07Yoei2RbqHgQq4QOV_z-S-T2TVe5hnMyBcQsPHyttbCXUkw3mbdmnt5a37DBv46C6_wo0MbiwY6kpBhFan8--6mJowL6ceR0Vhy3CkON2EJgQhZw0C9PcCguqEc0FAXra2cF5CFCGlLBdLHxUlQk46EVi6ubFmT0D5H6QhoFvxfh4jJWlYrtEs67hz1xc_mpWr');">
+      </div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+      <div class="relative z-10 flex h-full flex-col justify-end p-12 lg:p-16">
+        <h1 class="text-4xl font-light text-white lg:text-5xl leading-tight">
+          Join the <br /><span class="font-bold text-primary">Collection</span>
+        </h1>
+        <p class="mt-4 text-lg text-gray-300 max-w-md font-light">
+          Create your account and get exclusive access to our premium fragrance collections.
+        </p>
+      </div>
+    </div>
+
+    <!-- Right Side: Register Form -->
+    <div class="flex w-full md:w-1/2 lg:w-2/5 flex-col justify-center items-center bg-white dark:bg-[#231e10] transition-colors duration-300 overflow-y-auto">
+      <div class="relative w-full max-w-[480px] px-8 py-10 sm:px-12">
+        <!-- Header -->
+        <div class="mb-8 text-center">
+          <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <span class="material-symbols-outlined text-3xl" aria-hidden="true">person_add</span>
+          </div>
+          <h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Create Account</h2>
+          <p class="mt-2 text-sm text-gray-500 dark:text-text-gold">Fill in your details to get started.</p>
+        </div>
+
+        <!-- Flash Error -->
+        <% if (typeof error !=='undefined' && error && error.length> 0) { %>
+        <div class="mb-6 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3" role="alert">
+          <div class="flex items-center gap-2 text-red-400 text-sm">
+            <span class="material-symbols-outlined text-base" aria-hidden="true">error</span>
+            <span>
+              <%= error[0] %>
+            </span>
+          </div>
+        </div>
+        <% } %>
+
+        <!-- Register Form -->
+        <form action="/register" class="space-y-5" method="POST">
+          <!-- CSRF Token -->
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <!-- Full Name -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-white" for="name">
+              Full Name
+            </label>
+            <div class="relative">
+              <input autocomplete="name" class="block w-full rounded-lg border-0 py-3 pl-4 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-input-bg dark:ring-[#685a31] dark:text-white dark:placeholder-[#8a8060] sm:text-sm transition-all duration-200" id="name" name="name" placeholder="Your full name" required type="text" minlength="2" />
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <span class="material-symbols-outlined text-gray-400 dark:text-[#685a31] text-lg" aria-hidden="true">badge</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-white" for="email">
+              Email Address
+            </label>
+            <div class="relative">
+              <input autocomplete="email" class="block w-full rounded-lg border-0 py-3 pl-4 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-input-bg dark:ring-[#685a31] dark:text-white dark:placeholder-[#8a8060] sm:text-sm transition-all duration-200" id="email" name="email" placeholder="user@example.com" required type="email" />
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <span class="material-symbols-outlined text-gray-400 dark:text-[#685a31] text-lg" aria-hidden="true">mail</span>
+              </div>
+            </div>
+          </div>
+          <!-- Password -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-white" for="password">
+              Password
+            </label>
+            <div class="relative">
+              <input autocomplete="new-password" class="block w-full rounded-lg border-0 py-3 pl-4 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-input-bg dark:ring-[#685a31] dark:text-white dark:placeholder-[#8a8060] sm:text-sm transition-all duration-200" id="password" name="password" placeholder="12+ chars, upper/lowercase, number, symbol" required type="password" minlength="12" />
+
+              <!-- Toggle Button for Password -->
+              <button type="button" onclick="toggleField('password', 'toggleIcon1')" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 dark:text-[#685a31] hover:text-primary transition-colors">
+                <span class="material-symbols-outlined text-lg" id="toggleIcon1">visibility</span>
+              </button>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-text-gold">
+              Use 12-128 characters with at least one uppercase letter, one lowercase letter, one number, and one special character.
+            </p>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium leading-6 text-gray-900 dark:text-white" for="confirmPassword">
+              Confirm Password
+            </label>
+            <div class="relative">
+              <input autocomplete="new-password" class="block w-full rounded-lg border-0 py-3 pl-4 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-input-bg dark:ring-[#685a31] dark:text-white dark:placeholder-[#8a8060] sm:text-sm transition-all duration-200" id="confirmPassword" name="confirmPassword" placeholder="Repeat your password" required type="password" minlength="12" />
+
+              <!-- Toggle Button for Confirm Password -->
+              <button type="button" onclick="toggleField('confirmPassword', 'toggleIcon2')" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 dark:text-[#685a31] hover:text-primary transition-colors">
+                <span class="material-symbols-outlined text-lg" id="toggleIcon2">visibility</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="pt-2">
+            <button class="flex w-full justify-center rounded-lg bg-primary px-3 py-3.5 text-sm font-bold leading-6 text-luxury-dark shadow-sm hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-300 transform active:scale-[0.98]" type="submit">
+              Create Account
+            </button>
+          </div>
+        </form>
+
+        <!-- Sign in link -->
+        <p class="mt-8 text-center text-sm text-gray-500 dark:text-text-gold">
+          Already have an account?
+          <a class="font-semibold leading-6 text-primary hover:text-amber-500 hover:underline transition-colors ml-1" href="/login">Sign in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/js/Eye icon.js"></script>
+</html>

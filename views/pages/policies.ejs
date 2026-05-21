@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <%- include('../partials/head', { title: title }) %>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased min-h-screen flex flex-col">
+  <%- include('../partials/header') %>
+
+  <main class="flex-1">
+    <section class="border-b border-surface-border bg-background-dark">
+      <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+        <nav class="mb-8 flex items-center gap-2 text-sm text-text-muted">
+          <a href="/" class="hover:text-primary transition-colors">Home</a>
+          <span class="text-surface-border">/</span>
+          <span class="text-primary">Customer Care</span>
+        </nav>
+
+        <div class="max-w-3xl">
+          <p class="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-primary">Luxe Scents Care</p>
+          <h1 class="text-4xl font-black tracking-tight text-white md:text-6xl">Policies crafted with clarity.</h1>
+          <p class="mt-6 text-base leading-7 text-text-muted md:text-lg">
+            Everything you need to know about receiving, returning, and caring for your Luxe Scents order.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-background-dark px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+      <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[280px_1fr]">
+        <aside class="lg:sticky lg:top-24 lg:self-start">
+          <div class="rounded-lg border border-surface-border bg-surface-dark p-5">
+            <p class="mb-4 text-xs font-bold uppercase tracking-[0.22em] text-primary">On this page</p>
+            <nav class="space-y-2 text-sm text-zinc-300" aria-label="Policy sections">
+              <a href="#shipping" class="flex items-center justify-between rounded-md px-3 py-2 transition hover:bg-primary/10 hover:text-primary">
+                Shipping Policy
+                <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a href="#returns" class="flex items-center justify-between rounded-md px-3 py-2 transition hover:bg-primary/10 hover:text-primary">
+                Returns &amp; Exchanges
+                <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+              </a>
+              <a href="#faq" class="flex items-center justify-between rounded-md px-3 py-2 transition hover:bg-primary/10 hover:text-primary">
+                FAQ
+                <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+              </a>
+            </nav>
+          </div>
+        </aside>
+
+        <div class="space-y-8">
+          <section id="shipping" class="scroll-mt-28 rounded-lg border border-surface-border bg-surface-dark p-6 shadow-xl shadow-black/10 md:p-8">
+            <div class="mb-6 flex items-start gap-4">
+              <span class="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <span class="material-symbols-outlined" aria-hidden="true">local_shipping</span>
+              </span>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.22em] text-primary">Shipping Policy</p>
+                <h2 class="mt-2 text-2xl font-bold text-white md:text-3xl">Delivery with care and discretion.</h2>
+              </div>
+            </div>
+
+            <div class="space-y-5 text-sm leading-7 text-zinc-300 md:text-base">
+              <p>
+                Orders are processed after confirmation and packed carefully to protect each fragrance bottle during transit. Standard delivery timelines vary by city and courier availability, but most local orders are prepared within 1-2 business days.
+              </p>
+              <p>
+                Shipping updates are shared through your account order history where available. Please ensure your address, phone number, and city details are accurate before placing an order to avoid delivery delays.
+              </p>
+              <div class="grid gap-4 md:grid-cols-3">
+                <div class="rounded-lg border border-white/10 bg-background-dark/60 p-4">
+                  <p class="font-semibold text-white">Processing</p>
+                  <p class="mt-2 text-sm text-zinc-400">Usually 1-2 business days after order confirmation.</p>
+                </div>
+                <div class="rounded-lg border border-white/10 bg-background-dark/60 p-4">
+                  <p class="font-semibold text-white">Packaging</p>
+                  <p class="mt-2 text-sm text-zinc-400">Secured packaging to keep bottles protected and presentable.</p>
+                </div>
+                <div class="rounded-lg border border-white/10 bg-background-dark/60 p-4">
+                  <p class="font-semibold text-white">Payment</p>
+                  <p class="mt-2 text-sm text-zinc-400">Cash on delivery is available for eligible orders.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="returns" class="scroll-mt-28 rounded-lg border border-surface-border bg-surface-dark p-6 shadow-xl shadow-black/10 md:p-8">
+            <div class="mb-6 flex items-start gap-4">
+              <span class="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <span class="material-symbols-outlined" aria-hidden="true">assignment_return</span>
+              </span>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.22em] text-primary">Returns &amp; Exchanges</p>
+                <h2 class="mt-2 text-2xl font-bold text-white md:text-3xl">A fair policy for sealed fragrance products.</h2>
+              </div>
+            </div>
+
+            <div class="space-y-5 text-sm leading-7 text-zinc-300 md:text-base">
+              <p>
+                Because fragrances are personal-care products, returns are accepted only when the item is unused, unopened, and in its original packaging. If your order arrives damaged, incorrect, or incomplete, contact support as soon as possible with your order number and clear photos.
+              </p>
+              <ul class="space-y-3">
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined mt-0.5 text-primary" aria-hidden="true">check_circle</span>
+                  <span>Eligible items must be sealed, unused, and returned with original packaging.</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined mt-0.5 text-primary" aria-hidden="true">check_circle</span>
+                  <span>Damaged or incorrect items should be reported promptly for review.</span>
+                </li>
+                <li class="flex gap-3">
+                  <span class="material-symbols-outlined mt-0.5 text-primary" aria-hidden="true">check_circle</span>
+                  <span>Approved exchanges depend on product availability and order verification.</span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <section id="faq" class="scroll-mt-28 rounded-lg border border-surface-border bg-surface-dark p-6 shadow-xl shadow-black/10 md:p-8">
+            <div class="mb-6 flex items-start gap-4">
+              <span class="inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <span class="material-symbols-outlined" aria-hidden="true">help</span>
+              </span>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.22em] text-primary">FAQ</p>
+                <h2 class="mt-2 text-2xl font-bold text-white md:text-3xl">Common questions, answered simply.</h2>
+              </div>
+            </div>
+
+            <div class="divide-y divide-surface-border">
+              <details class="group py-5" open>
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-white">
+                  Are the perfumes original?
+                  <span class="material-symbols-outlined text-primary transition group-open:rotate-180" aria-hidden="true">expand_more</span>
+                </summary>
+                <p class="mt-3 text-sm leading-7 text-zinc-400">
+                  Luxe Scents is built around premium, carefully sourced fragrances. Product details and availability are reviewed before items are listed.
+                </p>
+              </details>
+              <details class="group py-5">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-white">
+                  Can I change my delivery address after ordering?
+                  <span class="material-symbols-outlined text-primary transition group-open:rotate-180" aria-hidden="true">expand_more</span>
+                </summary>
+                <p class="mt-3 text-sm leading-7 text-zinc-400">
+                  Address changes may be possible before dispatch. Contact support quickly with your order number so the team can review the request.
+                </p>
+              </details>
+              <details class="group py-5">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-white">
+                  What payment method is available?
+                  <span class="material-symbols-outlined text-primary transition group-open:rotate-180" aria-hidden="true">expand_more</span>
+                </summary>
+                <p class="mt-3 text-sm leading-7 text-zinc-400">
+                  Cash on delivery is available for checkout in the current store flow.
+                </p>
+              </details>
+              <details class="group py-5">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-white">
+                  How do I track my order?
+                  <span class="material-symbols-outlined text-primary transition group-open:rotate-180" aria-hidden="true">expand_more</span>
+                </summary>
+                <p class="mt-3 text-sm leading-7 text-zinc-400">
+                  Sign in and open your order history to review recent order status and details.
+                </p>
+              </details>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+ 
+</body>
+
+</html>

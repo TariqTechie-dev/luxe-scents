@@ -1,0 +1,46 @@
+/* Custom scrollbar for a cleaner look */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #221e10;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #493f22;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #f4c025;
+}
+
+.range-thumb {
+    -webkit-appearance: none;
+    pointer-events: none;
+}
+
+.range-thumb::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    pointer-events: auto;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #f4c025;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Order Success Page Styles */
+.luxury-border {
+    border: 1px solid rgba(244, 192, 37, 0.2);
+}
+
+.gold-gradient-text {
+    background: linear-gradient(to right, #f4c025, #d4a017);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

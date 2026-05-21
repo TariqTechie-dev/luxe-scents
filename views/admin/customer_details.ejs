@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/admin_head', {title: title}) %>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen">
+  <div class="flex h-screen">
+    <!-- Admin Sidebar -->
+    <%- include('../partials/admin_sidebar', {path: path}) %>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- Admin Header -->
+      <%- include('../partials/admin_header', {title: title}) %>
+
+      <!-- Main Content -->
+      <main class="flex-1 overflow-y-auto p-8">
+        <div class="max-w-4xl mx-auto space-y-8">
+          
+          <% if (error && error.length > 0) { %>
+            <div class="bg-red-500/10 border border-red-500/30 p-4 rounded-xl text-red-300 flex items-start gap-3">
+              <span class="material-symbols-outlined mt-0.5">error</span>
+              <%= error[0] %>
+            </div>
+          <% } %>
+
+          <% if (customer) { %>
+            
+            <!-- Customer Header Card -->
+            <div class="bg-[#2d281a] border border-[#493f22] rounded-2xl p-8">
+              <div class="flex flex-col md:flex-row md:items-start md:gap-8">
+                <div class="flex flex-col md:flex-row items-start md:items-center gap-6 flex-1">
+                  <div class="flex flex-col items-center md:flex-row md:items-center gap-4">
+                    <div class="flex items-center justify-center w-20 h-20 rounded-full bg-primary/20 text-primary font-bold text-lg uppercase border-4 border-primary/40 shadow-lg">
+                      <%= customer.name.split(' ').map(n => n[0]).join('').toUpperCase() %>
+                    </div>
+                    <div>
+                      <h2 class="text-2xl md:text-3xl font-bold text-white"><%= customer.name %></h2>
+                      <div class="flex items-center gap-2 text-[#cbbc90] mt-1">
+                        <span class="material-symbols-outlined font-normal">mail</span>
+                        <span class="text-sm"><%= customer.email %></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 mt-6 md:mt-0">
+                  <span class="px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-xl text-sm font-medium">
+                    <%= orders.length %> Total Orders
+                  </span>
+                  <span class="px-4 py-2 bg-slate-500/10 border border-slate-500/30 text-slate-400 rounded-xl text-sm">
+                    ID: <%= customer._id.toString().slice(-8).toUpperCase() %>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Customer Info Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div class="bg-[#2d281a]/70 border border-[#493f22]/50 backdrop-blur-sm rounded-xl p-6">
+                <h3 class="text-[#cbbc90] font-semibold mb-4 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-sm">location_on</span>
+                  Shipping Address
+                </h3>
+                <div class="space-y-2 text-sm">
+                  <div><span class="text-[#cbbc90]/70">Street:</span> <%= customer.address?.street || 'N/A' %></div>
+                  <div><span class="text-[#cbbc90]/70">City:</span> <%= customer.address?.city || 'N/A' %></div>
+                  <div class="flex gap-2"><span class="text-[#cbbc90]/70">State:</span> <%= customer.address?.state || '' %>, <%= customer.address?.country || 'N/A' %></div>
+                </div>
+              </div>
+
+              <div class="bg-[#2d281a]/70 border border-[#493f22]/50 backdrop-blur-sm rounded-xl p-6">
+                <h3 class="text-[#cbbc90] font-semibold mb-4 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-sm">phone</span>
+                  Contact Info
+                </h3>
+                <div class="space-y-2 text-sm">
+                  <% if (customer.phone) { %>
+                    <div class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-[#cbbc90]/70 text-sm">phone</span>
+                      <%= customer.phone %>
+                    </div>
+                  <% } %>
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#cbbc90]/70 text-sm">calendar_today</span>
+                    Joined <%= new Date(customer.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-[#2d281a]/70 border border-[#493f22]/50 backdrop-blur-sm rounded-xl p-6 md:col-span-2 lg:col-span-1">
+                <h3 class="text-[#cbbc90] font-semibold mb-4 flex items-center gap-2">
+                  <span class="material-symbols-outlined text-sm">local_mall</span>
+                  Account Stats
+                </h3>
+                <div class="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <div class="text-2xl font-bold text-emerald-400"><%= orders.length %></div>
+                    <div class="text-xs text-[#cbbc90]/70 uppercase tracking-wider">Orders</div>
+                  </div>
+                  <div>
+                    <div class="text-2xl font-bold text-slate-400">0</div>
+                    <div class="text-xs text-[#cbbc90]/70 uppercase tracking-wider">Wishlist</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Orders Table -->
+            <div class="bg-[#2d281a] border border-[#493f22] rounded-2xl overflow-hidden">
+              <div class="p-6 border-b border-[#493f22]/50">
+                <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                  <span class="material-symbols-outlined">receipt_long</span>
+                  Recent Orders (<%= orders.length %>)
+                </h3>
+              </div>
+              <% if (orders && orders.length > 0) { %>
+                <div class="overflow-x-auto">
+                  <table class="w-full">
+                    <thead>
+                      <tr class="bg-[#221e10] border-b border-[#493f22]/50">
+                        <th class="px-6 py-4 text-left text-xs font-bold text-[#cbbc90] uppercase tracking-wider">Order ID</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-[#cbbc90] uppercase tracking-wider">Date</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-[#cbbc90] uppercase tracking-wider">Items</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-[#cbbc90] uppercase tracking-wider">Total</th>
+                        <th class="px-6 py-4 text-left text-xs font-bold text-[#cbbc90] uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-right text-xs font-bold text-[#cbbc90] uppercase tracking-wider">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[#493f22]/30">
+                      <% orders.forEach(order => { %>
+                        <tr class="hover:bg-[#38301c]/50">
+                          <td class="px-6 py-4 font-mono text-primary font-semibold text-sm">#<%= order._id.toString().slice(-6).toUpperCase() %></td>
+                          <td class="px-6 py-4">
+                            <%= new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                          </td>
+                          <td class="px-6 py-4">
+                            <%= order.items.length %> items
+                          </td>
+                          <td class="px-6 py-4 font-bold text-emerald-400">$<%= order.totalAmount.toFixed(2) %></td>
+                          <td class="px-6 py-4">
+                            <span class="px-2 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                              <%= order.status %>
+                            </span>
+                          </td>
+                          <td class="px-6 py-4 text-right">
+                            <a href="/admin/orders/<%= order._id %>" class="text-primary hover:text-primary/80 font-medium text-sm flex items-center gap-1">
+                              View Order <span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+                            </a>
+                          </td>
+                        </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              <% } else { %>
+                <div class="text-center py-12">
+                  <span class="material-symbols-outlined text-4xl text-[#cbbc90]/40 mb-4 block">receipt</span>
+                  <p class="text-[#cbbc90]/60 text-lg">No orders yet</p>
+                </div>
+              <% } %>
+            </div>
+
+          <% } else { %>
+            <div class="text-center py-20">
+              <span class="material-symbols-outlined text-6xl text-[#cbbc90]/30 mb-6 block mx-auto">person_off</span>
+              <h3 class="text-2xl font-bold text-white mb-2">Customer not found</h3>
+              <p class="text-[#cbbc90]/60 mb-8">The customer you're looking for doesn't exist.</p>
+              <a href="/admin/customers" class="inline-flex items-center gap-2 bg-primary text-black px-6 py-3 rounded-xl font-bold hover:bg-primary/90 transition-all">
+                <span class="material-symbols-outlined">arrow_back</span>
+                Back to Customers
+              </a>
+            </div>
+          <% } %>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title><%= title %></title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Main JS (Tailwind Config) -->
+    <script src="/js/tailwind-config.js"></script>
+    <style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #221e10;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #493f22;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f4c025;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased">
+    <div class="flex h-screen w-full">
+        <!-- Side Navigation -->
+        <aside class="hidden lg:flex flex-col w-72 h-full bg-[#1c180d] border-r border-[#493f22] p-6 justify-between flex-shrink-0">
+            <div class="flex flex-col gap-8">
+                <div class="flex gap-3 items-center">
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-12 shadow-lg border border-[#493f22]"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLnJPo8QHf2Mawf_tWA7rct0PkvZsNnzt3vCJYem6p-nucJmYfFuJiy6Z54GbRvaMDMVVcraKQUB91SSq6kHT7RkN1bp9-ClwsOb-pNsqh9Xrvx5CUF0KgUGhJl8iCy_1L5SjKILegPG5maEmoldlq7KicI3JkFE9jdSi1EpDqJZNckxsiIFZ3lvSd_0fN8B5pNryhl_RlFqcJG8vry6nOzwRTKoQ9WG_uZM1SlHdSizQd34vTFnPJdHL9XMwpTgsWWfIJFQAAXj9M");'>
+                    </div>
+                    <div class="flex flex-col">
+                        <h1 class="text-white text-lg font-bold leading-tight">LuxParfum</h1>
+                        <p class="text-text-muted text-xs font-medium uppercase tracking-wider">Admin Panel</p>
+                    </div>
+                </div>
+                <!-- Navigation Links -->
+                <nav class="flex flex-col gap-2">
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
+                        href="#">
+                        <span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+                        <span class="text-sm font-medium">Dashboard</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
+                        href="/admin/orders">
+                        <span class="material-symbols-outlined group-hover:text-primary transition-colors">shopping_bag</span>
+                        <span class="text-sm font-medium">Orders</span>
+                    </a>
+                    <!-- Active State -->
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/20 text-primary border border-primary/10"
+                        href="/admin/products">
+                        <span class="material-symbols-outlined fill-1">inventory_2</span>
+                        <span class="text-sm font-bold">Products</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
+                        href="#">
+                        <span class="material-symbols-outlined group-hover:text-primary transition-colors">group</span>
+                        <span class="text-sm font-medium">Customers</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
+                        href="/admin/analytics">
+                        <span class="material-symbols-outlined group-hover:text-primary transition-colors">analytics</span>
+                        <span class="text-sm font-medium">Analytics</span>
+                    </a>
+                </nav>
+            </div>
+            <!-- User Profile -->
+            <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#2d2616] border border-[#493f22]">
+                <div class="bg-center bg-no-repeat bg-cover rounded-full size-8"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCTlffrPyEDR69ZaoIOOY8z195fyKbljzSrj5ekiASWpbjgV5rn0DiJ1FyREk-9EBA2O1KiK2q9R1CDR6Y5Ijbn1rdv43fNrMrDm8jcazoLCE3Fw_b6nptnAWVZI7vr8ejQASR4ZGm3jwKUVpNOi2KhAy59ItXYsU9c-J2Z9YtCOqHR9NUmQlhDPv0f0tyKNSdmIRsGRXxJwX2tKkX0qFkXNO_pNcz9Vkyur9TSZJ4BGmwu8N6aAtzs4gO01od6AtZgjLbY9yQnoRQf");'>
+                </div>
+                <div class="flex flex-col overflow-hidden">
+                    <p class="text-white text-sm font-semibold truncate">Admin</p>
+                    <p class="text-text-muted text-xs truncate">Store Manager</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-full relative overflow-hidden">
+            <!-- Header -->
+            <header class="h-16 border-b border-[#493f22] bg-background-dark/50 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-10">
+                <div class="flex items-center gap-4">
+                    <a href="/admin/products" class="text-slate-400 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </a>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Edit Product</h2>
+                        <p class="text-xs text-slate-500">Update product information</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto p-8">
+                <div class="max-w-2xl mx-auto">
+                    <!-- Flash Messages -->
+                    <% if (success && success.length > 0) { %>
+                        <div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-6 py-4 rounded-lg text-sm flex items-center gap-3 mb-6">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            <%= success[0] %>
+                        </div>
+                    <% } %>
+                    <% if (error && error.length > 0) { %>
+                        <div class="bg-red-500/10 border border-red-500/20 text-red-400 px-6 py-4 rounded-lg text-sm flex items-center gap-3 mb-6">
+                            <span class="material-symbols-outlined">error</span>
+                            <%= error[0] %>
+                        </div>
+                    <% } %>
+
+                    <!-- Edit Form -->
+                    <div class="bg-[#2d2616] border border-[#493f22] rounded-xl p-8">
+                        <h3 class="text-xl font-bold text-white mb-6">Product Information</h3>
+
+                        <form action="/admin/products/<%= product._id %>/edit" method="POST" class="space-y-6" autocomplete="off">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="md:col-span-2">
+                                    <label for="editProductName" class="block text-sm font-medium text-text-muted mb-2">Product Name *</label>
+                                    <input id="editProductName" name="name" required minlength="2" maxlength="120"
+                                        class="w-full bg-[#231e10] border border-[#493f22] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                                        placeholder="e.g. Royal Oud" type="text" value="<%= product.name %>" />
+                                </div>
+
+                                <div>
+                                    <label for="editProductSku" class="block text-sm font-medium text-text-muted mb-2">SKU *</label>
+                                    <input id="editProductSku" name="sku" required maxlength="50" pattern="[A-Za-z0-9_-]+" title="Use only letters, numbers, hyphens, and underscores."
+                                        class="w-full bg-[#231e10] border border-[#493f22] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all font-mono uppercase"
+                                        placeholder="e.g. RO-2024-001" type="text" value="<%= product.sku %>" />
+                                </div>
+
+                                <div>
+                                    <label for="editProductCategory" class="block text-sm font-medium text-text-muted mb-2">Category *</label>
+                                    <select id="editProductCategory" name="category" required
+                                        class="w-full bg-[#231e10] border border-[#493f22] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                                        <option value="Floral" <%= product.category === 'Floral' ? 'selected' : '' %>>Floral</option>
+                                        <option value="Woody" <%= product.category === 'Woody' ? 'selected' : '' %>>Woody</option>
+                                        <option value="Citrus" <%= product.category === 'Citrus' ? 'selected' : '' %>>Citrus</option>
+                                        <option value="Amber" <%= product.category === 'Amber' ? 'selected' : '' %>>Amber</option>
+                                        <option value="Aquatic" <%= product.category === 'Aquatic' ? 'selected' : '' %>>Aquatic</option>
+                                        <option value="Gourmand" <%= product.category === 'Gourmand' ? 'selected' : '' %>>Gourmand</option>
+                                        <option value="Other" <%= product.category === 'Other' ? 'selected' : '' %>>Other</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="editProductPrice" class="block text-sm font-medium text-text-muted mb-2">Price ($) *</label>
+                                    <input id="editProductPrice" name="price" required step="0.01" min="0" inputmode="decimal"
+                                        class="w-full bg-[#231e10] border border-[#493f22] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                                        placeholder="0.00" type="number" value="<%= product.price %>" />
+                                </div>
+
+                                <div>
+                                    <label for="editProductStock" class="block text-sm font-medium text-text-muted mb-2">Stock *</label>
+                                    <input id="editProductStock" name="stock" required min="0" step="1" inputmode="numeric"
+                                        class="w-full bg-[#231e10] border border-[#493f22] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                                        placeholder="0" type="number" value="<%= product.stock %>" />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="editProductImageUrl" class="block text-sm font-medium text-text-muted mb-2">Image URL</label>
+                                <input id="editProductImageUrl" name="imageUrl" type="url"
+                                    class="w-full bg-[#231e10] border border-[#493f22] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                                    placeholder="https://..." value="<%= product.imageUrl || '' %>" />
+                                <% if (product.imageUrl) { %>
+                                    <div class="mt-3">
+                                        <p class="text-xs text-slate-500 mb-2">Current Image:</p>
+                                        <img src="<%= product.imageUrl %>" alt="Product Image" class="h-20 w-20 object-cover rounded-lg border border-[#493f22]">
+                                    </div>
+                                <% } %>
+                            </div>
+
+                            <div>
+                                <label for="editProductDescription" class="block text-sm font-medium text-text-muted mb-2">Description</label>
+                                <textarea id="editProductDescription" name="description" maxlength="2000" rows="4"
+                                    class="w-full bg-[#231e10] border border-[#493f22] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-vertical"
+                                    placeholder="Product description..."><%= product.description || '' %></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label for="editProductTopNotes" class="block text-sm font-medium text-text-muted mb-2">Top Notes</label>
+                                    <input id="editProductTopNotes" name="topNotes" type="text" maxlength="300"
+                                        class="w-full bg-[#231e10] border border-[#493f22] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                                        placeholder="e.g. Bergamot, Saffron, Black Pepper" value="<%= Array.isArray(product.topNotes) ? product.topNotes.join(', ') : '' %>" />
+                                </div>
+
+                                <div>
+                                    <label for="editProductHeartNotes" class="block text-sm font-medium text-text-muted mb-2">Heart Notes</label>
+                                    <input id="editProductHeartNotes" name="heartNotes" type="text" maxlength="300"
+                                        class="w-full bg-[#231e10] border border-[#493f22] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                                        placeholder="e.g. Rose, Jasmine, Patchouli" value="<%= Array.isArray(product.heartNotes) ? product.heartNotes.join(', ') : '' %>" />
+                                </div>
+
+                                <div>
+                                    <label for="editProductBaseNotes" class="block text-sm font-medium text-text-muted mb-2">Base Notes</label>
+                                    <input id="editProductBaseNotes" name="baseNotes" type="text" maxlength="300"
+                                        class="w-full bg-[#231e10] border border-[#493f22] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all"
+                                        placeholder="e.g. Amber, Musk, Sandalwood" value="<%= Array.isArray(product.baseNotes) ? product.baseNotes.join(', ') : '' %>" />
+                                </div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-[#493f22]">
+                                <button type="submit"
+                                    class="flex-1 bg-primary hover:bg-[#dca60b] text-background-dark px-6 py-3 rounded-lg font-bold transition-all shadow-[0_0_15px_rgba(244,192,37,0.2)] hover:shadow-[0_0_25px_rgba(244,192,37,0.4)]">
+                                    Update Product
+                                </button>
+                                <a href="/admin/products"
+                                    class="flex-1 bg-transparent border border-[#493f22] hover:bg-[#493f22] text-text-muted hover:text-white px-6 py-3 rounded-lg font-semibold transition-all text-center">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Product Metadata -->
+                    <div class="bg-[#2d2616] border border-[#493f22] rounded-xl p-6 mt-6">
+                        <h4 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Product Metadata</h4>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-xs text-slate-500">Created</p>
+                                <p class="text-white font-semibold"><%= new Date(product.createdAt).toLocaleDateString() %></p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500">Last Updated</p>
+                                <p class="text-white font-semibold"><%= new Date(product.updatedAt).toLocaleDateString() %></p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500">Status</p>
+                                <span class="px-2 py-1 rounded-full text-xs font-bold <%= product.active ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20' %>">
+                                    <%= product.active ? 'Active' : 'Inactive' %>
+                                </span>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500">Product ID</p>
+                                <p class="text-white font-mono text-xs"><%= product._id %></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

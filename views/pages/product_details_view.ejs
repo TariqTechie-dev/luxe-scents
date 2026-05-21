@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title><%= product.name %> &mdash; <%= siteName %></title>
+  <!-- Google Fonts: Manrope (Sans) & Playfair Display (Serif) & Material Symbols -->
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Main JS (Tailwind Config) -->
+  <script src="/js/tailwind-config.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden transition-colors duration-300">
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-50 w-full border-b border-white/10 bg-background-dark/95 backdrop-blur-sm">
+    <div class="layout-container flex justify-center w-full">
+      <div class="w-full max-w-7xl px-4 md:px-8 py-4 flex items-center justify-between">
+        <!-- Logo & Brand -->
+        <div class="flex items-center gap-4">
+          <a class="flex items-center gap-3 text-white hover:text-primary transition-colors" href="/">
+            <span class="material-symbols-outlined text-primary" style="font-size: 32px;">local_florist</span>
+            <h2 class="text-xl font-bold tracking-widest uppercase font-display"><%= siteName %></h2>
+          </a>
+          <!-- Desktop Menu -->
+          <nav class="hidden md:flex items-center gap-8 ml-8">
+            <a class="text-white/80 hover:text-primary text-sm font-medium uppercase tracking-wide transition-colors" href="/shop">Shop</a>
+            <a class="text-white/80 hover:text-primary text-sm font-medium uppercase tracking-wide transition-colors" href="/shop">Collections</a>
+            <a class="text-white/80 hover:text-primary text-sm font-medium uppercase tracking-wide transition-colors" href="#">About</a>
+          </nav>
+        </div>
+        <!-- Right Actions -->
+        <div class="flex items-center gap-6">
+          <!-- Search Input (Hidden on mobile) -->
+          <div class="hidden lg:flex items-center bg-surface-dark rounded-full px-4 py-2 border border-white/5 focus-within:border-primary/50 transition-colors w-64">
+            <span class="material-symbols-outlined text-primary/70 text-xl">search</span>
+            <input class="bg-transparent border-none focus:ring-0 text-sm text-white placeholder-white/40 w-full ml-2" placeholder="Search..." type="text" />
+          </div>
+          <div class="flex gap-4">
+            <a href="/cart" class="text-white hover:text-primary transition-colors relative" aria-label="Shopping cart">
+              <span class="material-symbols-outlined">shopping_bag</span>
+              <% if (typeof session !== 'undefined' && session.cart && session.cart.totalQty > 0) { %>
+              <span class="cart-count absolute -top-1 -right-1 flex min-w-[1rem] h-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-background-dark"><%= session.cart.totalQty %></span>
+              <% } %>
+            </a>
+            <a href="<%= typeof session !== 'undefined' && session.userId ? '/dashboard' : '/login' %>" class="text-white hover:text-primary transition-colors" aria-label="<%= typeof session !== 'undefined' && session.userId ? 'My account' : 'Log in' %>">
+              <span class="material-symbols-outlined">person</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- Main Content Area -->
+  <main class="w-full flex justify-center min-h-screen py-8 md:py-12">
+    <div class="w-full max-w-7xl px-4 md:px-8 flex flex-col gap-12">
+      <!-- Breadcrumbs -->
+      <nav class="flex items-center text-sm font-medium text-white/50">
+        <a class="hover:text-primary transition-colors" href="/">Home</a>
+        <span class="mx-2">/</span>
+        <a class="hover:text-primary transition-colors" href="/shop">
+          Shop
+        </a>
+        <span class="mx-2">/</span>
+        <span class="text-primary">
+          <%= product.name %>
+        </span>
+      </nav>
+      <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+        <div class="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300" role="alert">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-base" aria-hidden="true">error</span>
+            <span><%= error[0] %></span>
+          </div>
+        </div>
+      <% } %>
+      <% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+        <div class="rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-300" role="alert">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-base" aria-hidden="true">check_circle</span>
+            <span><%= success[0] %></span>
+          </div>
+        </div>
+      <% } %>
+      <!-- Product Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-16">
+        <!-- Left Column: Gallery -->
+        <div class="lg:col-span-7 flex flex-col gap-4">
+          <!-- Main Image -->
+          <div class="relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/3] rounded-xl overflow-hidden bg-surface-dark group cursor-zoom-in">
+            <div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" style="background-image: url('<%= product.imageUrl %>');">
+            </div>
+            <div class="absolute top-4 right-4">
+              <form action="/wishlist/add" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="productId" value="<%= product._id %>">
+                <button type="submit" class="p-2 rounded-full bg-background-dark/50 hover:bg-primary text-white hover:text-background-dark backdrop-blur-md transition-all" aria-label="Add <%= product.name %> to wishlist">
+                  <span class="material-symbols-outlined text-xl">favorite</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- Right Column: Details -->
+        <div class="lg:col-span-5 flex flex-col h-full">
+          <div class="flex flex-col gap-1 pb-6 border-b border-white/10">
+            <h3 class="text-primary text-sm font-bold tracking-[0.2em] uppercase"><%= siteName %></h3>
+            <h1 class="text-4xl md:text-5xl font-serif text-white leading-tight mt-2">
+              <%= product.name %>
+            </h1>
+            <div class="flex items-center gap-4 mt-4">
+              <div class="flex items-center text-primary text-lg">
+                <% 
+                                    const rating = product.averageRating || 0;
+                                    for (let i = 1; i <= 5; i++) {
+                                        if (i <= Math.floor(rating)) {
+                                %>
+                <span class="material-symbols-outlined fill-current">star</span>
+                <% 
+                                        } else if (i - 0.5 <= rating) {
+                                %>
+                <span class="material-symbols-outlined fill-current">star_half</span>
+                <%
+                                        } else {
+                                %>
+                <span class="material-symbols-outlined">star</span>
+                <%
+                                        }
+                                    }
+                                %>
+              </div>
+              <span class="text-white/60 text-sm font-medium">
+                <%= (product.averageRating || 0).toFixed(1) %> rating &middot;
+                <span class="underline cursor-pointer hover:text-white" onclick="document.getElementById('reviewsSection').scrollIntoView({ behavior: 'smooth' })">
+                  <%= product.reviewCount || 0 %> Reviews
+                </span>
+              </span>
+            </div>
+            <div class="text-3xl font-medium text-primary mt-4 font-display">$<%= product.price.toFixed(2)
+                                %>
+            </div>
+          </div>
+          <div class="py-6 flex-1">
+            <p class="text-white/80 leading-relaxed text-lg font-light">
+              <%= product.description %>
+            </p>
+            <% const olfactoryNotes = [
+              { label: 'Top Notes', icon: 'filter_drama', notes: Array.isArray(product.topNotes) ? product.topNotes : [] },
+              { label: 'Heart Notes', icon: 'psychiatry', notes: Array.isArray(product.heartNotes) ? product.heartNotes : [] },
+              { label: 'Base Notes', icon: 'spa', notes: Array.isArray(product.baseNotes) ? product.baseNotes : [] }
+            ].filter((group) => group.notes.length > 0); %>
+            <div class="mt-8 bg-surface-dark/50 rounded-xl p-6 border border-white/5">
+              <h4 class="text-sm font-bold text-white uppercase tracking-widest mb-4 border-b border-white/10 pb-2 inline-block">
+                Olfactory Notes</h4>
+              <% if (olfactoryNotes.length > 0) { %>
+                <div class="space-y-4">
+                  <% olfactoryNotes.forEach((group) => { %>
+                    <div class="flex items-start gap-4">
+                      <div class="bg-primary/10 p-2 rounded-full text-primary">
+                        <span class="material-symbols-outlined"><%= group.icon %></span>
+                      </div>
+                      <div>
+                        <span class="block text-primary text-xs font-bold uppercase tracking-wider"><%= group.label %></span>
+                        <span class="text-white/90"><%= group.notes.join(', ') %></span>
+                      </div>
+                    </div>
+                  <% }); %>
+                </div>
+              <% } else { %>
+                <p class="text-white/60 leading-relaxed">Olfactory profile will be updated soon for this fragrance.</p>
+              <% } %>
+            </div>
+          </div>
+          <!-- Actions -->
+          <% const productStock = Number(product.stock) || 0; %>
+          <% const isSoldOut = productStock <= 0; %>
+          <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-[#493f22]">
+            <form action="/cart/add" method="POST" class="flex-1 flex gap-4">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <input type="hidden" name="productId" value="<%= product._id %>">
+              <div class="flex items-center border border-[#493f22] rounded-lg bg-[#231e10]">
+                <button type="button" class="px-4 py-3 text-white hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed" onclick="decrementQty()" <% if (isSoldOut) { %>disabled<% } %>>-</button>
+                <input type="number" name="quantity" id="qtyInput" value="1" min="1" max="<%= Math.max(productStock, 1) %>" class="w-12 bg-transparent text-center text-white border-none focus:ring-0 p-0" readonly>
+                <button type="button" class="px-4 py-3 text-white hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed" onclick="incrementQty()" <% if (isSoldOut) { %>disabled<% } %>>+</button>
+              </div>
+              <button type="submit" class="flex-1 flex items-center justify-center gap-2 font-bold text-lg px-8 py-3 rounded-lg transition-all <%= isSoldOut ? 'bg-zinc-700 text-zinc-300 cursor-not-allowed grayscale opacity-70 shadow-none' : 'bg-primary hover:bg-[#dca60b] text-background-dark shadow-[0_0_20px_rgba(244,192,37,0.3)] hover:shadow-[0_0_30px_rgba(244,192,37,0.5)] transform hover:-translate-y-0.5' %>" data-loading-label="Adding..." <% if (isSoldOut) { %>disabled aria-disabled="true"<% } %>>
+                <span class="material-symbols-outlined">shopping_bag</span>
+                <%= isSoldOut ? 'Sold Out' : 'Add to Bag' %>
+              </button>
+            </form>
+            <form action="/wishlist/add" method="POST">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <input type="hidden" name="productId" value="<%= product._id %>">
+              <button type="submit" class="p-3 border border-[#493f22] rounded-lg text-text-muted hover:text-red-500 hover:border-red-500/50 hover:bg-red-500/10 transition-all" aria-label="Save <%= product.name %> to wishlist">
+                <span class="material-symbols-outlined text-2xl">favorite</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Section -->
+      <section id="reviewsSection" class="pt-16 border-t border-white/10">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-2xl md:text-3xl font-serif text-white">Customer Reviews</h2>
+            <p class="text-white/60 text-sm mt-2">
+              <% if ((product.reviewCount || 0) > 0) { %>
+              <%= (product.averageRating || 0).toFixed(1) %> out of 5 stars &middot; <%= product.reviewCount || 0 %> review<%= (product.reviewCount || 0) !== 1 ? 's' : '' %>
+              <% } else { %>
+              No reviews yet
+              <% } %>
+            </p>
+          </div>
+        </div>
+
+        <!-- Review Statistics Bar -->
+        <% if ((product.reviewCount || 0) > 0) { %>
+        <div class="grid grid-cols-3 md:grid-cols-5 gap-4 mb-8">
+          <% for (let stars = 5; stars >= 1; stars--) { %>
+          <div class="text-center">
+            <div class="flex gap-1 justify-center mb-2">
+              <% for (let i = 0; i < stars; i++) { %>
+              <span class="material-symbols-outlined fill-current text-primary text-sm">star</span>
+              <% } %>
+            </div>
+            <p class="text-white/60 text-xs"><%= stars %> star</p>
+          </div>
+          <% } %>
+        </div>
+        <% } %>
+
+        <!-- Submit Review Form (for logged-in users) -->
+        <% if (typeof userId !== 'undefined' && userId) { %>
+        <div class="mb-12 p-6 border border-white/10 rounded-xl bg-surface-dark/50">
+          <h3 class="text-lg font-serif text-white mb-4">Share Your Experience</h3>
+          <form id="reviewForm" class="space-y-4">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+            <!-- Rating Selector -->
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-white">Rating</label>
+              <div id="ratingInput" class="flex gap-2">
+                <% for (let i = 1; i <= 5; i++) { %>
+                <button type="button" class="rating-star w-10 h-10 rounded-full border border-white/20 hover:border-primary text-white/60 hover:text-primary transition-colors flex items-center justify-center" data-rating="<%= i %>">
+                  <span class="material-symbols-outlined">star</span>
+                </button>
+                <% } %>
+              </div>
+              <input type="hidden" id="ratingValue" name="rating" value="">
+              <p id="ratingError" class="text-red-500 text-sm hidden"></p>
+            </div>
+
+            <!-- Comment Input -->
+            <div class="space-y-2">
+              <label for="commentInput" class="text-sm font-medium text-white">Your Review (10-1000 characters)</label>
+              <textarea id="commentInput" name="comment" rows="5" placeholder="Share your thoughts about this perfume..." class="w-full bg-background-dark border border-white/10 rounded-lg px-4 py-3 text-white placeholder-white/40 focus:border-primary focus:ring-1 focus:ring-primary resize-none transition-colors"></textarea>
+              <div class="flex justify-between items-center text-xs text-white/60">
+                <span id="charCount">0 / 1000</span>
+                <p id="commentError" class="text-red-500 hidden"></p>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex gap-4 pt-4">
+              <button type="submit" id="submitReviewBtn" class="px-6 py-3 bg-primary hover:bg-[#dca60b] text-background-dark font-bold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                Submit Review
+              </button>
+              <button type="reset" class="px-6 py-3 border border-white/20 hover:border-white text-white rounded-lg transition-colors">
+                Clear
+              </button>
+            </div>
+            <p id="reviewMessage" class="text-sm mt-2 hidden"></p>
+          </form>
+        </div>
+        <% } else { %>
+        <div class="mb-12 p-6 border border-white/10 rounded-xl bg-surface-dark/50 text-center">
+          <p class="text-white/60">
+            <a href="/login" class="text-primary hover:underline">Sign in</a> to share your review
+          </p>
+        </div>
+        <% } %>
+
+        <!-- Reviews List -->
+        <div id="reviewsList" class="space-y-4">
+          <!-- Reviews will be loaded here via JavaScript -->
+        </div>
+
+        <!-- Load More Reviews Button -->
+        <div class="text-center mt-8" id="loadMoreContainer" style="display: none;">
+          <button id="loadMoreBtn" type="button" class="px-6 py-3 border border-white/20 text-white hover:border-primary hover:text-primary transition-colors rounded-lg">
+            Load More Reviews
+          </button>
+        </div>
+
+        <div id="noReviewsMessage" class="text-center py-12 text-white/60" style="display: none;">
+          <span class="material-symbols-outlined text-5xl text-white/20 block mb-4">rate_review</span>
+          <p>Be the first to review this product!</p>
+        </div>
+      </section>
+
+      <% if (typeof relatedProducts !== 'undefined' && relatedProducts && relatedProducts.length > 0) { %>
+      <!-- Related Products -->
+      <div class="pt-16 border-t border-white/10">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-2xl md:text-3xl font-serif text-white">You May Also Like</h2>
+          <div class="flex gap-2">
+            <button class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-background-dark transition-colors">
+              <span class="material-symbols-outlined">arrow_back</span>
+            </button>
+            <button class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-background-dark transition-colors">
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <% relatedProducts.forEach(function(related) { %>
+          <div class="group flex flex-col gap-3">
+            <div class="relative w-full aspect-[4/5] bg-surface-dark rounded-lg overflow-hidden">
+              <div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style="background-image: url('<%= related.imageUrl %>');">
+              </div>
+              <div class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors">
+              </div>
+              <button class="absolute bottom-4 right-4 bg-primary text-background-dark p-2 rounded-full opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
+                <span class="material-symbols-outlined">add_shopping_cart</span>
+              </button>
+            </div>
+            <div class="flex flex-col gap-1">
+              <a href="/product/<%= related._id %>">
+                <h3 class="text-lg font-serif text-white group-hover:text-primary transition-colors">
+                  <%= related.name %>
+                </h3>
+              </a>
+              <p class="text-sm text-white/50">
+                <%= related.category %>
+              </p>
+              <span class="text-primary font-medium">$<%= related.price.toFixed(2) %></span>
+            </div>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+
+  <script>
+    const productId = '<%= product._id %>';
+    let currentPage = 1;
+
+    function getCsrfToken() {
+      return document.querySelector('input[name="_csrf"]')?.value || '';
+    }
+
+    // Rating star selection
+    document.querySelectorAll('.rating-star').forEach(star => {
+      star.addEventListener('click', function() {
+        const rating = this.dataset.rating;
+        document.getElementById('ratingValue').value = rating;
+        document.getElementById('ratingError').classList.add('hidden');
+
+        // Update UI
+        document.querySelectorAll('.rating-star').forEach(s => {
+          s.style.color = '';
+          s.classList.remove('border-primary', 'text-primary', 'fill-current');
+          s.classList.add('border-white/20', 'text-white/60');
+          s.querySelector('span').textContent = 'star';
+        });
+
+        this.parentElement.querySelectorAll('.rating-star').forEach((s, idx) => {
+          if (idx < rating) {
+            s.classList.remove('border-white/20', 'text-white/60');
+            s.classList.add('border-primary', 'text-primary', 'fill-current');
+            s.querySelector('span').textContent = 'star';
+          }
+        });
+      });
+    });
+
+    // Character counter for comment
+    document.getElementById('commentInput')?.addEventListener('input', function() {
+      const count = this.value.length;
+      document.getElementById('charCount').textContent = count + ' / 1000';
+    });
+
+    // Form submission
+    document.getElementById('reviewForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const rating = document.getElementById('ratingValue').value;
+      const comment = document.getElementById('commentInput').value.trim();
+      const submitBtn = document.getElementById('submitReviewBtn');
+      const messageEl = document.getElementById('reviewMessage');
+
+      // Validation
+      let hasError = false;
+
+      if (!rating) {
+        document.getElementById('ratingError').textContent = 'Please select a rating';
+        document.getElementById('ratingError').classList.remove('hidden');
+        hasError = true;
+      }
+
+      if (comment.length < 10) {
+        document.getElementById('commentError').textContent = 'Comment must be at least 10 characters';
+        document.getElementById('commentError').classList.remove('hidden');
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+
+      try {
+        const response = await fetch(`/products/${productId}/review`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-csrf-token': getCsrfToken()
+          },
+          body: JSON.stringify({
+            rating,
+            comment
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          messageEl.textContent = data.message || 'Error submitting review';
+          messageEl.classList.remove('hidden');
+          messageEl.style.color = '#ef4444';
+        } else {
+          messageEl.textContent = data.message || 'Review submitted successfully!';
+          messageEl.classList.remove('hidden');
+          messageEl.style.color = '#10b981';
+
+          // Reset form
+          document.getElementById('reviewForm').reset();
+          document.getElementById('ratingValue').value = '';
+          document.getElementById('charCount').textContent = '0 / 1000';
+          document.querySelectorAll('.rating-star').forEach(s => {
+            s.classList.remove('border-primary', 'text-primary', 'fill-current');
+            s.classList.add('border-white/20', 'text-white/60');
+            s.querySelector('span').textContent = 'star';
+          });
+
+          // Reload reviews after a short delay
+          setTimeout(() => {
+            currentPage = 1;
+            loadReviews();
+          }, 500);
+        }
+      } catch (error) {
+        messageEl.textContent = 'Error submitting review. Please try again.';
+        messageEl.classList.remove('hidden');
+        messageEl.style.color = '#ef4444';
+        console.error('Error:', error);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Review';
+      }
+    });
+
+    // Load reviews from server
+    async function loadReviews(page = 1) {
+      try {
+        const response = await fetch(`/products/${productId}/reviews?page=${page}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          console.error('Error loading reviews:', data);
+          return;
+        }
+
+        const reviews = data.data.reviews;
+        const pagination = data.data.pagination;
+        const reviewsContainer = document.getElementById('reviewsList');
+        const noReviewsMsg = document.getElementById('noReviewsMessage');
+        const loadMoreBtn = document.getElementById('loadMoreContainer');
+
+        if (page === 1) {
+          reviewsContainer.innerHTML = '';
+        }
+
+        if (reviews.length === 0 && page === 1) {
+          noReviewsMsg.style.display = 'block';
+          loadMoreBtn.style.display = 'none';
+          return;
+        }
+
+        noReviewsMsg.style.display = 'none';
+
+        reviews.forEach(review => {
+          const reviewEl = createReviewElement(review);
+          reviewsContainer.appendChild(reviewEl);
+        });
+
+        // Show/hide load more button
+        if (pagination.hasMore) {
+          loadMoreBtn.style.display = 'block';
+        } else {
+          loadMoreBtn.style.display = 'none';
+        }
+
+        currentPage = pagination.currentPage;
+      } catch (error) {
+        console.error('Error loading reviews:', error);
+      }
+    }
+
+    // Create review element HTML
+    function createReviewElement(review) {
+      const div = document.createElement('div');
+      div.className = 'p-4 border border-white/10 rounded-lg bg-surface-dark/50';
+
+      // Star rating HTML
+      let starsHTML = '';
+      for (let i = 1; i <= 5; i++) {
+        if (i <= review.rating) {
+          starsHTML += '<span class="material-symbols-outlined fill-current text-primary text-sm">star</span>';
+        } else {
+          starsHTML += '<span class="material-symbols-outlined text-white/40 text-sm">star</span>';
+        }
+      }
+
+      // Format date
+      const date = new Date(review.createdAt);
+      const dateStr = date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+      const deleteButtonHTML = review.canDelete
+        ? `
+                    <button type="button" class="delete-review-btn inline-flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-bold text-red-300 transition-colors hover:border-red-400/50 hover:bg-red-500/20 hover:text-red-200 focus:outline-none focus:ring-2 focus:ring-red-400/40" data-review-id="${escapeHTML(review._id)}" aria-label="Delete your review">
+                        <span class="material-symbols-outlined text-sm">delete</span>
+                        Delete
+                    </button>
+                `
+        : '';
+
+      div.innerHTML = `
+                <div class="flex items-start justify-between mb-2">
+                    <div class="flex-1">
+                        <p class="text-white font-medium">${escapeHTML(review.userName)}</p>
+                        <div class="flex gap-1 mt-1">
+                            ${starsHTML}
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-2">
+                        <p class="text-white/40 text-xs whitespace-nowrap">${dateStr}</p>
+                        ${deleteButtonHTML}
+                    </div>
+                </div>
+                <p class="text-white/80 leading-relaxed">${escapeHTML(review.comment)}</p>
+            `;
+
+      div.querySelector('.delete-review-btn')?.addEventListener('click', async function() {
+        await deleteReview(this.dataset.reviewId, this);
+      });
+
+      return div;
+    }
+
+    async function deleteReview(reviewId, button) {
+      if (!confirm('Delete your review? This action cannot be undone.')) {
+        return;
+      }
+
+      const originalHTML = button.innerHTML;
+      button.disabled = true;
+      button.innerHTML = '<span class="material-symbols-outlined text-sm">hourglass_empty</span>Deleting';
+
+      try {
+        const response = await fetch(`/reviews/${reviewId}`, {
+          method: 'DELETE',
+          headers: {
+            'x-csrf-token': getCsrfToken()
+          }
+        });
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          alert(data.message || 'Unable to delete review.');
+          return;
+        }
+
+        currentPage = 1;
+        await loadReviews();
+      } catch (error) {
+        console.error('Error deleting review:', error);
+        alert('Unable to delete review. Please try again.');
+      } finally {
+        button.disabled = false;
+        button.innerHTML = originalHTML;
+      }
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHTML(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return String(text || '').replace(/[&<>"']/g, m => map[m]);
+    }
+
+    // Load more button click handler
+    document.getElementById('loadMoreBtn')?.addEventListener('click', () => {
+      loadReviews(currentPage + 1);
+    });
+
+    // Load reviews on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadReviews();
+    });
+  </script>
+  <script src="/js/utils.js" defer></script>
+  <script src="/js/cart-logic.js" defer></script>
+</body>
+
+</html>

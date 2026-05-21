@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title><%= title %></title>
+    <!-- Google Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Main JS (Tailwind Config) -->
+    <script src="/js/tailwind-config.js"></script>
+    <style>
+        /* Custom Scrollbar for dark luxury feel */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #221e10; }
+        ::-webkit-scrollbar-thumb { background: #4a4025; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f4c025; }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-hidden">
+    <!-- Navigation Overlay -->
+    <a href="/shop"
+        class="absolute top-6 right-6 md:hidden z-50 flex items-center gap-2 text-white/80 hover:text-primary transition-colors bg-surface-dark/50 backdrop-blur px-3 py-1 rounded-full border border-border-dark">
+        <span class="text-xs font-medium tracking-wide">Back to Store</span>
+        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+    </a>
+
+    <div class="flex h-screen w-full">
+        <!-- Sidebar Navigation -->
+        <aside class="w-72 flex-shrink-0 flex flex-col bg-surface-dark border-r border-border-dark hidden md:flex">
+            <div class="p-6 flex flex-col items-center border-b border-border-dark">
+                <!-- User Avatar -->
+                <div class="size-20 rounded-full bg-primary/10 flex items-center justify-center mb-4 ring-2 ring-primary ring-offset-2 ring-offset-background-dark shadow-lg">
+                    <span class="material-symbols-outlined text-primary text-3xl">person</span>
+                </div>
+                <h2 class="text-white text-lg font-bold"><%= userName %></h2>
+                <p class="text-text-muted text-sm font-medium">
+                    <%= userRole === 'admin' ? 'Admin' : 'Customer' %>
+                </p>
+                <a href="/shop" class="mt-4 text-xs text-primary hover:underline">Back to Store</a>
+            </div>
+            <nav class="flex-1 flex flex-col gap-1 p-4 overflow-y-auto">
+                <!-- Dashboard Link (Active) -->
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 border border-primary/20 group hover:bg-primary/20 transition-colors"
+                    href="/dashboard">
+                    <span class="material-symbols-outlined text-primary group-hover:text-primary">dashboard</span>
+                    <span class="text-primary font-semibold text-sm">Dashboard</span>
+                </a>
+                <!-- Other Links -->
+                <a class="flex items-center gap-3 px-4 py-3 rounded-lg group hover:bg-[#38311e] transition-colors"
+                    href="/orders">
+                    <span class="material-symbols-outlined text-text-muted group-hover:text-white">shopping_bag</span>
+                    <span class="text-text-muted group-hover:text-white font-medium text-sm">My Orders</span>
+                </a>
+            </nav>
+            <div class="p-4 border-t border-border-dark">
+                <!-- Logout via POST form for CSRF protection -->
+                <form action="/logout" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit" class="flex items-center gap-3 px-4 py-3 rounded-lg group hover:bg-red-900/20 transition-colors w-full">
+                        <span class="material-symbols-outlined text-text-muted group-hover:text-red-400">logout</span>
+                        <span class="text-text-muted group-hover:text-red-400 font-medium text-sm">Logout</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden bg-background-dark">
+            <div class="flex-1 overflow-y-auto p-6 md:p-10 lg:px-16 space-y-8">
+                <!-- Headline & Header Info -->
+                <header
+                    class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 pb-4 border-b border-border-dark">
+                    <div>
+                        <p class="text-text-muted text-sm font-medium mb-1">Overview</p>
+                        <h1 class="text-white text-3xl md:text-4xl font-bold tracking-tight">Hello, <%= userName %></h1>
+                    </div>
+                    <div class="flex gap-4">
+                        <a href="/shop"
+                            class="flex items-center gap-2 bg-primary hover:bg-yellow-500 text-background-dark px-5 py-2.5 rounded-full font-bold text-sm transition-colors shadow-lg shadow-primary/20">
+                            <span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+                            Shop New Arrivals
+                        </a>
+                    </div>
+                </header>
+
+                <!-- Flash Messages -->
+                <% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+                    <div class="rounded-lg bg-green-500/10 border border-green-500/20 px-4 py-3" role="alert">
+                        <div class="flex items-center gap-2 text-green-400 text-sm">
+                            <span class="material-symbols-outlined text-base">check_circle</span>
+                            <span><%= success[0] %></span>
+                        </div>
+                    </div>
+                <% } %>
+                <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+                    <div class="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3" role="alert">
+                        <div class="flex items-center gap-2 text-red-400 text-sm">
+                            <span class="material-symbols-outlined text-base">error</span>
+                            <span><%= error[0] %></span>
+                        </div>
+                    </div>
+                <% } %>
+
+                <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <!-- Stat Card 1: Active Orders -->
+                    <div class="stat-card flex flex-col gap-1 p-5 rounded-xl border border-border-dark bg-surface-dark shadow-sm" data-target="<%= activeOrders %>">
+                        <div class="flex justify-between items-start">
+                            <p class="text-text-muted text-sm font-medium">Active Orders</p>
+                            <span class="material-symbols-outlined text-primary">local_shipping</span>
+                        </div>
+                        <p class="stat-number text-white text-3xl font-bold mt-2" data-target="<%= activeOrders %>">0</p>
+                        <p class="text-xs text-text-muted mt-1">
+                            Pending, Processing & Shipped
+                        </p>
+                    </div>
+                    <!-- Stat Card 2: Total Orders -->
+                    <div class="stat-card flex flex-col gap-1 p-5 rounded-xl border border-border-dark bg-surface-dark shadow-sm" data-target="<%= orderCount %>">
+                        <div class="flex justify-between items-start">
+                            <p class="text-text-muted text-sm font-medium">Total Orders</p>
+                            <span class="material-symbols-outlined text-primary">receipt_long</span>
+                        </div>
+                        <p class="stat-number text-white text-3xl font-bold mt-2" data-target="<%= orderCount %>">0</p>
+                        <p class="text-xs text-text-muted mt-1">
+                            All time
+                        </p>
+                    </div>
+                    <!-- Stat Card 3: Account Info -->
+                    <div class="flex flex-col gap-1 p-5 rounded-xl border border-border-dark bg-surface-dark shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-text-muted text-sm font-medium">Account</p>
+                            <span class="material-symbols-outlined text-primary">person</span>
+                        </div>
+                        <p class="text-white text-xl font-bold mt-2 truncate"><%= userEmail %></p>
+                        <p class="text-xs text-primary mt-1">
+                            Active Account
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Recent Orders Table Section -->
+                <section class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-white text-xl font-bold">Recent Orders</h2>
+                        <a class="text-primary text-sm font-semibold hover:underline" href="/orders">View All History</a>
+                    </div>
+
+                    <% if (recentOrders.length === 0) { %>
+                        <% const hasOrderHistory = orderCount > 0; %>
+                        <!-- Empty State -->
+                        <div class="overflow-hidden rounded-xl border border-border-dark bg-surface-dark shadow-sm p-12 text-center">
+                            <span class="material-symbols-outlined text-primary text-5xl mb-4 block">shopping_bag</span>
+                            <h3 class="text-white text-lg font-bold mb-2"><%= hasOrderHistory ? 'No Current Orders' : 'No Orders Yet' %></h3>
+                            <p class="text-text-muted text-sm mb-4"><%= hasOrderHistory ? 'Cancelled orders remain available in your full history.' : 'Start shopping to see your orders here.' %></p>
+                            <a href="<%= hasOrderHistory ? '/orders' : '/shop' %>" class="text-primary font-semibold text-sm hover:underline"><%= hasOrderHistory ? 'View Order History' : 'Browse Collection' %></a>
+                        </div>
+                    <% } else { %>
+                        <div class="overflow-hidden rounded-xl border border-border-dark bg-surface-dark shadow-sm">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-[#342d18] border-b border-border-dark text-xs uppercase tracking-wider text-text-muted font-semibold">
+                                            <th class="px-6 py-4">Order ID</th>
+                                            <th class="px-6 py-4">Date</th>
+                                            <th class="px-6 py-4">Status</th>
+                                            <th class="px-6 py-4">Total</th>
+                                            <th class="px-6 py-4 text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-border-dark">
+                                        <% recentOrders.forEach(function(order) { %>
+                                            <%
+                                                const orderId = order._id.toString().slice(-6).toUpperCase();
+                                                const orderDate = new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                                                let statusColor = 'primary';
+                                                if (order.status === 'Shipped') statusColor = 'blue-400';
+                                                else if (order.status === 'Delivered') statusColor = 'green-400';
+                                                else if (order.status === 'Cancelled') statusColor = 'red-400';
+                                                else if (order.status === 'Processing') statusColor = 'yellow-400';
+                                            %>
+                                            <tr class="order-row group hover:bg-[#38311e] transition-colors cursor-pointer" data-order-id="<%= order._id %>">
+                                                <td class="px-6 py-4 text-white font-medium text-sm expandable" data-order-id="<%= order._id %>">#ORD-<%= orderId %></td>
+                                                <td class="px-6 py-4 text-text-muted text-sm"><%= orderDate %></td>
+                                                <td class="px-6 py-4">
+                                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-<%= statusColor %>/10 px-3 py-1 text-xs font-bold text-<%= statusColor %> ring-1 ring-inset ring-<%= statusColor %>/20">
+                                                        <span class="size-1.5 rounded-full bg-<%= statusColor %>"></span>
+                                                        <%= order.status %>
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 text-white text-sm font-medium">$<%= order.totalAmount.toFixed(2) %></td>
+                                                <td class="px-6 py-4">
+                                                    <div class="flex items-center justify-end gap-3">
+                                                        <% if (order.status === 'Pending') { %>
+                                                            <form method="POST" action="/orders/<%= order._id %>/cancel" onsubmit="return confirm('Cancel this order? This action cannot be undone.');">
+                                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                                <input type="hidden" name="redirectTo" value="/dashboard">
+                                                                <button type="submit"
+                                                                    class="inline-flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-bold text-red-300 transition-colors hover:border-red-400/50 hover:bg-red-500/20 hover:text-red-200 focus:outline-none focus:ring-2 focus:ring-red-400/40">
+                                                                    <span class="material-symbols-outlined text-sm">cancel</span>
+                                                                    Cancel
+                                                                </button>
+                                                            </form>
+                                                        <% } %>
+                                                        <a href="/orders/<%= order._id %>"
+                                                            class="text-primary hover:text-white font-medium text-sm transition-colors">View Details</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    <% } %>
+                </section>
+
+                <%- include('../partials/footer') %>
+            </div>
+        </main>
+    </div>
+    <script src="/js/dashboard-interactive.js" defer></script>
+</body>
+
+</html>

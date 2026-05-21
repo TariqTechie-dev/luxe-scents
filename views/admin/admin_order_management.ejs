@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Admin Order Management - LuxParfum</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Main JS (Tailwind Config) -->
+    <script src="/js/tailwind-config.js"></script>
+    <style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #221e10;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #493f22;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f4c025;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-hidden">
+    <div class="flex h-screen w-full">
+        <!-- Side Navigation -->
+        <aside
+            class="hidden lg:flex flex-col w-72 h-full bg-[#1c180d] border-r border-[#493f22] p-6 justify-between flex-shrink-0">
+            <div class="flex flex-col gap-8">
+                <!-- Branding -->
+                <div class="flex gap-3 items-center">
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-12 shadow-lg border border-[#493f22]"
+                        data-alt="LuxParfum Abstract Gold Logo"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLnJPo8QHf2Mawf_tWA7rct0PkvZsNnzt3vCJYem6p-nucJmYfFuJiy6Z54GbRvaMDMVVcraKQUB91SSq6kHT7RkN1bp9-ClwsOb-pNsqh9Xrvx5CUF0KgUGhJl8iCy_1L5SjKILegPG5maEmoldlq7KicI3JkFE9jdSi1EpDqJZNckxsiIFZ3lvSd_0fN8B5pNryhl_RlFqcJG8vry6nOzwRTKoQ9WG_uZM1SlHdSizQd34vTFnPJdHL9XMwpTgsWWfIJFQAAXj9M");'>
+                    </div>
+                    <div class="flex flex-col">
+                        <h1 class="text-white text-lg font-bold leading-tight">LuxParfum</h1>
+                        <p class="text-text-muted text-xs font-medium uppercase tracking-wider">Admin Panel</p>
+                    </div>
+                </div>
+                <!-- Navigation Links -->
+                <nav class="flex flex-col gap-2">
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
+                        href="#">
+                        <span
+                            class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+                        <span class="text-sm font-medium">Dashboard</span>
+                    </a>
+                    <!-- Active State -->
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/20 text-primary border border-primary/10"
+                        href="/admin/orders">
+                        <span class="material-symbols-outlined fill-1">shopping_bag</span>
+                        <span class="text-sm font-bold">Orders</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
+                        href="/admin/products">
+                        <span
+                            class="material-symbols-outlined group-hover:text-primary transition-colors">inventory_2</span>
+                        <span class="text-sm font-medium">Products</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
+                        href="/admin/customers">
+                        <span class="material-symbols-outlined group-hover:text-primary transition-colors">group</span>
+                        <span class="text-sm font-medium">Customers</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
+                        href="/admin/analytics">
+                        <span
+                            class="material-symbols-outlined group-hover:text-primary transition-colors">analytics</span>
+                        <span class="text-sm font-medium">Analytics</span>
+                    </a>
+                </nav>
+            </div>
+            <!-- User Profile -->
+            <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#2d2616] border border-[#493f22]">
+                <div class="bg-center bg-no-repeat bg-cover rounded-full size-8" data-alt="Admin User Profile Picture"
+                    style='background-image: url("/images/tariq-profile.png");'>
+                </div>
+                <div class="flex flex-col overflow-hidden">
+                    <p class="text-white text-sm font-semibold truncate">Tariq Hussain</p>
+                    <p class="text-text-muted text-xs truncate">Store Manager</p>
+                </div>
+            </div>
+        </aside>
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-background-light dark:bg-background-dark">
+            <!-- Header Sticky -->
+            <header
+                class="h-16 border-b border-[#493f22] bg-background-dark/50 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-10">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-xl font-bold text-white">Order Management</h2>
+                    <span
+                        class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[10px] text-slate-400 font-mono">v2.4.0-STABLE</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="p-2 text-slate-400 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <div class="h-8 w-[1px] bg-[#493f22] mx-2"></div>
+                    <button
+                        class="flex items-center gap-2 bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 transition-all">
+                        <span class="material-symbols-outlined text-sm">download</span>
+                        Export CSV
+                    </button>
+                </div>
+            </header>
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-8 pt-4">
+                <div class="max-w-[1400px] mx-auto space-y-8">
+                    <!-- Metrics Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-[#2d2616] border border-[#493f22] p-6 rounded-xl">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-sm font-medium">Total Orders</p>
+                                    <h3 class="text-3xl font-bold text-white mt-1"><%= stats.total %></h3>
+                                </div>
+                                <div class="p-2 bg-primary/10 rounded-lg text-primary">
+                                    <span class="material-symbols-outlined">receipt_long</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center gap-2 text-emerald-500 text-sm">
+                                <span class="material-symbols-outlined text-sm">trending_up</span>
+                                <span><%= stats.pending %> pending orders</span>
+                            </div>
+                        </div>
+                        <div class="bg-[#2d2616] border border-[#493f22] p-6 rounded-xl">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-sm font-medium">Pending Shipments</p>
+                                    <h3 class="text-3xl font-bold text-white mt-1"><%= stats.pendingShipments %></h3>
+                                </div>
+                                <div class="p-2 bg-amber-500/10 rounded-lg text-amber-500">
+                                    <span class="material-symbols-outlined">local_shipping</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center gap-2 text-amber-500 text-sm">
+                                <span class="material-symbols-outlined text-sm">schedule</span>
+                                <span>Action required</span>
+                            </div>
+                        </div>
+                        <div class="bg-[#2d2616] border border-[#493f22] p-6 rounded-xl">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-slate-400 text-sm font-medium">Total Revenue</p>
+                                    <h3 class="text-3xl font-bold text-white mt-1">$<%= stats.totalRevenue.toFixed(2) %></h3>
+                                </div>
+                                <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-500">
+                                    <span class="material-symbols-outlined">payments</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center gap-2 text-emerald-500 text-sm">
+                                <span class="material-symbols-outlined text-sm">trending_up</span>
+                                <span>From <%= orders.length %> orders</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Flash Messages -->
+                    <% if (success && success.length > 0) { %>
+                        <div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-6 py-4 rounded-lg text-sm flex items-center gap-3">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            <%= success[0] %>
+                        </div>
+                    <% } %>
+                    <% if (error && error.length > 0) { %>
+                        <div class="bg-red-500/10 border border-red-500/20 text-red-400 px-6 py-4 rounded-lg text-sm flex items-center gap-3">
+                            <span class="material-symbols-outlined">error</span>
+                            <%= error[0] %>
+                        </div>
+                    <% } %>
+                    <!-- Table Controls -->
+                    <form method="GET" action="/admin/orders" class="flex flex-col md:flex-row gap-4 items-center justify-between">
+                        <div class="relative w-full md:w-96">
+                            <span
+                                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">search</span>
+                            <input
+                                class="w-full bg-[#2d2616] border border-[#493f22] rounded-lg pl-10 pr-4 py-2.5 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none text-white placeholder:text-slate-600"
+                                name="q" value="<%= filters.q %>" placeholder="Search Order ID, Customer..." type="text" />
+                        </div>
+                        <div class="flex gap-2 w-full md:w-auto">
+                            <button type="submit"
+                                class="flex items-center gap-2 px-4 py-2.5 bg-[#2d2616] border border-[#493f22] rounded-lg text-sm text-slate-400 hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-sm">filter_list</span>
+                                Filter
+                            </button>
+                            <select name="status"
+                                class="bg-[#2d2616] border border-[#493f22] rounded-lg px-4 py-2.5 text-sm text-slate-400 focus:ring-1 focus:ring-primary focus:border-primary outline-none appearance-none cursor-pointer">
+                                <option value="" <%= !filters.status ? 'selected' : '' %>>Status: All</option>
+                                <option value="Pending" <%= filters.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                <option value="Processing" <%= filters.status === 'Processing' ? 'selected' : '' %>>Processing</option>
+                                <option value="Shipped" <%= filters.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                <option value="Delivered" <%= filters.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                <option value="Cancelled" <%= filters.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                            </select>
+                        </div>
+                    </form>
+                    <!-- Data Table -->
+                    <div class="bg-[#2d2616] border border-[#493f22] rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-white/5 border-b border-[#493f22]">
+                                        <th
+                                            class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                            Order ID</th>
+                                        <th
+                                            class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                            Customer</th>
+                                        <th
+                                            class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                            Date</th>
+                                        <th
+                                            class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                            Amount</th>
+                                        <th
+                                            class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                            Payment</th>
+                                        <th
+                                            class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                            Order Status</th>
+                                        <th
+                                            class="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">
+                                            Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-[#493f22]">
+                                    <% if (orders && orders.length > 0) { %>
+                                        <% orders.forEach(order => {
+                                            const orderIdShort = order._id.toString().slice(-6).toUpperCase();
+                                            const userInitials = order.user?.fullName?.split(' ').map(n => n[0]).join('') || '?';
+                                            const createdDate = new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                                            
+                                            // Status badge color
+                                            let statusColorClass = 'bg-slate-700 text-slate-300';
+                                            let statusIcon = 'clock';
+                                            if (order.status === 'Processing') { statusColorClass = 'bg-blue-500/20 text-blue-400'; statusIcon = 'hourglass_top'; }
+                                            else if (order.status === 'Shipped') { statusColorClass = 'bg-amber-500/20 text-amber-400'; statusIcon = 'local_shipping'; }
+                                            else if (order.status === 'Delivered') { statusColorClass = 'bg-emerald-500/20 text-emerald-400'; statusIcon = 'check_circle'; }
+                                            else if (order.status === 'Cancelled') { statusColorClass = 'bg-red-500/20 text-red-400'; statusIcon = 'block'; }
+                                            
+                                            // Payment badge color
+                                            let paymentColorClass = 'bg-amber-500/10 text-amber-500 border-amber-500/20';
+                                            if (order.paymentStatus === 'Paid') { paymentColorClass = 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'; }
+                                            else if (order.paymentStatus === 'Refunded') { paymentColorClass = 'bg-red-500/10 text-red-500 border-red-500/20'; }
+                                        %>
+                                            <tr class="bg-[#2d2616] border-b border-[#493f22] hover:bg-[#493f22]/20 transition-colors">
+                                                <td class="px-6 py-4 font-mono text-primary text-sm font-semibold">#<%= orderIdShort %></td>
+                                                <td class="px-6 py-4">
+                                                    <div class="flex items-center gap-3">
+                                                        <div class="size-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-white">
+                                                            <%= userInitials %>
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-sm font-bold text-white"><%= order.user?.fullName || 'Unknown User' %></p>
+                                                            <p class="text-[11px] text-slate-500"><%= order.user?.email || 'N/A' %></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 text-sm text-slate-400"><%= createdDate %></td>
+                                                <td class="px-6 py-4 text-sm font-bold text-white">$<%= order.totalAmount.toFixed(2) %></td>
+                                                <td class="px-6 py-4">
+                                                    <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border <%= paymentColorClass %>">
+                                                        <%= order.paymentStatus %>
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <form method="POST" action="/admin/orders/<%= order._id %>/status" class="inline">
+                                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                        <select name="status" onchange="this.form.submit()" class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg text-xs text-white border border-[#493f22] cursor-pointer hover:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary">
+                                                            <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                                            <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
+                                                            <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                                            <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                                            <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                                        </select>
+                                                    </form>
+                                                </td>
+                                                <td class="px-6 py-4 text-right">
+                                                    <a href="/admin/orders/<%= order._id %>" class="text-slate-500 hover:text-primary transition-colors text-xs font-bold flex items-center gap-1 ml-auto">
+                                                        <span class="material-symbols-outlined text-sm">description</span>
+                                                        Details
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr class="bg-[#2d2616] border-b border-[#493f22]">
+                                            <td colspan="7" class="px-6 py-8 text-center text-slate-500 text-sm">
+                                                <div class="flex flex-col items-center gap-2">
+                                                    <span class="material-symbols-outlined text-2xl">inbox</span>
+                                                    <span>No orders found</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Footer Info -->
+                        <div class="px-6 py-4 border-t border-[#493f22] flex items-center justify-between">
+                            <p class="text-xs text-slate-500">Showing <%= orders.length %> of <%= pagination.totalOrders %> orders</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

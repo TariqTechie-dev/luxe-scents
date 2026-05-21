@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title><%= typeof title !== 'undefined' ? title : 'Wishlist' %></title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased min-h-screen flex flex-col">
+  <%- include('../partials/header') %>
+
+  <% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 mt-4 w-full" role="alert">
+      <div class="rounded-lg bg-green-500/10 border border-green-500/20 px-4 py-3 flex items-center gap-2 text-green-400 text-sm">
+        <span class="material-symbols-outlined text-base" aria-hidden="true">check_circle</span>
+        <span><%= success[0] %></span>
+      </div>
+    </div>
+  <% } %>
+
+  <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8 mt-4 w-full" role="alert">
+      <div class="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 flex items-center gap-2 text-red-400 text-sm">
+        <span class="material-symbols-outlined text-base" aria-hidden="true">error</span>
+        <span><%= error[0] %></span>
+      </div>
+    </div>
+  <% } %>
+
+  <main class="flex-grow py-8 px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-[1200px]">
+      <section class="mb-8 md:mb-10">
+        <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p class="text-text-gold text-xs sm:text-sm uppercase tracking-[0.3em]">Saved Fragrances</p>
+            <h1 class="text-3xl md:text-4xl font-light tracking-tight text-white mt-2">My Wishlist</h1>
+            <p class="text-zinc-400 text-sm md:text-base mt-2 max-w-2xl">
+              Keep your most desired scents close at hand and revisit them anytime before adding them to your collection.
+            </p>
+          </div>
+
+          <div class="inline-flex items-center gap-2 self-start md:self-auto rounded-full border border-surface-border bg-surface-dark px-4 py-2 text-sm text-zinc-300">
+            <span class="material-symbols-outlined text-primary text-lg" aria-hidden="true">favorite</span>
+            <span><%= wishlistProducts && wishlistProducts.length ? wishlistProducts.length : 0 %> item<%= wishlistProducts && wishlistProducts.length === 1 ? '' : 's' %> saved</span>
+          </div>
+        </div>
+      </section>
+
+      <% if (wishlistProducts && wishlistProducts.length > 0) { %>
+        <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          <% wishlistProducts.forEach(function(product) { %>
+            <article class="group bg-white dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-200 dark:border-surface-border hover:border-primary/40 transition-all duration-300 hover:shadow-xl">
+              <a href="/product/<%= product._id %>" class="block">
+                <div class="relative aspect-[4/5] overflow-hidden bg-white/5">
+                  <img
+                    src="<%= product.imageUrl %>"
+                    alt="<%= product.name %>"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-80"></div>
+                </div>
+              </a>
+
+              <div class="p-5 md:p-6">
+                <div class="flex items-start justify-between gap-4 mb-3">
+                  <div class="min-w-0">
+                    <p class="text-xs uppercase tracking-[0.25em] text-text-gold mb-2"><%= product.category %></p>
+                    <a href="/product/<%= product._id %>" class="inline-block">
+                      <h2 class="text-lg md:text-xl font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">
+                        <%= product.name %>
+                      </h2>
+                    </a>
+                  </div>
+
+                  <span class="shrink-0 text-lg md:text-xl font-bold text-primary">
+                    $<%= Number(product.price).toFixed(2) %>
+                  </span>
+                </div>
+
+                <div class="flex items-center justify-between gap-3 pt-4 border-t border-gray-200 dark:border-surface-border">
+                  <a
+                    href="/product/<%= product._id %>"
+                    class="inline-flex items-center gap-2 text-sm font-medium text-zinc-300 hover:text-primary transition-colors"
+                  >
+                    <span>View details</span>
+                    <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+                  </a>
+
+                  <form action="/wishlist/remove" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="productId" value="<%= product._id %>">
+                    <button
+                      type="submit"
+                      class="inline-flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-colors"
+                    >
+                      <span class="material-symbols-outlined text-base" aria-hidden="true">delete</span>
+                      Remove
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </article>
+          <% }); %>
+        </section>
+      <% } else { %>
+        <section class="rounded-2xl border border-surface-border bg-surface-dark px-6 py-16 sm:px-10 text-center">
+          <div class="mx-auto max-w-xl">
+            <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-surface-border bg-white/5 text-primary">
+              <span class="material-symbols-outlined text-4xl" aria-hidden="true">favorite</span>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-light text-white mb-3">Your wishlist is empty</h2>
+            <p class="text-zinc-400 text-sm md:text-base mb-8">
+              Discover signature scents, save the ones you love, and build your personal fragrance shortlist.
+            </p>
+            <a
+              href="/shop"
+              class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-background-dark font-bold rounded-lg hover:bg-primary-hover transition-colors shadow-[0_0_20px_rgba(244,192,37,0.2)]"
+            >
+              <span>Explore Collection</span>
+              <span class="material-symbols-outlined text-base" aria-hidden="true">arrow_forward</span>
+            </a>
+          </div>
+        </section>
+      <% } %>
+    </div>
+  </main>
+
+   <%- include('../partials/footer') %>
+
+  <script src="/js/tailwind-config.js"></script>
+</body>
+
+</html>

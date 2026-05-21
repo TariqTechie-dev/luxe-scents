@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Admin Product Management - LuxParfum</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+  <!-- Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Main JS (Tailwind Config) -->
+  <script src="/js/tailwind-config.js"></script>
+  <style>
+    /* Custom scrollbar for webkit */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #221e10;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #493f22;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f4c025;
+    }
+  </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-hidden">
+  <%
+  const productList = Array.isArray(products) ? products : [];
+  const productCount = productList.length;
+  const shouldOpenAddProductModal = Boolean(showAddProductModal);
+  %>
+  <div class="flex h-screen w-full">
+    <div id="sidebarBackdrop" class="fixed inset-0 z-40 hidden bg-black/70 backdrop-blur-sm lg:hidden"></div>
+    <!-- Side Navigation -->
+    <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] -translate-x-full flex-col justify-between border-r border-[#493f22] bg-[#1c180d] p-6 transition-transform duration-300 ease-out lg:static lg:z-auto lg:h-full lg:max-w-none lg:translate-x-0 lg:flex-shrink-0">
+      <div class="flex flex-col gap-8">
+        <!-- Branding -->
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex gap-3 items-center">
+            <div class="bg-center bg-no-repeat bg-cover rounded-full size-12 shadow-lg border border-[#493f22]" data-alt="LuxParfum Abstract Gold Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLnJPo8QHf2Mawf_tWA7rct0PkvZsNnzt3vCJYem6p-nucJmYfFuJiy6Z54GbRvaMDMVVcraKQUB91SSq6kHT7RkN1bp9-ClwsOb-pNsqh9Xrvx5CUF0KgUGhJl8iCy_1L5SjKILegPG5maEmoldlq7KicI3JkFE9jdSi1EpDqJZNckxsiIFZ3lvSd_0fN8B5pNryhl_RlFqcJG8vry6nOzwRTKoQ9WG_uZM1SlHdSizQd34vTFnPJdHL9XMwpTgsWWfIJFQAAXj9M");'>
+            </div>
+            <div class="flex flex-col">
+              <h1 class="text-white text-lg font-bold leading-tight">Luxe Scents</h1>
+              <p class="text-text-muted text-xs font-medium uppercase tracking-wider">Admin Panel</p>
+            </div>
+          </div>
+          <button id="closeSidebarBtn" type="button" class="inline-flex size-10 items-center justify-center rounded-lg border border-[#493f22] bg-[#2d2616] text-text-muted transition-colors hover:text-white hover:border-text-muted lg:hidden" aria-label="Close navigation menu">
+            <span class="material-symbols-outlined text-xl">close</span>
+          </button>
+        </div>
+        <!-- Navigation Links -->
+        <nav class="flex flex-col gap-2">
+          <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group" href="#">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+            <span class="text-sm font-medium">Dashboard</span>
+          </a>
+          <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group" href="/admin/orders">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">shopping_bag</span>
+            <span class="text-sm font-medium">Orders</span>
+          </a>
+          <!-- Active State -->
+          <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/20 text-primary border border-primary/10" href="/admin/products">
+            <span class="material-symbols-outlined fill-1">inventory_2</span>
+            <span class="text-sm font-bold">Products</span>
+          </a>
+          <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group" href="/admin/customers">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">group</span>
+            <span class="text-sm font-medium">Customers</span>
+          </a>
+          <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group" href="/admin/analytics">
+            <span class="material-symbols-outlined group-hover:text-primary transition-colors">analytics</span>
+            <span class="text-sm font-medium">Analytics</span>
+          </a>
+        </nav>
+      </div>
+      <!-- User Profile -->
+      <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#2d2616] border border-[#493f22]">
+        <div class="bg-center bg-no-repeat bg-cover rounded-full size-8" data-alt="Admin User Profile Picture" style='background-image: url("/images/tariq-profile.png");'>
+        </div>
+        <div class="flex flex-col overflow-hidden">
+          <p class="text-white text-sm font-semibold truncate">Tariq Hussain</p>
+          <p class="text-text-muted text-xs truncate">Store Manager</p>
+        </div>
+      </div>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-background-light dark:bg-background-dark">
+      <!-- Header Sticky -->
+      <header class="w-full px-8 py-6 flex flex-col gap-6 z-10 bg-background-light dark:bg-background-dark/95 backdrop-blur-sm sticky top-0 border-b border-[#493f22]/30">
+        <!-- Breadcrumbs -->
+        <div class="flex items-center gap-3 text-sm">
+          <button id="openSidebarBtn" type="button" class="inline-flex size-11 items-center justify-center rounded-lg border border-[#493f22] bg-[#2d2616] text-text-muted transition-colors hover:text-white hover:border-text-muted lg:hidden" aria-label="Open navigation menu">
+            <span class="material-symbols-outlined text-[22px]">menu</span>
+          </button>
+          <a class="text-text-muted hover:text-primary transition-colors" href="#">Dashboard</a>
+          <span class="text-[#493f22] material-symbols-outlined text-sm">chevron_right</span>
+          <span class="text-white font-medium">Inventory Management</span>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+          <div class="flex flex-col gap-1">
+            <h2 class="text-3xl md:text-4xl font-black text-white tracking-tight">Product Inventory</h2>
+            <p class="text-text-muted text-base">Manage your catalogue, track stock levels, and update
+              pricing.</p>
+          </div>
+          <!-- Primary Action Button -->
+          <button id="openModalBtn" class="group flex items-center justify-center gap-2 h-12 px-6 bg-primary hover:bg-[#dca60b] text-background-dark rounded-lg font-bold transition-all shadow-[0_0_15px_rgba(244,192,37,0.2)] hover:shadow-[0_0_25px_rgba(244,192,37,0.4)]">
+            <span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">add</span>
+            <span>Add New Product</span>
+          </button>
+        </div>
+      </header>
+      <!-- Scrollable Content -->
+      <div class="flex-1 overflow-y-auto p-8 pt-4">
+        <div class="max-w-[1400px] mx-auto flex flex-col gap-6">
+          <% if (success && success.length > 0) { %>
+          <div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-6 py-4 rounded-lg text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined">check_circle</span>
+            <%= success[0] %>
+          </div>
+          <% } %>
+          <% if (error && error.length > 0) { %>
+          <div class="bg-red-500/10 border border-red-500/20 text-red-400 px-6 py-4 rounded-lg text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined">error</span>
+            <%= error[0] %>
+          </div>
+          <% } %>
+          <!-- Controls: Search & Filter -->
+          <div class="flex flex-col lg:flex-row lg:flex-nowrap gap-4 justify-between items-start lg:items-center w-full mb-8">
+            <!-- Search -->
+            <div class="w-full lg:w-[280px] lg:flex-shrink-0">
+              <label class="relative flex items-center w-full group">
+                <span class="absolute left-4 text-text-muted material-symbols-outlined group-focus-within:text-primary transition-colors">search</span>
+                <input id="searchInput" class="w-full bg-[#2d2616] border border-[#493f22] text-white rounded-lg h-12 pl-12 pr-4 focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-text-muted/60 transition-all" placeholder="Search by product name or SKU..." type="text" />
+              </label>
+            </div>
+            <!-- Chips / Filters -->
+            <div class="w-full min-w-0">
+              <div class="flex flex-wrap gap-2 justify-start lg:flex-nowrap lg:justify-end lg:overflow-x-auto lg:pb-1">
+                <button type="button" data-category="all" class="filter-chip h-10 px-4 whitespace-nowrap flex-shrink-0 rounded-lg bg-primary border border-primary/10 text-background-dark font-bold text-sm shadow-md transition-all">All Products</button>
+                <button type="button" data-category="Floral" class="filter-chip h-10 px-4 whitespace-nowrap flex-shrink-0 rounded-lg bg-[#2d2616] border border-[#493f22] text-text-muted hover:text-white hover:border-text-muted transition-colors text-sm font-medium">Floral</button>
+                <button type="button" data-category="Woody" class="filter-chip h-10 px-4 whitespace-nowrap flex-shrink-0 rounded-lg bg-[#2d2616] border border-[#493f22] text-text-muted hover:text-white hover:border-text-muted transition-colors text-sm font-medium">Woody</button>
+                <button type="button" data-category="Citrus" class="filter-chip h-10 px-4 whitespace-nowrap flex-shrink-0 rounded-lg bg-[#2d2616] border border-[#493f22] text-text-muted hover:text-white hover:border-text-muted transition-colors text-sm font-medium">Citrus</button>
+                <button type="button" data-category="Amber" class="filter-chip h-10 px-4 whitespace-nowrap flex-shrink-0 rounded-lg bg-[#2d2616] border border-[#493f22] text-text-muted hover:text-white hover:border-text-muted transition-colors text-sm font-medium">Amber</button>
+                <button type="button" data-category="Aquatic" class="filter-chip h-10 px-4 whitespace-nowrap flex-shrink-0 rounded-lg bg-[#2d2616] border border-[#493f22] text-text-muted hover:text-white hover:border-text-muted transition-colors text-sm font-medium">Aquatic</button>
+                <button type="button" data-category="Gourmand" class="filter-chip h-10 px-4 whitespace-nowrap flex-shrink-0 rounded-lg bg-[#2d2616] border border-[#493f22] text-text-muted hover:text-white hover:border-text-muted transition-colors text-sm font-medium">Gourmand</button>
+                <button type="button" data-category="Other" class="filter-chip h-10 px-4 whitespace-nowrap flex-shrink-0 rounded-lg bg-[#2d2616] border border-[#493f22] text-text-muted hover:text-white hover:border-text-muted transition-colors text-sm font-medium">Other</button>
+              </div>
+            </div>
+          </div>
+          <!-- Data Table -->
+          <div class="bg-[#2d2616] border border-[#493f22] rounded-xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-[#231e10] border-b border-[#493f22] text-text-muted text-xs uppercase tracking-wider">
+                    <th class="p-5 font-semibold">Product Details</th>
+                    <th class="p-5 font-semibold">Category</th>
+                    <th class="p-5 font-semibold">Stock Status</th>
+                    <th class="p-5 font-semibold">Price</th>
+                    <th class="p-5 font-semibold text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-[#493f22]">
+                  <% if (productCount > 0) { %>
+                  <% productList.forEach(function(product) { %>
+                  <tr class="js-product-row group hover:bg-[#38301c] transition-colors" data-category="<%= product.category %>" data-name="<%= product.name.toLowerCase() %>" data-sku="<%= product.sku.toLowerCase() %>">
+                    <td class="p-4">
+                      <div class="flex items-center gap-4">
+                        <div class="h-14 w-14 rounded-lg bg-white/5 bg-center bg-cover border border-[#493f22]" style='background-image: url("<%= product.imageUrl %>");'>
+                        </div>
+                        <div class="flex flex-col">
+                          <span class="text-white font-bold text-base group-hover:text-primary transition-colors">
+                            <%= product.name %>
+                          </span>
+                          <span class="text-text-muted text-xs">SKU: <%= product.sku
+                                                                    %></span>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="p-4 text-sm text-white">
+                      <%= product.category %>
+                    </td>
+                    <td class="p-4">
+                      <div class="flex items-center gap-2">
+                        <% if (product.stock===0) { %>
+                        <div class="h-2 w-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]">
+                        </div>
+                        <span class="text-red-400 text-sm font-medium">Out of
+                          Stock</span>
+                        <% } else if (product.stock < 10) { %>
+                        <div class="h-2 w-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]">
+                        </div>
+                        <span class="text-amber-400 text-sm font-medium">
+                          <%= product.stock %> Low Stock
+                        </span>
+                        <% } else { %>
+                        <div class="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]">
+                        </div>
+                        <span class="text-emerald-400 text-sm font-medium">
+                          <%= product.stock %> In Stock
+                        </span>
+                        <% } %>
+                      </div>
+                    </td>
+                    <td class="p-4">
+                      <span class="text-white font-bold">$<%= product.price.toFixed(2) %>
+                      </span>
+                    </td>
+                    <td class="p-4">
+                      <div class="flex justify-end gap-2">
+                        <a href="/admin/products/<%= product._id %>/edit" class="p-2 rounded-lg text-text-muted hover:bg-primary hover:text-background-dark transition-all" title="Edit">
+                          <span class="material-symbols-outlined text-xl">edit</span>
+                        </a>
+                        <form method="POST" action="/admin/products/<%= product._id %>/delete" class="inline" onsubmit="return confirm('Are you sure you want to permanently delete this product? This action cannot be undone.')">
+                          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                          <button type="submit" class="p-2 rounded-lg text-text-muted hover:bg-red-500/20 hover:text-red-400 transition-all" title="Delete">
+                            <span class="material-symbols-outlined text-xl">delete</span>
+                          </button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                  <% }); %>
+                  <% } else { %>
+                  <tr>
+                    <td colspan="5" class="p-8 text-center text-text-muted">No
+                      products found.</td>
+                  </tr>
+                  <% } %>
+                  <tr id="noFilterResultsRow" class="hidden">
+                    <td colspan="5" class="p-8 text-center text-text-muted">No products match your search or selected category.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- Pagination (Simplified for now) -->
+            <div class="flex items-center justify-between p-4 border-t border-[#493f22] bg-[#231e10]">
+              <p class="text-text-muted text-sm">Showing <span class="text-white font-bold" id="visibleProductCount"><%= productCount %></span> of
+                <span class="text-white font-bold">
+                  <%= productCount %>
+                </span> products
+              </p>
+              <div class="flex gap-2">
+                <button class="px-3 py-1 rounded border border-[#493f22] text-text-muted hover:text-white hover:border-primary disabled:opacity-50" disabled="">
+                  <span class="material-symbols-outlined text-sm">chevron_left</span>
+                </button>
+                <button class="px-3 py-1 rounded bg-primary text-background-dark font-bold text-sm">1</button>
+                <button class="px-3 py-1 rounded border border-[#493f22] text-text-muted hover:text-white hover:border-primary">
+                  <span class="material-symbols-outlined text-sm">chevron_right</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <!-- Add Product Modal -->
+  <div aria-labelledby="modal-title" aria-modal="true" class="hidden relative z-50" data-open-on-load="<%= shouldOpenAddProductModal ? 'true' : 'false' %>" id="addProductModal" role="dialog">
+    <div class="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity" id="modalBackdrop"></div>
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+        <div class="relative transform overflow-hidden rounded-xl bg-[#2d2616] border border-[#493f22] text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+          <form id="addProductForm" action="/admin/products/add" method="POST" autocomplete="off">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="px-6 py-6 border-b border-[#493f22]">
+              <h3 class="text-xl font-bold text-white leading-6" id="modal-title">Add New Product</h3>
+            </div>
+            <div class="px-6 py-6 space-y-4">
+              <div>
+                <label for="addProductName" class="block text-sm font-medium text-text-muted mb-1">Product Name *</label>
+                <input id="addProductName" name="name" required minlength="2" maxlength="120" class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white focus:ring-1 focus:ring-primary" placeholder="e.g. Royal Oud" type="text" />
+              </div>
+              <div>
+                <label for="addProductSku" class="block text-sm font-medium text-text-muted mb-1">SKU *</label>
+                <input id="addProductSku" name="sku" required maxlength="50" pattern="[A-Za-z0-9_-]+" title="Use only letters, numbers, hyphens, and underscores." class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white font-mono uppercase focus:ring-1 focus:ring-primary" placeholder="e.g. RO-2024-001" type="text" />
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label for="addProductPrice" class="block text-sm font-medium text-text-muted mb-1">Price ($) *</label>
+                  <input id="addProductPrice" name="price" required min="0" class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white" placeholder="0.00" type="number" step="0.01" inputmode="decimal" />
+                </div>
+                <div>
+                  <label for="addProductStock" class="block text-sm font-medium text-text-muted mb-1">Stock *</label>
+                  <input id="addProductStock" name="stock" required min="0" step="1" class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white" placeholder="0" type="number" inputmode="numeric" />
+                </div>
+              </div>
+              <div>
+                <label for="addProductCategory" class="block text-sm font-medium text-text-muted mb-1">Category *</label>
+                <select id="addProductCategory" name="category" required class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white">
+                  <option value="Floral">Floral</option>
+                  <option value="Woody">Woody</option>
+                  <option value="Citrus">Citrus</option>
+                  <option value="Amber">Amber</option>
+                  <option value="Aquatic">Aquatic</option>
+                  <option value="Gourmand">Gourmand</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label for="addProductImageUrl" class="block text-sm font-medium text-text-muted mb-1">Image URL</label>
+                <input id="addProductImageUrl" name="imageUrl" class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white focus:ring-1 focus:ring-primary" placeholder="https://..." type="url" />
+              </div>
+              <div>
+                <label for="addProductDescription" class="block text-sm font-medium text-text-muted mb-1">Description</label>
+                <textarea id="addProductDescription" name="description" maxlength="2000" class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white focus:ring-1 focus:ring-primary" rows="3" placeholder="Product description..."></textarea>
+              </div>
+              <div class="grid grid-cols-1 gap-4">
+                <div>
+                  <label for="addProductTopNotes" class="block text-sm font-medium text-text-muted mb-1">Top Notes</label>
+                  <input id="addProductTopNotes" name="topNotes" maxlength="300" class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white focus:ring-1 focus:ring-primary" placeholder="e.g. Bergamot, Saffron, Black Pepper" type="text" />
+                </div>
+                <div>
+                  <label for="addProductHeartNotes" class="block text-sm font-medium text-text-muted mb-1">Heart Notes</label>
+                  <input id="addProductHeartNotes" name="heartNotes" maxlength="300" class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white focus:ring-1 focus:ring-primary" placeholder="e.g. Rose, Jasmine, Patchouli" type="text" />
+                </div>
+                <div>
+                  <label for="addProductBaseNotes" class="block text-sm font-medium text-text-muted mb-1">Base Notes</label>
+                  <input id="addProductBaseNotes" name="baseNotes" maxlength="300" class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white focus:ring-1 focus:ring-primary" placeholder="e.g. Amber, Musk, Sandalwood" type="text" />
+                </div>
+              </div>
+            </div>
+            <div class="px-6 py-4 bg-[#231e10] flex flex-row-reverse gap-2">
+              <button class="inline-flex w-full justify-center rounded-lg bg-primary px-3 py-2 text-sm font-bold text-background-dark shadow-sm hover:bg-[#dca60b] sm:w-auto" type="submit">Save Product</button>
+              <button id="closeModalBtn" class="inline-flex w-full justify-center rounded-lg bg-transparent border border-[#493f22] px-3 py-2 text-sm font-semibold text-text-muted shadow-sm ring-1 ring-inset ring-[#493f22] hover:bg-[#493f22] sm:w-auto" type="button">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <input id="adminProductConfig" type="hidden" value="<%= shouldOpenAddProductModal ? 'true' : 'false' %>">
+  <script src="/js/admin-product.js"></script>
+</body>
+
+</html>

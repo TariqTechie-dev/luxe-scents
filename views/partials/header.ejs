@@ -1,0 +1,91 @@
+<header
+    class="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-border-dark bg-background-light dark:bg-background-dark/95 backdrop-blur-sm">
+    <div class="px-6 md:px-10 py-4 flex items-center justify-between gap-4 max-w-[1440px] mx-auto">
+        <div class="flex items-center gap-4">
+            <a class="flex items-center gap-3 group" href="/">
+                <div class="size-8 text-primary transition-transform group-hover:scale-110">
+                    <span class="material-symbols-outlined !text-3xl" aria-hidden="true">local_florist</span>
+                </div>
+                <span class="text-xl md:text-2xl font-bold tracking-tight uppercase">Luxe Scents</span>
+            </a>
+        </div>
+
+        <div class="hidden md:flex flex-1 max-w-md mx-4 lg:mx-8">
+            <form action="/search" method="GET" class="relative w-full group" role="search">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span
+                        class="material-symbols-outlined text-text-muted group-focus-within:text-primary transition-colors"
+                        aria-hidden="true">search</span>
+                </div>
+                <label for="search-input" class="sr-only">Search fragrances</label>
+                <input id="search-input" name="q"
+                    class="block w-full pl-10 pr-3 py-2.5 border-none rounded-lg bg-gray-100 dark:bg-surface-dark text-sm placeholder-gray-500 dark:placeholder-text-muted focus:ring-1 focus:ring-primary focus:bg-white dark:focus:bg-surface-dark transition-all"
+                    placeholder="Search fragrances, brands..." type="text"
+                    value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" />
+            </form>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-4">
+            <% if (typeof session !== 'undefined' && session.userId) { %>
+                <% if (session.role === 'admin') { %>
+                    <a href="/admin/products"
+                        class="hidden sm:flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-700 bg-amber-100 dark:bg-amber-900/30 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/50 transition-colors"
+                        aria-label="Admin Panel">
+                        <span class="material-symbols-outlined text-base" aria-hidden="true">admin_panel_settings</span>
+                        Admin
+                    </a>
+                <% } %>
+                <a href="/dashboard"
+                    class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark transition-colors relative group"
+                    aria-label="My Account">
+                    <span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors"
+                        aria-hidden="true">account_circle</span>
+                </a>
+                <form action="/logout" method="POST" class="inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit"
+                        class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark transition-colors relative group"
+                        aria-label="Log out">
+                        <span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors"
+                            aria-hidden="true">logout</span>
+                    </button>
+                </form>
+            <% } else { %>
+                <a href="/login"
+                    class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark transition-colors relative group"
+                    aria-label="Log in">
+                    <span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors"
+                        aria-hidden="true">person</span>
+                </a>
+            <% } %>
+
+            <a href="/cart"
+                class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark transition-colors relative group"
+                aria-label="Shopping cart<% if (typeof session !== 'undefined' && session.cart && session.cart.totalQty > 0) { %>, <%= session.cart.totalQty %> item<%= session.cart.totalQty > 1 ? 's' : '' %><% } %>">
+                <span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors"
+                    aria-hidden="true">shopping_bag</span>
+                <% if (typeof session !== 'undefined' && session.cart && session.cart.totalQty > 0) { %>
+                    <span
+                        class="cart-count absolute -top-1 -right-1 h-5 min-w-[1.25rem] px-1 flex items-center justify-center text-[10px] font-bold text-background-dark rounded-full bg-primary border-2 border-background-light dark:border-background-dark"
+                        aria-hidden="true">
+                        <%= session.cart.totalQty %>
+                    </span>
+                <% } %>
+            </a>
+        </div>
+    </div>
+
+    <div class="md:hidden px-6 pb-4 max-w-[1440px] mx-auto">
+        <form action="/search" method="GET" class="relative w-full group" role="search">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span class="material-symbols-outlined text-text-muted group-focus-within:text-primary transition-colors"
+                    aria-hidden="true">search</span>
+            </div>
+            <label for="search-input-mobile" class="sr-only">Search fragrances</label>
+            <input id="search-input-mobile" name="q"
+                class="block w-full pl-10 pr-3 py-2.5 border-none rounded-lg bg-gray-100 dark:bg-surface-dark text-sm placeholder-gray-500 dark:placeholder-text-muted focus:ring-1 focus:ring-primary focus:bg-white dark:focus:bg-surface-dark transition-all"
+                placeholder="Search fragrances, brands..." type="text"
+                value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" />
+        </form>
+    </div>
+</header>

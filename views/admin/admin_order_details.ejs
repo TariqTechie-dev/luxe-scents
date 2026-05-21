@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Order Details - LuxParfum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/tailwind-config.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased">
+    <div class="flex h-screen w-full">
+        <!-- Side Navigation -->
+        <aside class="hidden lg:flex flex-col w-72 h-full bg-[#1c180d] border-r border-[#493f22] p-6 justify-between flex-shrink-0">
+            <div class="flex flex-col gap-8">
+                <div class="flex gap-3 items-center">
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-12 shadow-lg border border-[#493f22]"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLnJPo8QHf2Mawf_tWA7rct0PkvZsNnzt3vCJYem6p-nucJmYfFuJiy6Z54GbRvaMDMVVcraKQUB91SSq6kHT7RkN1bp9-ClwsOb-pNsqh9Xrvx5CUF0KgUGhJl8iCy_1L5SjKILegPG5maEmoldlq7KicI3JkFE9jdSi1EpDqJZNckxsiIFZ3lvSd_0fN8B5pNryhl_RlFqcJG8vry6nOzwRTKoQ9WG_uZM1SlHdSizQd34vTFnPJdHL9XMwpTgsWWfIJFQAAXj9M");'>
+                    </div>
+                    <div class="flex flex-col">
+                        <h1 class="text-white text-lg font-bold leading-tight">LuxParfum</h1>
+                        <p class="text-text-muted text-xs font-medium uppercase tracking-wider">Admin Panel</p>
+                    </div>
+                </div>
+                <nav class="flex flex-col gap-2">
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
+                        href="#">
+                        <span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
+                        <span class="text-sm font-medium">Dashboard</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/20 text-primary border border-primary/10"
+                        href="/admin/orders">
+                        <span class="material-symbols-outlined fill-1">shopping_bag</span>
+                        <span class="text-sm font-bold">Orders</span>
+                    </a>
+                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
+                        href="/admin/products">
+                        <span class="material-symbols-outlined group-hover:text-primary transition-colors">inventory_2</span>
+                        <span class="text-sm font-medium">Products</span>
+                    </a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#2d2616] border border-[#493f22]">
+                <div class="bg-center bg-no-repeat bg-cover rounded-full size-8"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCTlffrPyEDR69ZaoIOOY8z195fyKbljzSrj5ekiASWpbjgV5rn0DiJ1FyREk-9EBA2O1KiK2q9R1CDR6Y5Ijbn1rdv43fNrMrDm8jcazoLCE3Fw_b6nptnAWVZI7vr8ejQASR4ZGm3jwKUVpNOi2KhAy59ItXYsU9c-J2Z9YtCOqHR9NUmQlhDPv0f0tyKNSdmIRsGRXxJwX2tKkX0qFkXNO_pNcz9Vkyur9TSZJ4BGmwu8N6aAtzs4gO01od6AtZgjLbY9yQnoRQf");'>
+                </div>
+                <div class="flex flex-col overflow-hidden">
+                    <p class="text-white text-sm font-semibold truncate">Admin</p>
+                    <p class="text-text-muted text-xs truncate">Store Manager</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-full relative overflow-hidden">
+            <header class="h-16 border-b border-[#493f22] bg-background-dark/50 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-10">
+                <div class="flex items-center gap-4">
+                    <a href="/admin/orders" class="text-slate-400 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </a>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Order #<%= order._id.toString().slice(-6).toUpperCase() %></h2>
+                        <p class="text-xs text-slate-500">Detailed order information</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="flex-1 overflow-y-auto p-8">
+                <div class="max-w-4xl mx-auto space-y-6">
+                    <!-- Flash Messages -->
+                    <% if (success && success.length > 0) { %>
+                        <div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-6 py-4 rounded-lg text-sm flex items-center gap-3">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            <%= success[0] %>
+                        </div>
+                    <% } %>
+                    <% if (error && error.length > 0) { %>
+                        <div class="bg-red-500/10 border border-red-500/20 text-red-400 px-6 py-4 rounded-lg text-sm flex items-center gap-3">
+                            <span class="material-symbols-outlined">error</span>
+                            <%= error[0] %>
+                        </div>
+                    <% } %>
+
+                    <!-- Customer & Order Info -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-[#2d2616] border border-[#493f22] p-6 rounded-xl">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Customer Information</h3>
+                            <div class="space-y-3">
+                                <div>
+                                    <p class="text-xs text-slate-500">Name</p>
+                                    <p class="text-white font-semibold"><%= order.user?.fullName || 'N/A' %></p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500">Email</p>
+                                    <p class="text-white font-semibold"><%= order.user?.email || 'N/A' %></p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-500">Phone</p>
+                                    <p class="text-white font-semibold"><%= order.user?.phone || 'N/A' %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#2d2616] border border-[#493f22] p-6 rounded-xl">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Order Status</h3>
+                            <div class="space-y-4">
+                                <form method="POST" action="/admin/orders/<%= order._id %>/status">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <label class="text-xs text-slate-500 block mb-2">Order Status</label>
+                                    <select name="status" class="w-full bg-slate-800 border border-[#493f22] rounded-lg px-4 py-2 text-white text-sm mb-3">
+                                        <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                        <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
+                                        <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                        <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                        <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                    </select>
+                                    <button type="submit" class="w-full bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 transition-all">
+                                        Update Status
+                                    </button>
+                                </form>
+                                <form method="POST" action="/admin/orders/<%= order._id %>/payment-status">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <label class="text-xs text-slate-500 block mb-2">Payment Status</label>
+                                    <select name="paymentStatus" class="w-full bg-slate-800 border border-[#493f22] rounded-lg px-4 py-2 text-white text-sm mb-3">
+                                        <option value="Pending" <%= order.paymentStatus === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                        <option value="Paid" <%= order.paymentStatus === 'Paid' ? 'selected' : '' %>>Paid</option>
+                                        <option value="Refunded" <%= order.paymentStatus === 'Refunded' ? 'selected' : '' %>>Refunded</option>
+                                    </select>
+                                    <button type="submit" class="w-full bg-primary text-background-dark px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 transition-all">
+                                        Update Payment
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address -->
+                    <div class="bg-[#2d2616] border border-[#493f22] p-6 rounded-xl">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Shipping Address</h3>
+                        <div class="space-y-2 text-white">
+                            <p><%= order.shippingAddress.street %></p>
+                            <p><%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> <%= order.shippingAddress.zip %></p>
+                            <p><%= order.shippingAddress.country %></p>
+                        </div>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div class="bg-[#2d2616] border border-[#493f22] p-6 rounded-xl">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Order Items</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="border-b border-[#493f22]">
+                                        <th class="text-left py-2 text-xs text-slate-400 font-bold">Product</th>
+                                        <th class="text-left py-2 text-xs text-slate-400 font-bold">SKU</th>
+                                        <th class="text-center py-2 text-xs text-slate-400 font-bold">Quantity</th>
+                                        <th class="text-right py-2 text-xs text-slate-400 font-bold">Price</th>
+                                        <th class="text-right py-2 text-xs text-slate-400 font-bold">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-[#493f22]">
+                                    <% order.items.forEach(item => { %>
+                                        <tr>
+                                            <td class="py-3 text-white"><%= item.name %></td>
+                                            <td class="py-3 text-slate-400 font-mono text-xs"><%= item.product?.sku || 'N/A' %></td>
+                                            <td class="py-3 text-white text-center"><%= item.quantity %></td>
+                                            <td class="py-3 text-white text-right">$<%= item.price.toFixed(2) %></td>
+                                            <td class="py-3 text-white text-right">$<%= (item.price * item.quantity).toFixed(2) %></td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="bg-[#2d2616] border border-[#493f22] p-6 rounded-xl">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Order Summary</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between text-white">
+                                <span>Subtotal:</span>
+                                <span>$<%= order.totalAmount.toFixed(2) %></span>
+                            </div>
+                            <div class="flex justify-between text-white border-t border-[#493f22] pt-3">
+                                <span class="font-bold">Total Amount:</span>
+                                <span class="font-bold text-primary text-lg">$<%= order.totalAmount.toFixed(2) %></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Metadata -->
+                    <div class="bg-[#2d2616] border border-[#493f22] p-6 rounded-xl">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Order Metadata</h3>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-xs text-slate-500">Order Date</p>
+                                <p class="text-white font-semibold"><%= new Date(order.createdAt).toLocaleDateString() %></p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500">Last Updated</p>
+                                <p class="text-white font-semibold"><%= new Date(order.updatedAt).toLocaleDateString() %></p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-500">Order ID</p>
+                                <p class="text-white font-mono text-xs"><%= order._id %></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

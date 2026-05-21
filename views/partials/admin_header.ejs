@@ -1,0 +1,45 @@
+<header
+    class="h-16 flex items-center justify-between px-8 py-3 border-b border-[#493f22] bg-background-dark/95 backdrop-blur z-20 shrink-0 sticky top-0">
+    <div class="flex items-center gap-4 text-white">
+        <button class="md:hidden text-white">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <h2 class="text-xl font-bold tracking-tight text-white hidden sm:block">
+            <%= title %>
+        </h2>
+    </div>
+    <div class="flex items-center gap-6">
+        <!-- Search -->
+        <div class="relative hidden sm:block w-64 lg:w-96 group">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span
+                    class="material-symbols-outlined text-[#cbbc90] group-focus-within:text-primary transition-colors">search</span>
+            </div>
+            <input
+                class="block w-full pl-10 pr-3 py-2 border border-[#493f22] rounded-lg leading-5 bg-[#2d281a] text-gray-300 placeholder-[#cbbc90]/50 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm transition-all"
+                placeholder="Search..." type="text" />
+        </div>
+        <!-- Actions -->
+        <div class="flex items-center gap-4">
+            <button
+                class="relative p-2 rounded-full hover:bg-[#493f22] text-[#cbbc90] hover:text-primary transition-colors">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute top-2 right-2 flex h-2 w-2">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+            </button>
+            <div class="h-8 w-[1px] bg-[#493f22]"></div>
+            <div class="flex items-center gap-3 cursor-pointer">
+                <div class="text-right hidden md:block">
+                    <p class="text-sm font-medium text-white">Tariq H.</p>
+                    <p class="text-xs text-[#cbbc90]">Admin</p>
+                </div>
+                <div class="bg-center bg-no-repeat bg-cover rounded-full size-9 border border-[#493f22]"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDUT4KT8VLrkl9ACcE6MNe1OTOFB8CxMqMCFMhBQI-MG8xd1UPg7A2WujgoYi6EtOXZqlWhOOBhmMoWDw0I6Uac5KlzHhXB6j8awfejSo8nZggD2Ak71kBfnLg0eZLKke6PQ-E45PZ36_IbgODorQXmgoS-TpBbew-sFGMjH3PU2_Awo8VvTVrjETeyLNPpmYPF1O5Mnw2scCVWmu7dNflvnRtAAH3lSkMHv2ZtVZDPsg2H2Tb_Gi5n4JEh8XtwtwFuOq1XKUf2ScYo");'>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
