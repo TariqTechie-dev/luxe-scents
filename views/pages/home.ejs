@@ -9,29 +9,29 @@
   <%- include('../partials/header') %>
 
   <main class="flex-1">
-    <section class="px-6 md:px-10 pt-8 pb-10">
+    <section class="px-3 sm:px-6 md:px-10 pt-10 pb-10">
       <% const heroProduct = featuredProducts && featuredProducts.length > 0 ? featuredProducts[0] : null; %>
       <div class="max-w-[1440px] mx-auto">
         <div class="relative overflow-hidden rounded-[2rem] border border-gray-200 dark:border-border-dark/60 bg-white dark:bg-surface-dark shadow-[0_30px_80px_rgba(15,23,42,0.12)]">
           <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,192,37,0.24),transparent_36%),radial-gradient(circle_at_bottom_right,rgba(244,192,37,0.16),transparent_30%)]"></div>
           <div class="absolute inset-y-0 right-0 hidden w-1/2 bg-[linear-gradient(135deg,rgba(15,23,42,0),rgba(15,23,42,0.05))] lg:block dark:bg-[linear-gradient(135deg,rgba(255,255,255,0),rgba(255,255,255,0.04))]"></div>
-          <div class="relative grid gap-10 lg:grid-cols-[1.05fr_0.95fr] px-8 py-12 md:px-12 md:py-16 lg:px-16 lg:py-20 items-center">
-            <div class="max-w-3xl">
+          <div class="relative grid gap-10 lg:grid-cols-[1.05fr_0.95fr] px-2 sm:px-8 py-10 md:px-12 md:py-16 lg:px-16 lg:py-20 items-center">
+            <div class="max-w-3xl order-2 lg:order-1">
               <div class="inline-flex items-center gap-3 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-xs md:text-sm uppercase tracking-[0.3em] text-primary font-bold mb-6">
                 <span class="inline-block h-2.5 w-2.5 rounded-full bg-primary"></span>
                 Luxe Scents
               </div>
-              <h1 class="text-4xl md:text-6xl font-black tracking-tight leading-none text-slate-900 dark:text-white mb-6">
+              <h1 class="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight leading-none text-slate-900 dark:text-white mb-6">
                 Find a signature scent that stays with the room long after you leave.
               </h1>
               <p class="text-lg md:text-xl text-slate-600 dark:text-text-muted font-light max-w-2xl mb-8">
                 Explore premium perfumes chosen for elegance, confidence, and memorable everyday wear, from soft florals to deep amber blends.
               </p>
-              <div class="flex flex-wrap items-center gap-4 mb-8">
-                <a href="/shop" class="inline-flex items-center justify-center rounded-full bg-primary text-slate-900 font-semibold px-8 py-4 shadow-lg shadow-primary/20 hover:bg-white transition-colors">
+              <div class="flex flex-col sm:flex-row flex-wrap items-center gap-4 mb-8">
+                <a href="/shop" class="inline-flex items-center justify-center rounded-full bg-primary text-slate-900 font-semibold px-8 py-4 shadow-lg shadow-primary/20 hover:bg-white transition-colors w-full sm:w-auto text-base sm:text-lg">
                   Shop Signature Scents
                 </a>
-                <a href="#best-sellers" class="inline-flex items-center justify-center rounded-full border border-gray-300 dark:border-border-dark text-slate-900 dark:text-white font-semibold px-8 py-4 hover:border-primary hover:text-primary transition-colors">
+                <a href="#best-sellers" class="inline-flex items-center justify-center rounded-full border border-gray-300 dark:border-border-dark text-slate-900 dark:text-white font-semibold px-8 py-4 hover:border-primary hover:text-primary transition-colors w-full sm:w-auto text-base sm:text-lg">
                   Explore Best Sellers
                 </a>
               </div>
@@ -51,7 +51,7 @@
               </div>
             </div>
 
-            <div class="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+            <div class="grid gap-5 lg:grid-cols-[1.15fr_0.85fr] order-1 lg:order-2">
               <div class="relative overflow-hidden rounded-[1.9rem] border border-gray-200 dark:border-border-dark/50 bg-gradient-to-br from-[#f8f3e8] via-white to-amber-50 dark:from-[#1a160d] dark:via-[#16120b] dark:to-[#231e10] p-6 md:p-8 min-h-[420px]">
                 <div class="absolute -top-14 right-8 h-36 w-36 rounded-full bg-primary/20 blur-3xl"></div>
                 <div class="absolute -bottom-10 left-0 h-28 w-28 rounded-full bg-slate-900/10 blur-3xl dark:bg-primary/10"></div>
@@ -71,7 +71,7 @@
                   <div class="relative mx-auto flex w-full max-w-[280px] items-center justify-center">
                     <div class="absolute inset-x-10 bottom-2 h-10 rounded-full bg-slate-900/15 blur-2xl dark:bg-black/40"></div>
                     <% if (heroProduct && heroProduct.imageUrl) { %>
-                      <img src="<%= heroProduct.imageUrl %>" alt="<%= heroProduct.name %>" class="relative max-h-[300px] w-auto object-contain drop-shadow-[0_24px_40px_rgba(15,23,42,0.22)]" />
+                      <img src="<%= heroProduct.imageUrl %>" alt="<%= heroProduct.name %>" class="relative max-h-[300px] w-auto object-contain drop-shadow-[0_24px_40px_rgba(15,23,42,0.22)]" loading="lazy" />
                     <% } else { %>
                       <div class="relative h-[300px] w-[220px] rounded-[2.5rem] border border-white/60 bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(243,232,205,0.45))] p-5 shadow-[0_20px_45px_rgba(15,23,42,0.16)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(40,32,18,0.95),rgba(20,16,10,0.95))]">
                         <div class="mx-auto h-16 w-20 rounded-b-[1.5rem] rounded-t-md bg-slate-900/80 dark:bg-primary/80"></div>
@@ -141,7 +141,7 @@
       </div>
     </section>
 
-    <section id="best-sellers" class="px-6 md:px-10 pb-20">
+    <section id="best-sellers" class="px-3 sm:px-6 md:px-10 pb-20">
       <div class="max-w-[1440px] mx-auto">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 pb-8">
           <div class="max-w-2xl">
@@ -164,7 +164,7 @@
               <%- include('../partials/product_card', { product: product }) %>
             <% }); %>
           <% } else { %>
-            <div class="col-span-full text-center py-20 rounded-2xl border border-gray-200 dark:border-border-dark bg-white dark:bg-surface-dark">
+            <div class="col-span-full text-center py-20 rounded-2xl border border-gray-200 dark:border-border-dark bg-white dark:bg-surface-dark mx-2 sm:mx-0">
               <h3 class="text-xl font-bold text-slate-900 dark:text-white">No featured products available yet.</h3>
               <p class="mt-3 text-slate-600 dark:text-text-muted">Browse the full shop to explore the current collection.</p>
               <a href="/shop" class="inline-flex items-center justify-center rounded-full bg-primary text-slate-900 font-semibold px-6 py-3 mt-6 hover:bg-white transition-colors">
