@@ -52,7 +52,7 @@ const addProductValidation = [
         .toUpperCase(),
     body('price')
         .isFloat({ min: 0 })
-        .withMessage('Price must be a positive number.')
+        .withMessage('Price must be a valid PKR amount.')
         .toFloat(),
     body('stock')
         .isInt({ min: 0 })
@@ -133,7 +133,7 @@ const updateProductValidation = [
         .toUpperCase(),
     body('price')
         .isFloat({ min: 0 })
-        .withMessage('Price must be a positive number.')
+        .withMessage('Price must be a valid PKR amount.')
         .toFloat(),
     body('stock')
         .isInt({ min: 0 })

@@ -20,7 +20,6 @@
     exportParams.set('export', 'csv');
 
     const exportUrl = `/admin/customers?${exportParams.toString()}`;
-    const formatCurrency = (value) => Number(value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     const formatDate = (value, fallback = 'Not available') => {
       if (!value) return fallback;
       return new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });

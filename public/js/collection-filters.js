@@ -46,12 +46,12 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   priceMaxInput?.addEventListener('input', () => {
-    if (priceMaxValue) priceMaxValue.textContent = priceMaxInput.value;
+    if (priceMaxValue) priceMaxValue.textContent = formatFilterCurrency(priceMaxInput.value);
     filterProducts();
   });
 
   if (priceMaxInput && priceMaxValue) {
-    priceMaxValue.textContent = priceMaxInput.value;
+    priceMaxValue.textContent = formatFilterCurrency(priceMaxInput.value);
   }
 
   document.querySelectorAll('#reset-filters, #reset-filters-mobile')?.forEach(button => {
@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       if (priceMaxInput) {
-        priceMaxInput.value = priceMaxInput.defaultValue || 500;
-        if (priceMaxValue) priceMaxValue.textContent = priceMaxInput.value;
+        priceMaxInput.value = priceMaxInput.defaultValue || 100000;
+        if (priceMaxValue) priceMaxValue.textContent = formatFilterCurrency(priceMaxInput.value);
       }
 
       window.location.href = window.location.pathname;
@@ -76,3 +76,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   window.filterProducts = filterProducts; // Global for buttons
 });
+
+function formatFilterCurrency(value) {
+  if (window.LuxeCurrency?.format) {
+    return window.LuxeCurrency.format(value);
+  }
+
+  return `Rs. ${Number(value || 0).toLocaleString('en-PK', { maximumFractionDigits: 2 })}`;
+}

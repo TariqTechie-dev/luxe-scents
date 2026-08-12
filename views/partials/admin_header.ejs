@@ -1,8 +1,14 @@
 <header
     class="h-16 flex items-center justify-between px-8 py-3 border-b border-[#493f22] bg-background-dark/95 backdrop-blur z-20 shrink-0 sticky top-0">
     <div class="flex items-center gap-4 text-white">
-        <button class="md:hidden text-white">
-            <span class="material-symbols-outlined">menu</span>
+        <button
+            type="button"
+            data-admin-sidebar-open
+            class="inline-flex size-10 items-center justify-center rounded-lg border border-[#493f22] bg-[#2d281a] text-[#cbbc90] transition-colors hover:border-primary/60 hover:text-white md:hidden"
+            aria-controls="adminSidebar"
+            aria-expanded="false"
+            aria-label="Open admin navigation">
+            <span class="material-symbols-outlined" aria-hidden="true">menu</span>
         </button>
         <h2 class="text-xl font-bold tracking-tight text-white hidden sm:block">
             <%= title %>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title><%= title %></title>
+    <title><%= title %> - Luxe Scents Admin</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap"
         rel="stylesheet" />
@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="/css/style.css">
     <!-- Main JS (Tailwind Config) -->
     <script src="/js/tailwind-config.js"></script>
+    <script src="/js/admin-sidebar.js" defer></script>
     <style>
         /* Custom scrollbar for webkit */
         ::-webkit-scrollbar {
@@ -39,67 +40,24 @@
     </style>
 </head>
 
-<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased">
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-hidden">
     <div class="flex h-screen w-full">
-        <!-- Side Navigation -->
-        <aside class="hidden lg:flex flex-col w-72 h-full bg-[#1c180d] border-r border-[#493f22] p-6 justify-between flex-shrink-0">
-            <div class="flex flex-col gap-8">
-                <div class="flex gap-3 items-center">
-                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-12 shadow-lg border border-[#493f22]"
-                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLnJPo8QHf2Mawf_tWA7rct0PkvZsNnzt3vCJYem6p-nucJmYfFuJiy6Z54GbRvaMDMVVcraKQUB91SSq6kHT7RkN1bp9-ClwsOb-pNsqh9Xrvx5CUF0KgUGhJl8iCy_1L5SjKILegPG5maEmoldlq7KicI3JkFE9jdSi1EpDqJZNckxsiIFZ3lvSd_0fN8B5pNryhl_RlFqcJG8vry6nOzwRTKoQ9WG_uZM1SlHdSizQd34vTFnPJdHL9XMwpTgsWWfIJFQAAXj9M");'>
-                    </div>
-                    <div class="flex flex-col">
-                        <h1 class="text-white text-lg font-bold leading-tight">LuxParfum</h1>
-                        <p class="text-text-muted text-xs font-medium uppercase tracking-wider">Admin Panel</p>
-                    </div>
-                </div>
-                <!-- Navigation Links -->
-                <nav class="flex flex-col gap-2">
-                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
-                        href="#">
-                        <span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
-                        <span class="text-sm font-medium">Dashboard</span>
-                    </a>
-                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
-                        href="/admin/orders">
-                        <span class="material-symbols-outlined group-hover:text-primary transition-colors">shopping_bag</span>
-                        <span class="text-sm font-medium">Orders</span>
-                    </a>
-                    <!-- Active State -->
-                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/20 text-primary border border-primary/10"
-                        href="/admin/products">
-                        <span class="material-symbols-outlined fill-1">inventory_2</span>
-                        <span class="text-sm font-bold">Products</span>
-                    </a>
-                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
-                        href="#">
-                        <span class="material-symbols-outlined group-hover:text-primary transition-colors">group</span>
-                        <span class="text-sm font-medium">Customers</span>
-                    </a>
-                    <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group"
-                        href="/admin/analytics">
-                        <span class="material-symbols-outlined group-hover:text-primary transition-colors">analytics</span>
-                        <span class="text-sm font-medium">Analytics</span>
-                    </a>
-                </nav>
-            </div>
-            <!-- User Profile -->
-            <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#2d2616] border border-[#493f22]">
-                <div class="bg-center bg-no-repeat bg-cover rounded-full size-8"
-                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCTlffrPyEDR69ZaoIOOY8z195fyKbljzSrj5ekiASWpbjgV5rn0DiJ1FyREk-9EBA2O1KiK2q9R1CDR6Y5Ijbn1rdv43fNrMrDm8jcazoLCE3Fw_b6nptnAWVZI7vr8ejQASR4ZGm3jwKUVpNOi2KhAy59ItXYsU9c-J2Z9YtCOqHR9NUmQlhDPv0f0tyKNSdmIRsGRXxJwX2tKkX0qFkXNO_pNcz9Vkyur9TSZJ4BGmwu8N6aAtzs4gO01od6AtZgjLbY9yQnoRQf");'>
-                </div>
-                <div class="flex flex-col overflow-hidden">
-                    <p class="text-white text-sm font-semibold truncate">Admin</p>
-                    <p class="text-text-muted text-xs truncate">Store Manager</p>
-                </div>
-            </div>
-        </aside>
+        <%- include('../partials/admin_sidebar', { path: '/admin/products' }) %>
 
         <!-- Main Content -->
         <main class="flex-1 flex flex-col h-full relative overflow-hidden">
             <!-- Header -->
             <header class="h-16 border-b border-[#493f22] bg-background-dark/50 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-10">
                 <div class="flex items-center gap-4">
+                    <button
+                        type="button"
+                        data-admin-sidebar-open
+                        class="inline-flex size-10 items-center justify-center rounded-lg border border-[#493f22] bg-[#2d281a] text-[#cbbc90] transition-colors hover:border-primary/60 hover:text-white md:hidden"
+                        aria-controls="adminSidebar"
+                        aria-expanded="false"
+                        aria-label="Open admin navigation">
+                        <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+                    </button>
                     <a href="/admin/products" class="text-slate-400 hover:text-white transition-colors">
                         <span class="material-symbols-outlined">arrow_back</span>
                     </a>
@@ -163,10 +121,10 @@
                                 </div>
 
                                 <div>
-                                    <label for="editProductPrice" class="block text-sm font-medium text-text-muted mb-2">Price ($) *</label>
-                                    <input id="editProductPrice" name="price" required step="0.01" min="0" inputmode="decimal"
+                                    <label for="editProductPrice" class="block text-sm font-medium text-text-muted mb-2">Price (PKR) *</label>
+                                    <input id="editProductPrice" name="price" required step="1" min="0" inputmode="numeric"
                                         class="w-full bg-[#231e10] border border-[#493f22] rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-primary focus:border-primary transition-all"
-                                        placeholder="0.00" type="number" value="<%= product.price %>" />
+                                        placeholder="12000" type="number" value="<%= product.price %>" />
                                 </div>
 
                                 <div>

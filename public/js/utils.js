@@ -1,3 +1,26 @@
+(() => {
+  const CURRENCY_CODE = 'PKR';
+  const CURRENCY_LABEL = 'Rs.';
+  const CURRENCY_LOCALE = 'en-PK';
+
+  function formatCurrency(value) {
+    const amount = Number(value);
+    const safeAmount = Number.isFinite(amount) ? amount : 0;
+    const hasFraction = !Number.isInteger(safeAmount);
+
+    return `${CURRENCY_LABEL} ${safeAmount.toLocaleString(CURRENCY_LOCALE, {
+      minimumFractionDigits: hasFraction ? 2 : 0,
+      maximumFractionDigits: 2
+    })}`;
+  }
+
+  window.LuxeCurrency = Object.freeze({
+    code: CURRENCY_CODE,
+    label: CURRENCY_LABEL,
+    format: formatCurrency
+  });
+})();
+
 window.showToast = function showToast(message, type = 'success') {
   const toast = document.createElement('div');
 

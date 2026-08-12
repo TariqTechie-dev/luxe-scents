@@ -157,7 +157,9 @@ function updateTextContent(target, value) {
 
 function updateCurrency(target, value) {
   const elements = typeof target === 'string' ? document.querySelectorAll(target) : [target];
-  const formattedValue = `$${Number(value || 0).toFixed(2)}`;
+  const formattedValue = window.LuxeCurrency?.format
+    ? window.LuxeCurrency.format(value)
+    : `Rs. ${Number(value || 0).toLocaleString('en-PK', { maximumFractionDigits: 2 })}`;
 
   elements.forEach((element) => {
     if (!element) {

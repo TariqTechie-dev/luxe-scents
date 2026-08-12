@@ -19,6 +19,8 @@ const SORT_OPTIONS = {
   last_order: { lastOrderAt: -1, createdAt: -1 }
 };
 
+const VIP_SPEND_THRESHOLD_PKR = 50000;
+
 const escapeRegex = (value) => {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 };
@@ -87,7 +89,7 @@ const buildCustomerPipeline = ({ q = '', segment = '', sort = 'newest' } = {}) =
         segment: {
           $switch: {
             branches: [
-              { case: { $or: [{ $gte: ['$totalOrders', 5] }, { $gte: ['$totalSpent', 500] }] }, then: 'VIP' },
+              { case: { $or: [{ $gte: ['$totalOrders', 5] }, { $gte: ['$totalSpent', VIP_SPEND_THRESHOLD_PKR] }] }, then: 'VIP' },
               { case: { $and: [{ $gt: ['$totalOrders', 0] }, { $lt: ['$lastOrderAt', inactiveCutoff] }] }, then: 'Inactive' },
               { case: { $gte: ['$totalOrders', 2] }, then: 'Repeat' },
               { case: '$isNewCustomer', then: 'New' },
@@ -147,7 +149,7 @@ const escapeCsvValue = (value) => {
 };
 
 const buildCustomerCsv = (customers) => {
-  const headers = ['Customer ID', 'Name', 'Email', 'Phone', 'Location', 'Orders', 'Lifetime Spend', 'Last Order', 'Segment', 'Joined'];
+  const headers = ['Customer ID', 'Name', 'Email', 'Phone', 'Location', 'Orders', 'Lifetime Spend (PKR)', 'Last Order', 'Segment', 'Joined'];
   const rows = customers.map((customer) => {
     const location = [customer.address?.city, customer.address?.country].filter(Boolean).join(', ');
     const lastOrder = customer.lastOrderAt ? new Date(customer.lastOrderAt).toISOString().slice(0, 10) : '';

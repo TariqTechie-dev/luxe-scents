@@ -1,60 +1,75 @@
+<%
+    const currentPath = typeof path !== 'undefined' ? path : '';
+    const navItems = [
+        { href: '/admin/analytics', label: 'Dashboard', icon: 'dashboard', match: '/admin/analytics' },
+        { href: '/admin/products', label: 'Products', icon: 'inventory_2', match: '/admin/products' },
+        { href: '/admin/orders', label: 'Orders', icon: 'shopping_cart', match: '/admin/orders' },
+        { href: '/admin/customers', label: 'Customers', icon: 'group', match: '/admin/customers' }
+    ];
+
+    const isActiveAdminPath = (item) => currentPath === item.match || currentPath.startsWith(`${item.match}/`);
+%>
+
+<div
+    id="sidebarBackdrop"
+    data-admin-sidebar-backdrop
+    class="fixed inset-0 z-40 hidden bg-black/70 backdrop-blur-sm md:hidden"
+    aria-hidden="true"></div>
+
 <aside
-    class="hidden md:flex flex-col w-64 h-full border-r border-[#493f22] bg-background-dark shrink-0 transition-all duration-300">
-    <div class="flex flex-col h-full p-4">
-        <!-- Brand -->
-        <div class="flex items-center gap-3 px-2 py-6 mb-4">
-            <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shadow-[0_0_15px_rgba(244,192,37,0.3)]"
-                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBaTkoZge5gaapf-z7r7NxgePfFeKn-KvW3IXUtS1jkPQcnt3frBCsMbmpYHjUa2QGuxWZDaQo3dHYGv8FnZm_88_eSEyOcjjnW3fWDyV8GCix4TRzXhovzwI7riiRDE9Mup9AtmdSYFzfblvTa8mePZSFlQj_ezAroxmFG4_cHlM5fty3_OwrTPCMHhPRr9yOp8_q1AU9DjLWc5fzxo0fTsc7d2bZq1p1vEoWDPcPEh68wm2YgYSscJLNqdjeQRTswimVTrqfGQSpe");'>
-            </div>
-            <div class="flex flex-col">
-                <h1 class="text-white text-lg font-bold tracking-tight">Luxe Scents</h1>
-                <p class="text-primary/80 text-xs font-medium uppercase tracking-widest">Admin</p>
-            </div>
+    id="adminSidebar"
+    data-admin-sidebar
+    class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] -translate-x-full flex-col justify-between border-r border-[#493f22] bg-background-dark p-4 transition-transform duration-300 ease-out md:static md:z-auto md:h-full md:w-64 md:max-w-none md:translate-x-0 md:shrink-0"
+    aria-label="Admin navigation"
+    aria-hidden="true"
+    tabindex="-1"
+    inert>
+    <div class="flex min-h-0 flex-1 flex-col">
+        <div class="flex items-center justify-between gap-3 px-2 py-6 mb-4">
+            <a href="/admin/analytics" class="flex items-center gap-3 text-white hover:text-primary transition-colors">
+                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shadow-[0_0_15px_rgba(244,192,37,0.3)]"
+                    style='background-image: url("/images/tariq-profile.png");'>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-bold tracking-tight">Luxe Scents</span>
+                    <span class="text-primary/80 text-xs font-medium uppercase tracking-widest">Admin</span>
+                </div>
+            </a>
+            <button
+                type="button"
+                data-admin-sidebar-close
+                class="inline-flex size-10 items-center justify-center rounded-lg border border-[#493f22] bg-[#2d281a] text-[#cbbc90] transition-colors hover:border-primary/60 hover:text-white md:hidden"
+                aria-label="Close admin navigation">
+                <span class="material-symbols-outlined text-xl" aria-hidden="true">close</span>
+            </button>
         </div>
-        <!-- Navigation Links -->
-        <nav class="flex flex-col gap-2 flex-1">
-            <a href="/admin/analytics"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#493f22]/30 text-[#cbbc90] hover:text-white transition-all group <%= path === '/admin/analytics' ? 'bg-primary/10 text-white border border-primary/20' : '' %>">
-                <span
-                    class="material-symbols-outlined <%= path === '/admin/analytics' ? 'text-primary' : 'group-hover:text-primary' %> transition-colors">dashboard</span>
-                <span class="text-sm font-medium">Dashboard</span>
-            </a>
-            <a href="/admin/products"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#493f22]/30 text-[#cbbc90] hover:text-white transition-all group <%= path === '/admin/products' ? 'bg-primary/10 text-white border border-primary/20' : '' %>">
-                <span
-                    class="material-symbols-outlined <%= path === '/admin/products' ? 'text-primary' : 'group-hover:text-primary' %> transition-colors">inventory_2</span>
-                <span class="text-sm font-medium">Products</span>
-            </a>
-            <a href="/admin/orders"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#493f22]/30 text-[#cbbc90] hover:text-white transition-all group <%= path === '/admin/orders' ? 'bg-primary/10 text-white border border-primary/20' : '' %>">
-                <span
-                    class="material-symbols-outlined <%= path === '/admin/orders' ? 'text-primary' : 'group-hover:text-primary' %> transition-colors">shopping_cart</span>
-                <span class="text-sm font-medium">Orders</span>
-            </a>
-            <a href="/admin/customers"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#493f22]/30 text-[#cbbc90] hover:text-white transition-all group <%= path === '/admin/customers' ? 'bg-primary/10 text-white border border-primary/20' : '' %>">
-                <span
-                    class="material-symbols-outlined <%= path === '/admin/customers' ? 'text-primary' : 'group-hover:text-primary' %> transition-colors">group</span>
-                <span class="text-sm font-medium">Customers</span>
-            </a>
-            <a href="#"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#493f22]/30 text-[#cbbc90] hover:text-white transition-all group">
-                <span class="material-symbols-outlined group-hover:text-primary transition-colors">analytics</span>
-                <span class="text-sm font-medium">Reports</span>
-            </a>
+
+        <nav class="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto" aria-label="Admin sections">
+            <% navItems.forEach((item) => {
+                const active = isActiveAdminPath(item);
+            %>
+                <a
+                    href="<%= item.href %>"
+                    class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm transition-all group <%= active ? 'border border-primary/20 bg-primary/10 text-white' : 'text-[#cbbc90] hover:bg-[#493f22]/30 hover:text-white' %>"
+                    <%= active ? 'aria-current="page"' : '' %>>
+                    <span class="material-symbols-outlined transition-colors <%= active ? 'text-primary' : 'group-hover:text-primary' %>" aria-hidden="true"><%= item.icon %></span>
+                    <span class="font-medium"><%= item.label %></span>
+                </a>
+            <% }) %>
         </nav>
-        <!-- Bottom Settings -->
-        <div class="mt-auto pt-4 border-t border-[#493f22]">
-            <a href="#"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#493f22]/30 text-[#cbbc90] hover:text-white transition-all group">
-                <span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
-                <span class="text-sm font-medium">Settings</span>
-            </a>
-            <a href="/"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#493f22]/30 text-[#cbbc90] hover:text-white transition-all group">
-                <span class="material-symbols-outlined group-hover:text-primary transition-colors">logout</span>
-                <span class="text-sm font-medium">Logout</span>
-            </a>
-        </div>
+    </div>
+
+    <div class="mt-4 space-y-2 border-t border-[#493f22] pt-4">
+        <a href="/" class="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-[#cbbc90] transition-all hover:bg-[#493f22]/30 hover:text-white group">
+            <span class="material-symbols-outlined transition-colors group-hover:text-primary" aria-hidden="true">storefront</span>
+            <span class="font-medium">View Store</span>
+        </a>
+        <form action="/logout" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button type="submit" class="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm text-[#cbbc90] transition-all hover:bg-red-900/20 hover:text-red-300 group">
+                <span class="material-symbols-outlined transition-colors group-hover:text-red-300" aria-hidden="true">logout</span>
+                <span class="font-medium">Logout</span>
+            </button>
+        </form>
     </div>
 </aside>

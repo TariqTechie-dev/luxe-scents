@@ -198,7 +198,7 @@
                                                         <%= order.status %>
                                                     </span>
                                                 </td>
-                                                <td class="px-6 py-4 text-white text-sm font-medium">$<%= order.totalAmount.toFixed(2) %></td>
+                                                <td class="px-6 py-4 text-white text-sm font-medium"><%= formatCurrency(order.totalAmount) %></td>
                                                 <td class="px-6 py-4">
                                                     <div class="flex items-center justify-end gap-3">
                                                         <% if (order.status === 'Pending') { %>

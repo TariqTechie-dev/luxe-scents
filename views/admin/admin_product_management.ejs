@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Admin Product Management - LuxParfum</title>
+  <title>Product Management - Luxe Scents Admin</title>
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
   <!-- Icons -->
@@ -44,69 +44,17 @@
   const shouldOpenAddProductModal = Boolean(showAddProductModal);
   %>
   <div class="flex h-screen w-full">
-    <div id="sidebarBackdrop" class="fixed inset-0 z-40 hidden bg-black/70 backdrop-blur-sm lg:hidden"></div>
-    <!-- Side Navigation -->
-    <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] -translate-x-full flex-col justify-between border-r border-[#493f22] bg-[#1c180d] p-6 transition-transform duration-300 ease-out lg:static lg:z-auto lg:h-full lg:max-w-none lg:translate-x-0 lg:flex-shrink-0">
-      <div class="flex flex-col gap-8">
-        <!-- Branding -->
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex gap-3 items-center">
-            <div class="bg-center bg-no-repeat bg-cover rounded-full size-12 shadow-lg border border-[#493f22]" data-alt="LuxParfum Abstract Gold Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLnJPo8QHf2Mawf_tWA7rct0PkvZsNnzt3vCJYem6p-nucJmYfFuJiy6Z54GbRvaMDMVVcraKQUB91SSq6kHT7RkN1bp9-ClwsOb-pNsqh9Xrvx5CUF0KgUGhJl8iCy_1L5SjKILegPG5maEmoldlq7KicI3JkFE9jdSi1EpDqJZNckxsiIFZ3lvSd_0fN8B5pNryhl_RlFqcJG8vry6nOzwRTKoQ9WG_uZM1SlHdSizQd34vTFnPJdHL9XMwpTgsWWfIJFQAAXj9M");'>
-            </div>
-            <div class="flex flex-col">
-              <h1 class="text-white text-lg font-bold leading-tight">Luxe Scents</h1>
-              <p class="text-text-muted text-xs font-medium uppercase tracking-wider">Admin Panel</p>
-            </div>
-          </div>
-          <button id="closeSidebarBtn" type="button" class="inline-flex size-10 items-center justify-center rounded-lg border border-[#493f22] bg-[#2d2616] text-text-muted transition-colors hover:text-white hover:border-text-muted lg:hidden" aria-label="Close navigation menu">
-            <span class="material-symbols-outlined text-xl">close</span>
-          </button>
-        </div>
-        <!-- Navigation Links -->
-        <nav class="flex flex-col gap-2">
-          <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group" href="#">
-            <span class="material-symbols-outlined group-hover:text-primary transition-colors">dashboard</span>
-            <span class="text-sm font-medium">Dashboard</span>
-          </a>
-          <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group" href="/admin/orders">
-            <span class="material-symbols-outlined group-hover:text-primary transition-colors">shopping_bag</span>
-            <span class="text-sm font-medium">Orders</span>
-          </a>
-          <!-- Active State -->
-          <a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/20 text-primary border border-primary/10" href="/admin/products">
-            <span class="material-symbols-outlined fill-1">inventory_2</span>
-            <span class="text-sm font-bold">Products</span>
-          </a>
-          <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group" href="/admin/customers">
-            <span class="material-symbols-outlined group-hover:text-primary transition-colors">group</span>
-            <span class="text-sm font-medium">Customers</span>
-          </a>
-          <a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-muted hover:bg-[#493f22] hover:text-white transition-colors group" href="/admin/analytics">
-            <span class="material-symbols-outlined group-hover:text-primary transition-colors">analytics</span>
-            <span class="text-sm font-medium">Analytics</span>
-          </a>
-        </nav>
-      </div>
-      <!-- User Profile -->
-      <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#2d2616] border border-[#493f22]">
-        <div class="bg-center bg-no-repeat bg-cover rounded-full size-8" data-alt="Admin User Profile Picture" style='background-image: url("/images/tariq-profile.png");'>
-        </div>
-        <div class="flex flex-col overflow-hidden">
-          <p class="text-white text-sm font-semibold truncate">Tariq Hussain</p>
-          <p class="text-text-muted text-xs truncate">Store Manager</p>
-        </div>
-      </div>
-    </aside>
+    <%- include('../partials/admin_sidebar', { path: '/admin/products' }) %>
     <!-- Main Content Area -->
     <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-background-light dark:bg-background-dark">
       <!-- Header Sticky -->
       <header class="w-full px-8 py-6 flex flex-col gap-6 z-10 bg-background-light dark:bg-background-dark/95 backdrop-blur-sm sticky top-0 border-b border-[#493f22]/30">
         <!-- Breadcrumbs -->
         <div class="flex items-center gap-3 text-sm">
-          <button id="openSidebarBtn" type="button" class="inline-flex size-11 items-center justify-center rounded-lg border border-[#493f22] bg-[#2d2616] text-text-muted transition-colors hover:text-white hover:border-text-muted lg:hidden" aria-label="Open navigation menu">
-            <span class="material-symbols-outlined text-[22px]">menu</span>
+          <button type="button" data-admin-sidebar-open class="inline-flex size-11 items-center justify-center rounded-lg border border-[#493f22] bg-[#2d2616] text-text-muted transition-colors hover:text-white hover:border-text-muted md:hidden" aria-controls="adminSidebar" aria-expanded="false" aria-label="Open admin navigation">
+            <span class="material-symbols-outlined text-[22px]" aria-hidden="true">menu</span>
           </button>
-          <a class="text-text-muted hover:text-primary transition-colors" href="#">Dashboard</a>
+          <a class="text-text-muted hover:text-primary transition-colors" href="/admin/analytics">Dashboard</a>
           <span class="text-[#493f22] material-symbols-outlined text-sm">chevron_right</span>
           <span class="text-white font-medium">Inventory Management</span>
         </div>
@@ -217,7 +165,7 @@
                       </div>
                     </td>
                     <td class="p-4">
-                      <span class="text-white font-bold">$<%= product.price.toFixed(2) %>
+                      <span class="text-white font-bold"><%= formatCurrency(product.price) %>
                       </span>
                     </td>
                     <td class="p-4">
@@ -275,6 +223,7 @@
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
       <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
         <div class="relative transform overflow-hidden rounded-xl bg-[#2d2616] border border-[#493f22] text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+          
           <form id="addProductForm" action="/admin/products/add" method="POST" autocomplete="off">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="px-6 py-6 border-b border-[#493f22]">
@@ -291,8 +240,8 @@
               </div>
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label for="addProductPrice" class="block text-sm font-medium text-text-muted mb-1">Price ($) *</label>
-                  <input id="addProductPrice" name="price" required min="0" class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white" placeholder="0.00" type="number" step="0.01" inputmode="decimal" />
+                  <label for="addProductPrice" class="block text-sm font-medium text-text-muted mb-1">Price (PKR) *</label>
+                  <input id="addProductPrice" name="price" required min="0" class="w-full bg-[#231e10] border border-[#493f22] rounded-lg p-2 text-white" placeholder="12000" type="number" step="1" inputmode="numeric" />
                 </div>
                 <div>
                   <label for="addProductStock" class="block text-sm font-medium text-text-muted mb-1">Stock *</label>
@@ -345,6 +294,7 @@
   </div>
 
   <input id="adminProductConfig" type="hidden" value="<%= shouldOpenAddProductModal ? 'true' : 'false' %>">
+  <script src="/js/admin-sidebar.js" defer></script>
   <script src="/js/admin-product.js"></script>
 </body>
 

@@ -1,24 +1,78 @@
-# Online Perfume Store
+# Luxe Scents – Online Perfume Store
 
-Professional Node.js + Express.js backend setup for an online perfume store.
+Luxe Scents is a full-stack web-based perfume e-commerce platform built with Node.js, Express.js, MongoDB, Mongoose, and EJS. The platform allows customers to browse perfumes, manage their cart and wishlist, place orders, and submit product reviews. It also provides an admin dashboard for managing products, orders, customers, and analytics.
 
 ## Tech Stack
+
 - Node.js
 - Express.js
-- EJS (templating)
-- MongoDB 
-- HTML, CSS, JS, Bootstrap (frontend)
+- MongoDB
+- Mongoose
+- EJS (Templating Engine)
+- Tailwind CSS
+- HTML
+- CSS
+- JavaScript
 
-## Folder Structure
-- /views (EJS templates)
-- /public (static assets: CSS, JS, images)
-- /routes (Express route files)
-- /config (database configs)
+## Main Features
 
-## Getting Started
-1. Install dependencies: `npm install`
-2. Start server: `node server.js`
+### Customer Features
 
----
+- User registration and login
+- Secure password hashing
+- Browse and search perfumes
+- Product details and perfume notes
+- Shopping cart management
+- Wishlist management
+- Checkout and order placement
+- Order history and order cancellation
+- Product reviews and ratings
 
-Ye project final year + portfolio ke liye design kiya gaya hai. Prototype screens ko follow karte hue backend/frontend integrate kiya jayega.
+### Admin Features
+
+- Admin authentication and authorization
+- Product management
+- Product activation/deactivation
+- Order management
+- Customer management
+- Customer CSV export
+- Sales and order analytics
+
+## Security
+
+The application includes several security mechanisms:
+
+- Password hashing with bcryptjs
+- Session management with express-session
+- MongoDB-backed session storage with connect-mongo
+- CSRF protection
+- Helmet security headers
+- Rate limiting
+- Input validation
+- Role-based authorization
+- Ownership checks for orders and reviews
+
+## Project Structure
+
+```text
+/
+├── config/
+│   └── Database configuration
+├── controllers/
+│   └── Application business logic
+├── middleware/
+│   └── Authentication, authorization, validation, and security middleware
+├── models/
+│   └── Mongoose models
+├── routes/
+│   └── Express route definitions
+├── utils/
+│   └── Reusable utility functions
+├── views/
+│   └── EJS templates and page views
+├── public/
+│   ├── css/
+│   ├── js/
+│   └── images/
+├── server.js
+└── seed.js

@@ -186,7 +186,7 @@
                         <button type="submit"
                             class="w-full md:w-auto px-10 py-4 bg-primary hover:bg-primary-hover text-black font-bold rounded-lg transition-all flex items-center justify-center gap-2 transform active:scale-[0.98] shadow-lg shadow-primary/20">
                             <span class="material-symbols-outlined text-sm">lock</span>
-                            Place Order — $<%= cart.totalPrice.toFixed(2) %>
+                            Place Order - <%= formatCurrency(cart.totalPrice) %>
                         </button>
                     </div>
                 </form>
@@ -231,11 +231,11 @@
                                     <div class="flex flex-1 flex-col justify-center">
                                         <div class="flex justify-between items-start mb-1">
                                             <h4 class="text-white font-medium text-sm leading-tight"><%= item.name %></h4>
-                                            <p class="text-white font-bold text-sm">$<%= (item.price * item.quantity).toFixed(2) %></p>
+                                            <p class="text-white font-bold text-sm"><%= formatCurrency(item.price * item.quantity) %></p>
                                         </div>
                                         <p class="text-text-gold text-xs mb-2"><%= item.category %></p>
                                         <div class="flex items-center justify-between gap-3">
-                                            <p class="text-xs text-zinc-500">$<%= item.price.toFixed(2) %> each</p>
+                                            <p class="text-xs text-zinc-500"><%= formatCurrency(item.price) %> each</p>
                                             <form action="/cart/remove" method="POST">
                                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                                 <input type="hidden" name="productId" value="<%= item.productId %>">
@@ -254,7 +254,7 @@
                         <div class="flex flex-col gap-3 pt-6 border-t border-surface-border">
                             <div class="flex justify-between text-sm text-zinc-400">
                                 <span>Subtotal</span>
-                                <span class="text-white">$<%= cart.totalPrice.toFixed(2) %></span>
+                                <span class="text-white"><%= formatCurrency(cart.totalPrice) %></span>
                             </div>
                             <div class="flex justify-between text-sm text-zinc-400">
                                 <span>Shipping</span>
@@ -263,8 +263,8 @@
                             <div class="flex justify-between items-end mt-4 pt-4 border-t border-surface-border">
                                 <span class="text-base font-medium text-white">Total</span>
                                 <div class="flex flex-col items-end">
-                                    <span class="text-xs text-zinc-500 mb-1">USD</span>
-                                    <span class="text-3xl font-bold text-primary">$<%= cart.totalPrice.toFixed(2) %></span>
+                                    <span class="text-xs text-zinc-500 mb-1"><%= currencyCode %></span>
+                                    <span class="text-3xl font-bold text-primary"><%= formatCurrency(cart.totalPrice) %></span>
                                 </div>
                             </div>
                         </div>

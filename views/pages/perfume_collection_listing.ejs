@@ -24,6 +24,9 @@
     const paginationWindowStart = Math.max(1, current - 1);
     const paginationWindowEnd = Math.min(totalPageCount, current + 1);
     const paginationPages = [];
+    const priceFilterMin = 1000;
+    const priceFilterMax = 100000;
+    const priceFilterStep = 1000;
 
     for (let pageNumber = paginationWindowStart; pageNumber <= paginationWindowEnd; pageNumber += 1) {
       paginationPages.push(pageNumber);
@@ -148,14 +151,14 @@
         <div class="flex justify-between items-center">
           <div>
             <h3 class="font-bold text-sm uppercase tracking-wider text-slate-900 dark:text-white">Price Range</h3>
-            <p class="text-xs text-slate-500 dark:text-text-muted">Up to <span id="price-max-value" class="font-semibold">500</span></p>
+            <p class="text-xs text-slate-500 dark:text-text-muted">Up to <span id="price-max-value" class="font-semibold"><%= formatCurrency(priceFilterMax) %></span></p>
           </div>
         </div>
         <div class="pt-4 pb-2">
-          <input id="price-max" name="priceMax" type="range" min="50" max="500" step="5" value="500" class="w-full h-2 accent-primary" />
+          <input id="price-max" name="priceMax" type="range" min="<%= priceFilterMin %>" max="<%= priceFilterMax %>" step="<%= priceFilterStep %>" value="<%= priceFilterMax %>" class="w-full h-2 accent-primary" />
           <div class="flex justify-between mt-3 text-sm font-medium text-slate-600 dark:text-text-muted">
-            <span>$50</span>
-            <span>$500</span>
+            <span><%= formatCurrency(priceFilterMin) %></span>
+            <span><%= formatCurrency(priceFilterMax) %></span>
           </div>
         </div>
       </div>

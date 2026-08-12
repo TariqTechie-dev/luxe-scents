@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const { CURRENCY_CODE, CURRENCY_LABEL, formatCurrency } = require('./utils/currency');
 
 // Load env vars FIRST before anything else
 dotenv.config();
@@ -77,6 +78,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 // ─── Global App Locals (available in every EJS template) ─────────────────────
 app.locals.siteName = 'Luxe Scents';
+app.locals.currencyCode = CURRENCY_CODE;
+app.locals.currencyLabel = CURRENCY_LABEL;
+app.locals.formatCurrency = formatCurrency;
 
 // ─── Static Files with Cache Headers ─────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public'), {
@@ -104,7 +108,7 @@ app.use(session({
     secure: process.env.SESSION_COOKIE_SECURE === 'true', // Explicit env var control
     sameSite: 'lax'           // CSRF protection
   },
-  name: 'sid'                   // Don't use default 'connect.sid' name
+  name: 'sid'                  
 }));
 
 // ─── Flash Messages ───────────────────────────────────────────────────────────
@@ -159,7 +163,7 @@ app.use('/', authRoutes);
 app.use('/', viewRoutes);
 app.use('/', reviewRoutes);
 app.use('/', checkoutRoutes);
-app.use('/orders', orderRoutes);
+app.use('/orders', orderRoutes); 
 app.use('/admin', adminRoutes);
 app.use('/cart', cartRoutes);
 app.use('/wishlist', wishlistRoutes);

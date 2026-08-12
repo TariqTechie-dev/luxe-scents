@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
       data: {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
         datasets: [{
-          label: 'Sales $',
-          data: [12000, 19000, 15000, 25000, 22000, 30000],
+          label: 'Sales PKR',
+          data: [1200000, 1900000, 1500000, 2500000, 2200000, 3000000],
           borderColor: '#f4c025',
           backgroundColor: 'rgba(244, 192, 37, 0.1)',
           tension: 0.4,
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Export button
   document.querySelector('#export-btn')?.addEventListener('click', function() {
     // Mock export
-    const dataStr = 'data:text/csv;charset=utf-8,Order ID,Customer,Amount\\n10234,Alice,$135';
+    const dataStr = 'data:text/csv;charset=utf-8,Order ID,Customer,Amount (PKR)\\n10234,Alice,13500';
     const link = document.createElement('a');
     link.href = dataStr;
     link.download = 'analytics.csv';

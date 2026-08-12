@@ -1,8 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const sidebar = document.getElementById('adminSidebar');
-  const sidebarBackdrop = document.getElementById('sidebarBackdrop');
-  const openSidebarBtn = document.getElementById('openSidebarBtn');
-  const closeSidebarBtn = document.getElementById('closeSidebarBtn');
   const modal = document.getElementById('addProductModal');
   const openBtn = document.getElementById('openModalBtn');
   const closeBtn = document.getElementById('closeModalBtn');
@@ -15,19 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const noFilterResultsRow = document.getElementById('noFilterResultsRow');
   const visibleProductCount = document.getElementById('visibleProductCount');
   let activeCategory = 'all';
-
-  function toggleSidebar(show) {
-    if (!sidebar || window.innerWidth >= 1024) {
-      return;
-    }
-
-    sidebar.classList.toggle('-translate-x-full', !show);
-    sidebar.classList.toggle('translate-x-0', show);
-
-    if (sidebarBackdrop) {
-      sidebarBackdrop.classList.toggle('hidden', !show);
-    }
-  }
 
   function setActiveChip(category) {
     categoryChips.forEach((chip) => {
@@ -86,18 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.classList.toggle('hidden', !show);
   }
 
-  if (openSidebarBtn) {
-    openSidebarBtn.addEventListener('click', () => toggleSidebar(true));
-  }
-
-  if (closeSidebarBtn) {
-    closeSidebarBtn.addEventListener('click', () => toggleSidebar(false));
-  }
-
-  if (sidebarBackdrop) {
-    sidebarBackdrop.addEventListener('click', () => toggleSidebar(false));
-  }
-
   if (openBtn) {
     openBtn.addEventListener('click', () => toggleModal(true));
   }
@@ -129,25 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
   setActiveChip(activeCategory);
   applyProductFilters();
 
-  window.addEventListener('resize', () => {
-    if (window.innerWidth >= 1024) {
-      if (sidebarBackdrop) {
-        sidebarBackdrop.classList.add('hidden');
-      }
-
-      if (sidebar) {
-        sidebar.classList.remove('-translate-x-full');
-        sidebar.classList.add('translate-x-0');
-      }
-    } else if (sidebar) {
-      sidebar.classList.add('-translate-x-full');
-      sidebar.classList.remove('translate-x-0');
-    }
-  });
-
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
-      toggleSidebar(false);
+      toggleModal(false);
     }
   });
 });
