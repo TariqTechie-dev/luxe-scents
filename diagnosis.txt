@@ -1,5 +1,0 @@
-nType of export: object
-Keys: ["MongoStore","createKrupteinAdapter","createWebCryptoAdapter","default"]
-MongoStore.create DOES NOT exist
-MongoStore.default exists
-MongoStore.default.create exists

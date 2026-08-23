@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const { CURRENCY_CODE, CURRENCY_LABEL, formatCurrency } = require('./utils/currency');
@@ -11,24 +12,38 @@ const DB_URL = process.env.DB_URL || process.env.MONGO_URI;
 
 // Crash early if critical env vars are missing
 if (!process.env.SESSION_SECRET) {
-  console.error('FATAL ERROR: SESSION_SECRET is not defined in .env');
+  console.error('FATAL ERROR: SESSION_SECRET is not defined in the environment');
   process.exit(1);
 }
 if (!DB_URL) {
-  console.error('FATAL ERROR: DB_URL or MONGO_URI is not defined in .env');
+  console.error('FATAL ERROR: DB_URL or MONGO_URI is not defined in the environment');
   process.exit(1);
 }
-
-// Connect to database
-connectDB(DB_URL);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const IS_PROD = process.env.NODE_ENV === 'production';
+const SESSION_COOKIE_SECURE = process.env.SESSION_COOKIE_SECURE
+  ? process.env.SESSION_COOKIE_SECURE === 'true'
+  : IS_PROD;
+
+if (IS_PROD) {
+  app.set('trust proxy', 1);
+}
 
 // ─── Security Headers (Helmet) ───────────────────────────────────────────────
 const helmet = require('helmet');
 const winston = require('winston');
+
+const loggerTransports = [
+  new winston.transports.Console()
+];
+
+if (!IS_PROD) {
+  const logDir = path.join(__dirname, 'logs');
+  fs.mkdirSync(logDir, { recursive: true });
+  loggerTransports.push(new winston.transports.File({ filename: path.join(logDir, 'error.log') }));
+}
 
 // Configure Winston logger
 const logger = winston.createLogger({
@@ -37,9 +52,7 @@ const logger = winston.createLogger({
     winston.format.timestamp(),
     winston.format.json()
   ),
-  transports: [
-    new winston.transports.File({ filename: 'logs/error.log' })
-  ]
+  transports: loggerTransports
 });
 
 app.use(helmet({
@@ -105,7 +118,7 @@ app.use(session({
   cookie: {
     maxAge: 180 * 60 * 1000, // 3 hours
     httpOnly: true,           // Not accessible via JS — prevents XSS cookie theft
-    secure: process.env.SESSION_COOKIE_SECURE === 'true', // Explicit env var control
+    secure: SESSION_COOKIE_SECURE,
     sameSite: 'lax'           // CSRF protection
   },
   name: 'sid'                  
@@ -128,7 +141,7 @@ const { doubleCsrfProtection, generateToken } = doubleCsrf({
   cookieOptions: {
     httpOnly: true,
     sameSite: 'lax',
-    secure: IS_PROD,
+    secure: SESSION_COOKIE_SECURE,
     path: '/'
   },
   size: 64,
@@ -170,13 +183,17 @@ app.use('/wishlist', wishlistRoutes);
 
 // ─── Health Check (protected) ─────────────────────────────────────────────────────────────
 const mongoose = require('mongoose');
-const healthToken = process.env.HEALTH_TOKEN || 'change-me';
+const healthToken = process.env.HEALTH_TOKEN;
 app.get('/health', (req, res) => {
-  // Require a secret token in the X-Health-Token header
-  const token = req.headers['x-health-token'];
-  if (token !== healthToken) {
-    return res.status(403).json({ status: 'forbidden', message: 'Invalid health check token' });
+  if (healthToken) {
+    const token = req.headers['x-health-token'];
+    if (token !== healthToken) {
+      return res.status(403).json({ status: 'forbidden', message: 'Invalid health check token' });
+    }
+  } else if (IS_PROD) {
+    return res.status(404).json({ status: 'disabled' });
   }
+
   res.status(200).json({
     status: 'ok',
     uptime: process.uptime(),
@@ -213,6 +230,12 @@ app.use((err, req, res, next) => {
 });
 
 // ─── Start Server ─────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`[${new Date().toISOString()}] Server running on http://localhost:${PORT} [${process.env.NODE_ENV || 'development'}]`);
-});
+const startServer = async () => {
+  await connectDB(DB_URL);
+
+  app.listen(PORT, () => {
+    console.log(`[${new Date().toISOString()}] Server listening on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
+  });
+};
+
+startServer();

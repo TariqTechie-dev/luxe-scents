@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Professional Online Perfume Store — Node.js, Express, EJS, MongoDB",
   "main": "server.js",
+  "engines": {
+    "node": ">=20.19.0 <25"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"

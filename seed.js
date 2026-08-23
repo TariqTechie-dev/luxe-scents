@@ -8,6 +8,17 @@ dotenv.config();
 
 const DB_URL = process.env.DB_URL || process.env.MONGO_URI;
 
+const getRequiredEnv = (name) => {
+    const value = process.env[name];
+
+    if (!value) {
+        console.error(`${name} is required before running seed.js.`);
+        process.exit(1);
+    }
+
+    return value;
+};
+
 const assertCanSeed = () => {
     if (process.env.NODE_ENV === 'production') {
         console.error('Refusing to run seed.js in production. Set NODE_ENV to development or test before seeding.');
@@ -32,6 +43,9 @@ const connectDB = async () => {
 
 const seedData = async () => {
     assertCanSeed();
+    const seedAdminPassword = getRequiredEnv('SEED_ADMIN_PASSWORD');
+    const seedCustomerPassword = getRequiredEnv('SEED_CUSTOMER_PASSWORD');
+
     await connectDB();
 
     try {
@@ -45,7 +59,7 @@ const seedData = async () => {
         const adminUser = await User.create({
             name: 'Admin User',
             email: 'admin@luxparfum.com',
-            password: 'password123',
+            password: seedAdminPassword,
             role: 'admin',
             phone: '123-456-7890',
             address: {
@@ -59,7 +73,7 @@ const seedData = async () => {
         const customerUser = await User.create({
             name: 'John Doe',
             email: 'john@example.com',
-            password: 'password123',
+            password: seedCustomerPassword,
             role: 'customer',
             phone: '987-654-3210',
             address: {
