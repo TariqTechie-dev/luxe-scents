@@ -44,3 +44,32 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+
+/* ── Auth form inputs ───────────────────────────────────────────────
+   Deterministic luxury styling for sign-in / register inputs.
+   Plain CSS on purpose (not Tailwind Play CDN utilities): the CDN
+   generates utilities at runtime and can misbehave per-element, while
+   this class always applies. Values mirror the design tokens
+   (input-bg #342d18, primary #f4c025) used across the site. */
+.auth-input {
+  display: block;
+  width: 100%;
+  background-color: #342d18;   /* input-bg */
+  border: 1px solid #685a31;
+  border-radius: 0.5rem;        /* rounded-lg */
+  color: #ffffff;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;  /* py-3 pl-4 pr-10 (room for eye icon) */
+  font-size: 0.875rem;          /* text-sm */
+  line-height: 1.5rem;          /* leading-6 */
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.auth-input::placeholder {
+  color: #8a8060;
+  opacity: 1;
+}
+.auth-input:focus {
+  border-color: #f4c025;        /* primary */
+  box-shadow: 0 0 0 2px rgba(244, 192, 37, 0.35);
+}
