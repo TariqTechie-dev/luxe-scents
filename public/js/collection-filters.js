@@ -24,6 +24,15 @@ document.addEventListener('DOMContentLoaded', function() {
              categoryMatch;
     });
 
+    const sortValue = document.getElementById('sort')?.value || 'bestselling';
+    const priceOf = (card) => parseFloat(card.dataset.price) || 0;
+    const soldOf = (card) => parseInt(card.dataset.sold, 10) || 0;
+    const createdOf = (card) => parseInt(card.dataset.createdAt, 10) || 0;
+    if (sortValue === 'price-asc') filteredProducts.sort((a, b) => priceOf(a) - priceOf(b));
+    else if (sortValue === 'price-desc') filteredProducts.sort((a, b) => priceOf(b) - priceOf(a));
+    else if (sortValue === 'newest') filteredProducts.sort((a, b) => createdOf(b) - createdOf(a));
+    else filteredProducts.sort((a, b) => soldOf(b) - soldOf(a));
+
     displayProducts(filteredProducts);
   }
 
@@ -72,6 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   window.filterProducts = filterProducts; // Global for buttons
+
+  filterProducts();
 });
 
 function formatFilterCurrency(value) {

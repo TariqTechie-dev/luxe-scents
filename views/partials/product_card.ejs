@@ -3,7 +3,9 @@
   data-product-id="<%= product._id %>"
   data-category="<%= product.category %>"
   data-price="<%= product.price %>"
-  data-name="<%= product.name.toLowerCase() %>">
+  data-name="<%= product.name.toLowerCase() %>"
+  data-sold="<%= product.soldCount || 0 %>"
+  data-created-at="<%= product.createdAt ? new Date(product.createdAt).getTime() : 0 %>">
   <div class="relative aspect-[4/5] overflow-hidden bg-gray-100 dark:bg-[#1a160d]">
     <img alt="<%= product.name %>" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" src="<%= product.imageUrl %>" />
 
