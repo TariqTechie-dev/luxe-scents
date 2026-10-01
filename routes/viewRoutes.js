@@ -116,6 +116,15 @@ router.get('/shop', wrapAsync(async (req, res) => {
         .limit(SHOP_PAGE_SIZE)
         .lean();
 
+    const salesTotals = await Order.aggregate([
+        { $unwind: '$items' },
+        { $group: { _id: '$items.product', totalQuantity: { $sum: '$items.quantity' } } }
+    ]);
+    const soldByProduct = new Map(salesTotals.map((entry) => [String(entry._id), entry.totalQuantity]));
+    products.forEach((product) => {
+        product.soldCount = soldByProduct.get(String(product._id)) || 0;
+    });
+
     res.render('pages/perfume_collection_listing', buildShopViewModel({
         products,
         title: 'Luxe Scents - Signature Collection',
