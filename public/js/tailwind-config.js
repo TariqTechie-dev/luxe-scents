@@ -21,8 +21,8 @@ window.tailwind.config = {
         'input-bg': '#342d18'
       },
       fontFamily: {
-        display: ['Manrope', 'sans-serif'],
-        body: ['Noto Sans', 'sans-serif']
+        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        body: ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif']
       },
       borderRadius: {
         DEFAULT: '0.25rem',

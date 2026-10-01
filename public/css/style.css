@@ -94,3 +94,11 @@ input.auth-input:-webkit-autofill:focus {
   box-shadow: 0 0 0 1000px #342d18 inset !important;
   caret-color: #ffffff;
 }
+body {
+  font-family: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+}
+h1,
+h2,
+h3 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
