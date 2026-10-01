@@ -45,14 +45,18 @@
     -webkit-text-fill-color: transparent;
 }
 
-
 /* ── Auth form inputs ───────────────────────────────────────────────
    Deterministic luxury styling for sign-in / register inputs.
    Plain CSS on purpose (not Tailwind Play CDN utilities): the CDN
-   generates utilities at runtime and can misbehave per-element, while
-   this class always applies. Values mirror the design tokens
-   (input-bg #342d18, primary #f4c025) used across the site. */
-.auth-input {
+   injects its generated <style> block into <head> at runtime, AFTER
+   this stylesheet, so any specificity TIE is won by the CDN — including
+   the forms plugin's base `[type='password']` rule. The selectors below
+   (e.g. input.auth-input[type="password"] = 0,2,1) outrank it regardless
+   of source order. Values mirror the design tokens
+   (input-bg #342d18, primary #f4c025). */
+input.auth-input[type="email"],
+input.auth-input[type="password"],
+input.auth-input[type="text"] {
   display: block;
   width: 100%;
   background-color: #342d18;   /* input-bg */
@@ -65,11 +69,28 @@
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.auth-input::placeholder {
+input.auth-input[type="email"]::placeholder,
+input.auth-input[type="password"]::placeholder,
+input.auth-input[type="text"]::placeholder {
   color: #8a8060;
   opacity: 1;
 }
-.auth-input:focus {
+input.auth-input[type="email"]:focus,
+input.auth-input[type="password"]:focus,
+input.auth-input[type="text"]:focus {
   border-color: #f4c025;        /* primary */
   box-shadow: 0 0 0 2px rgba(244, 192, 37, 0.35);
+}
+/* Chrome repaints autofilled credential fields with its own background
+   (dark/black in dark contexts), hiding the site styling. The inset
+   box-shadow trick is the documented way to restore it; !important is
+   required here because Chrome's internal autofill style outranks
+   normal author declarations. */
+input.auth-input:-webkit-autofill,
+input.auth-input:-webkit-autofill:hover,
+input.auth-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0 1000px #342d18 inset !important;
+  box-shadow: 0 0 0 1000px #342d18 inset !important;
+  caret-color: #ffffff;
 }
