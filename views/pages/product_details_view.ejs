@@ -7,11 +7,11 @@
   <title>
     <%= product.name %> &mdash; <%= siteName %>
   </title>
-  <!-- Google Fonts: Manrope (Sans) & Playfair Display (Serif) & Material Symbols -->
+  <!-- Google Fonts: Manrope (Sans) & Cormorant Garamond (Serif) & Material Symbols -->
   <link href="https://fonts.googleapis.com" rel="preconnect" />
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
   <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Manrope:wght@200..800&amp;display=swap"
     rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet" />
@@ -24,7 +24,7 @@
 </head>
 
 <body
-  class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden transition-colors duration-300">
+  class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-body overflow-x-hidden transition-colors duration-300">
   <!-- Navigation Bar -->
   <header class="sticky top-0 z-50 w-full border-b border-white/10 bg-background-dark/95 backdrop-blur-sm">
     <div class="layout-container flex justify-center w-full">
@@ -32,7 +32,7 @@
         <!-- Logo & Brand -->
         <div class="flex items-center gap-4">
           <a class="flex items-center gap-3 text-white hover:text-primary transition-colors" href="/">
-            <span class="material-symbols-outlined text-primary" style="font-size: 32px;">local_florist</span>
+            <span class="material-symbols-outlined text-primary text-[32px]">local_florist</span>
             <h2 class="text-xl font-bold tracking-widest uppercase font-display">
               <%= siteName %>
             </h2>
@@ -142,7 +142,7 @@
                     <h3 class="text-primary text-sm font-bold tracking-[0.2em] uppercase">
                       <%= siteName %>
                     </h3>
-                    <h1 class="text-4xl md:text-5xl font-serif text-white leading-tight mt-2">
+                    <h1 class="text-4xl md:text-5xl font-display text-white leading-tight mt-2">
                       <%= product.name %>
                     </h1>
                     <div class="flex items-center gap-4 mt-4">
@@ -244,7 +244,7 @@
                           <section id="reviewsSection" class="pt-16 border-t border-white/10">
                             <div class="flex items-center justify-between mb-8">
                               <div>
-                                <h2 class="text-2xl md:text-3xl font-serif text-white">Customer Reviews</h2>
+                                <h2 class="text-2xl md:text-3xl font-display text-white">Customer Reviews</h2>
                                 <p class="text-white/60 text-sm mt-2">
                                   <% if ((product.reviewCount || 0)> 0) { %>
                                     <%= (product.averageRating || 0).toFixed(1) %> out of 5 stars &middot; <%=
@@ -279,7 +279,7 @@
                                 <!-- Submit Review Form (for logged-in users) -->
                                 <% if (typeof userId !=='undefined' && userId) { %>
                                   <div class="mb-12 p-6 border border-white/10 rounded-xl bg-surface-dark/50">
-                                    <h3 class="text-lg font-serif text-white mb-4">Share Your Experience</h3>
+                                    <h3 class="text-lg font-display text-white mb-4">Share Your Experience</h3>
                                     <form id="reviewForm" class="space-y-4">
                                       <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
@@ -362,7 +362,7 @@
                             <!-- Related Products -->
                             <div class="pt-16 border-t border-white/10">
                               <div class="flex items-center justify-between mb-8">
-                                <h2 class="text-2xl md:text-3xl font-serif text-white">You May Also Like</h2>
+                                <h2 class="text-2xl md:text-3xl font-display text-white">You May Also Like</h2>
                                 <div class="flex gap-2">
                                   <button
                                     class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-background-dark transition-colors">
@@ -394,7 +394,7 @@
                                     <div class="flex flex-col gap-1">
                                       <a href="/product/<%= related._id %>">
                                         <h3
-                                          class="text-lg font-serif text-white group-hover:text-primary transition-colors">
+                                          class="text-lg font-display text-white group-hover:text-primary transition-colors">
                                           <%= related.name %>
                                         </h3>
                                       </a>
