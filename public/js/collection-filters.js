@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const priceMaxInput = document.getElementById('price-max');
     const priceMax = parseFloat(priceMaxInput?.value) || Infinity;
     const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(el => el.value);
-    const selectedBrands = Array.from(document.querySelectorAll('input[name="brand"]:checked')).map(el => el.value.toLowerCase());
 
     filteredProducts = Array.from(productCards).filter(card => {
       const name = (card.dataset.name || '').toLowerCase();
@@ -19,12 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
       const cat = card.dataset.category || '';
 
       const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(cat);
-      const brandMatch = selectedBrands.length === 0 || selectedBrands.some(brand => name.includes(brand));
 
       return name.includes(searchQuery) &&
              price <= priceMax &&
-             categoryMatch &&
-             brandMatch;
+             categoryMatch;
     });
 
     displayProducts(filteredProducts);
@@ -41,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const priceMaxValue = document.getElementById('price-max-value');
 
   document.getElementById('collection-search')?.addEventListener('input', filterProducts);
-  document.querySelectorAll('input[name="brand"], input[name="category"], #sort').forEach(el => {
+  document.querySelectorAll('input[name="category"], #sort').forEach(el => {
     el.addEventListener('change', filterProducts);
   });
 
