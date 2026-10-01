@@ -5,10 +5,33 @@ document.addEventListener('DOMContentLoaded', function() {
   const productCards = document.querySelectorAll('.product-card');
   let filteredProducts = Array.from(productCards);
 
+  const priceMaxInput = document.getElementById('price-max');
+  const priceMaxValue = document.getElementById('price-max-value');
+  const priceMinLabel = document.getElementById('price-min-label');
+  const priceMaxLabel = document.getElementById('price-max-label');
+  const resultsCount = document.getElementById('results-count');
+
+  // Slider range follows the actual products on the page
+  const prices = Array.from(productCards).map(card => parseFloat(card.dataset.price) || 0);
+  const topPrice = Math.max.apply(null, prices.concat([0]));
+  if (priceMaxInput && topPrice > 0) {
+    const niceMax = Math.ceil(topPrice / 500) * 500;
+    priceMaxInput.min = '0';
+    priceMaxInput.max = String(niceMax);
+    priceMaxInput.step = '100';
+    priceMaxInput.value = String(niceMax);
+    if (priceMaxValue) priceMaxValue.textContent = formatFilterCurrency(niceMax);
+    if (priceMinLabel) priceMinLabel.textContent = formatFilterCurrency(0);
+    if (priceMaxLabel) priceMaxLabel.textContent = formatFilterCurrency(niceMax);
+  }
+
+  function updateResultsCount(n) {
+    if (resultsCount) resultsCount.textContent = 'Showing ' + n + ' result' + (n === 1 ? '' : 's');
+  }
+
   // Filter functions
   function filterProducts() {
     const searchQuery = document.getElementById('collection-search')?.value.toLowerCase() || '';
-    const priceMaxInput = document.getElementById('price-max');
     const priceMax = parseFloat(priceMaxInput?.value) || Infinity;
     const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(el => el.value);
 
@@ -34,18 +57,20 @@ document.addEventListener('DOMContentLoaded', function() {
     else filteredProducts.sort((a, b) => soldOf(b) - soldOf(a));
 
     displayProducts(filteredProducts);
+    updateResultsCount(filteredProducts.length);
   }
 
   function displayProducts(products) {
     const grid = document.querySelector('.products-grid');
     grid.innerHTML = '';
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="col-span-full text-center py-20"><h3 class="text-xl font-bold text-slate-400">No products found.</h3><p class="mt-2 text-sm text-slate-500 dark:text-text-muted">Try adjusting your filters.</p></div>';
+      return;
+    }
     products.forEach(product => grid.appendChild(product));
   }
 
   // Event listeners
-  const priceMaxInput = document.getElementById('price-max');
-  const priceMaxValue = document.getElementById('price-max-value');
-
   document.getElementById('collection-search')?.addEventListener('input', filterProducts);
   document.querySelectorAll('input[name="category"], #sort').forEach(el => {
     el.addEventListener('change', filterProducts);
@@ -55,10 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (priceMaxValue) priceMaxValue.textContent = formatFilterCurrency(priceMaxInput.value);
     filterProducts();
   });
-
-  if (priceMaxInput && priceMaxValue) {
-    priceMaxValue.textContent = formatFilterCurrency(priceMaxInput.value);
-  }
 
   document.querySelectorAll('#reset-filters, #reset-filters-mobile')?.forEach(button => {
     button.addEventListener('click', (event) => {
@@ -72,13 +93,30 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       if (priceMaxInput) {
-        priceMaxInput.value = priceMaxInput.defaultValue || 100000;
+        priceMaxInput.value = priceMaxInput.max || priceMaxInput.defaultValue || 100000;
         if (priceMaxValue) priceMaxValue.textContent = formatFilterCurrency(priceMaxInput.value);
       }
 
       window.location.href = window.location.pathname;
     });
   });
+
+  // Mobile: filters collapse under the tune button
+  const toggleBtn = document.getElementById('toggle-filters-mobile');
+  const filterBody = document.getElementById('filter-body');
+  if (toggleBtn && filterBody) {
+    if (window.innerWidth < 1024) {
+      filterBody.classList.add('hidden');
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
+    toggleBtn.addEventListener('click', () => {
+      const collapsed = filterBody.classList.toggle('hidden');
+      toggleBtn.setAttribute('aria-expanded', String(!collapsed));
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) filterBody.classList.remove('hidden');
+    });
+  }
 
   window.filterProducts = filterProducts; // Global for buttons
 
