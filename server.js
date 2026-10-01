@@ -97,8 +97,7 @@ app.locals.formatCurrency = formatCurrency;
 
 // ─── Static Files with Cache Headers ─────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public'), {
-  maxAge: IS_PROD ? '7d' : 0,
-  immutable: IS_PROD, // Tells browser: don't re-validate, file hasn't changed
+  maxAge: IS_PROD ? '1d' : 0,
   etag: true
 }));
 
