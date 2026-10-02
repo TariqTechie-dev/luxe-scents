@@ -59,6 +59,13 @@
                 </a>
             <% } %>
 
+            <a href="/wishlist"
+                class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark transition-colors relative group"
+                aria-label="Wishlist">
+                <span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors"
+                    aria-hidden="true">favorite</span>
+            </a>
+
             <a href="/cart"
                 class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark transition-colors relative group"
                 aria-label="Shopping cart<% if (typeof session !== 'undefined' && session.cart && session.cart.totalQty > 0) { %>, <%= session.cart.totalQty %> item<%= session.cart.totalQty > 1 ? 's' : '' %><% } %>">
