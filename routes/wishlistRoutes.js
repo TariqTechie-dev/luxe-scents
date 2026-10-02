@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const Product = require('../models/Product');
 const User = require('../models/User');
 const { isAuthenticated } = require('../middlewares/authMiddleware');
+const { attachReviewStats } = require('../utils/reviewStats');
 
 const wishlistProductValidation = [
     body('productId')
@@ -48,6 +49,8 @@ router.get('/', isAuthenticated, async (req, res, next) => {
             req.flash('error', 'Please log in to continue.');
             return res.redirect('/login');
         }
+
+        await attachReviewStats(user.wishlist || []);
 
         return res.render('pages/wishlist', {
             title: 'My Wishlist | Luxe Scents',
