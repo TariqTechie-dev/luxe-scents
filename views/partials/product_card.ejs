@@ -56,11 +56,16 @@
       </h3>
     </a>
     <div class="flex items-center gap-1 mb-3">
-      <span class="material-symbols-outlined text-primary text-[18px] fill-current">star</span>
-      <span class="material-symbols-outlined text-primary text-[18px] fill-current">star</span>
-      <span class="material-symbols-outlined text-primary text-[18px] fill-current">star</span>
-      <span class="material-symbols-outlined text-primary text-[18px] fill-current">star</span>
-      <span class="material-symbols-outlined text-primary text-[18px] fill-current">star</span>
+      <% const cardRating = product.averageRating || 0; %>
+      <% for (let i = 1; i <= 5; i++) { %>
+        <% if (i <= Math.floor(cardRating)) { %>
+          <span class="material-symbols-outlined text-primary text-[18px] fill-current">star</span>
+        <% } else if (i - 0.5 <= cardRating) { %>
+          <span class="material-symbols-outlined text-primary text-[18px]">star_half</span>
+        <% } else { %>
+          <span class="material-symbols-outlined text-primary text-[18px]">star</span>
+        <% } %>
+      <% } %>
       <span class="text-xs text-white/50">(<%= product.reviewCount || 0 %>)</span>
     </div>
     <div class="flex items-center justify-between gap-3">
