@@ -45,63 +45,7 @@
     }
   %>
 
-  <header class="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-border-dark bg-background-light dark:bg-background-dark/95 backdrop-blur-sm">
-    <div class="px-6 md:px-10 py-4 flex items-center justify-between max-w-[1440px] mx-auto">
-      <div class="flex items-center gap-4">
-        <a class="flex items-center gap-3 group" href="/">
-          <div class="size-8 text-primary transition-transform group-hover:scale-110">
-            <span class="material-symbols-outlined !text-3xl">local_florist</span>
-          </div>
-          <h1 class="text-xl md:text-2xl font-bold tracking-tight uppercase">Luxe Scents</h1>
-        </a>
-      </div>
-
-      <div class="hidden md:flex flex-1 max-w-md mx-8">
-        <form action="/search" method="GET" class="relative w-full group">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <span class="material-symbols-outlined text-text-muted group-focus-within:text-primary transition-colors">
-              search
-            </span>
-          </div>
-          <input id="collection-search" name="q" value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" class="block w-full pl-10 pr-3 py-2.5 border-none rounded-lg bg-gray-100 dark:bg-surface-dark text-sm placeholder-gray-500 dark:placeholder-text-muted focus:ring-1 focus:ring-primary focus:bg-white dark:focus:bg-surface-dark transition-all" placeholder="Search for fragrances, brands..." type="text" />
-        </form>
-      </div>
-
-      <div class="flex items-center gap-4">
-        <a href="/wishlist" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark transition-colors relative group">
-          <span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">
-            favorite
-          </span>
-        </a>
-
-        <% if (typeof session !== 'undefined' && session.userId) { %>
-          <a href="/dashboard" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark transition-colors relative group">
-            <span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">
-              account_circle
-            </span>
-          </a>
-        <% } else { %>
-          <a href="/login" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark transition-colors relative group">
-            <span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">
-              person
-            </span>
-          </a>
-        <% } %>
-
-        <a href="/cart" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-surface-dark transition-colors relative group">
-          <span class="material-symbols-outlined text-2xl group-hover:text-primary transition-colors">
-            shopping_bag
-          </span>
-
-          <% if (typeof session !== 'undefined' && session.cart && session.cart.totalQty > 0) { %>
-            <span class="cart-count absolute top-1 right-1 min-w-[18px] h-[18px] px-1 text-[10px] flex items-center justify-center rounded-full bg-primary text-black font-bold border-2 border-background-light dark:border-background-dark">
-              <%= session.cart.totalQty %>
-            </span>
-          <% } %>
-        </a>
-      </div>
-    </div>
-  </header>
+  <%- include('../partials/header') %>
 
   <div class="px-6 md:px-10 py-4">
     <nav aria-label="Breadcrumb" class="flex text-sm text-text-muted">
