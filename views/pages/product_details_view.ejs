@@ -209,16 +209,17 @@
           <!-- Actions -->
           <% const productStock = Number(product.stock) || 0; %>
           <% const isSoldOut = productStock <= 0; %>
-          <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-[#493f22]">
-            <form action="/cart/add" method="POST" class="flex-1 flex flex-col sm:flex-row gap-4">
+          <div class="flex flex-wrap items-center gap-4 pt-6 border-t border-[#493f22] sm:flex-nowrap">
+            <form id="pdp-cart-form" action="/cart/add" method="POST" class="order-1 flex items-center">
               <input type="hidden" name="_csrf" value="<%= csrfToken %>">
               <input type="hidden" name="productId" value="<%= product._id %>">
-              <div class="flex items-center border border-[#493f22] rounded-lg bg-[#231e10] self-start">
+              <div class="flex items-center border border-[#493f22] rounded-lg bg-[#231e10]">
                 <button type="button" class="px-4 py-3 text-white hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed" onclick="decrementQty()" <% if (isSoldOut) { %>disabled<% } %>>-</button>
                 <input type="number" name="quantity" id="qtyInput" value="1" min="1" max="<%= Math.max(productStock, 1) %>" class="w-12 bg-transparent text-center text-white border-none focus:ring-0 p-0" readonly>
                 <button type="button" class="px-4 py-3 text-white hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed" onclick="incrementQty()" <% if (isSoldOut) { %>disabled<% } %>>+</button>
               </div>
-              <button type="submit" class="w-full sm:flex-1 flex items-center justify-center gap-2 font-bold text-lg px-8 py-3 rounded-lg transition-all whitespace-nowrap <%= isSoldOut
+              </form>
+              <button type="submit" form="pdp-cart-form" class="order-3 w-full sm:order-2 sm:w-auto sm:flex-1 flex items-center justify-center gap-2 font-bold text-lg px-8 py-3 rounded-lg transition-all whitespace-nowrap <%= isSoldOut
                                       ? 'bg-zinc-700 text-zinc-300 cursor-not-allowed grayscale opacity-70 shadow-none'
                                       : 'bg-primary hover:bg-[#dca60b] text-background-dark shadow-[0_0_20px_rgba(244,192,37,0.3)] hover:shadow-[0_0_30px_rgba(244,192,37,0.5)] transform hover:-translate-y-0.5'
                                       %>" data-loading-label="Adding..." <% if (isSoldOut) { %>disabled
@@ -226,8 +227,7 @@
                                           <span class="material-symbols-outlined shrink-0">shopping_bag</span>
                                           <%= isSoldOut ? 'Sold Out' : 'Add to cart' %>
                                             </button>
-                                            </form>
-                                            <form action="/wishlist/add" method="POST">
+                                            <form action="/wishlist/add" method="POST" class="order-2 ml-auto sm:order-3 sm:ml-0">
                                               <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                               <input type="hidden" name="productId" value="<%= product._id %>">
                                               <button type="submit"
