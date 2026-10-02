@@ -6,6 +6,7 @@ const Review = require('../models/Review');
 const Order = require('../models/Order');
 const { isAuthenticated } = require('../middlewares/authMiddleware');
 const wrapAsync = require('../utils/WrapAsync');
+const { attachReviewStats } = require('../utils/reviewStats');
 
 const SHOP_PAGE_SIZE = 12;
 const HOME_FEATURED_LIMIT = 4;
@@ -96,6 +97,7 @@ function buildShopViewModel({
 // GET / - Home Page
 router.get('/', wrapAsync(async (req, res) => {
     const featuredProducts = await getBestSellerProducts(HOME_FEATURED_LIMIT);
+    await attachReviewStats(featuredProducts);
 
     res.render('pages/home', {
         title: 'Home',
@@ -125,6 +127,7 @@ router.get('/shop', wrapAsync(async (req, res) => {
     products.forEach((product) => {
         product.soldCount = soldByProduct.get(String(product._id)) || 0;
     });
+    await attachReviewStats(products);
 
     res.render('pages/perfume_collection_listing', buildShopViewModel({
         products,
@@ -180,6 +183,13 @@ router.get('/product/:id', wrapAsync(async (req, res) => {
         if (ratingDistribution[row._id] !== undefined) ratingDistribution[row._id] = row.count;
     });
 
+    const realReviewCount = distRaw.reduce((sum, row) => sum + row.count, 0);
+    product.reviewCount = realReviewCount;
+    product.averageRating = realReviewCount
+        ? Number((distRaw.reduce((sum, row) => sum + row._id * row.count, 0) / realReviewCount).toFixed(1))
+        : 0;
+    await attachReviewStats(relatedProducts);
+
     res.render('pages/product_details_view', {
         product,
         relatedProducts,
@@ -207,6 +217,7 @@ router.get('/search', wrapAsync(async (req, res) => {
             .limit(24)
             .lean();
     }
+    await attachReviewStats(products);
 
     res.render('pages/perfume_collection_listing', buildShopViewModel({
         products,
