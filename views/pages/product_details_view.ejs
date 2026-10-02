@@ -374,12 +374,22 @@
                                   <div class="group flex flex-col gap-3">
                                     <div
                                       class="relative w-full aspect-[4/5] bg-surface-dark rounded-lg overflow-hidden">
+                                      <a href="/product/<%= related._id %>" class="block w-full h-full"
+                                        aria-label="View <%= related.name %> details">
+                                        <div
+                                          class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                          style="background-image: url('<%= related.imageUrl %>');">
+                                        </div>
+                                        <div
+                                          class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors">
+                                        </div>
+                                      </a>
                                       <div
-                                        class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                        style="background-image: url('<%= related.imageUrl %>');">
-                                      </div>
-                                      <div
-                                        class="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors">
+                                        class="absolute left-4 bottom-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                                        <a href="/product/<%= related._id %>"
+                                          class="inline-flex items-center rounded-full bg-white/95 text-slate-900 text-sm font-semibold px-5 py-2.5 hover:bg-white transition-colors">
+                                          View Details
+                                        </a>
                                       </div>
                                       <form action="/cart/add" method="POST" class="absolute bottom-4 right-4">
                                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
