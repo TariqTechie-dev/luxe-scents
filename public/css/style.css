@@ -102,3 +102,7 @@ h2,
 h3 {
   font-family: 'Cormorant Garamond', Georgia, serif;
 }
+
+.material-symbols-outlined.fill-current {
+  font-variation-settings: 'FILL' 1;
+}
