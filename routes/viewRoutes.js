@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Product = require('../models/Product');
+const Review = require('../models/Review');
 const Order = require('../models/Order');
 const { isAuthenticated } = require('../middlewares/authMiddleware');
 const wrapAsync = require('../utils/WrapAsync');
@@ -157,15 +158,32 @@ router.get('/product/:id', wrapAsync(async (req, res) => {
         });
     }
 
-    const relatedProducts = await Product.find({
+    let relatedProducts = await Product.find({
         _id: { $ne: product._id },
         category: product.category,
         active: true
     }).lean().limit(4);
 
+    if (relatedProducts.length === 0) {
+        relatedProducts = await Product.find({
+            _id: { $ne: product._id },
+            active: true
+        }).lean().limit(4);
+    }
+
+    const distRaw = await Review.aggregate([
+        { $match: { product: product._id } },
+        { $group: { _id: '$rating', count: { $sum: 1 } } }
+    ]);
+    const ratingDistribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    distRaw.forEach((row) => {
+        if (ratingDistribution[row._id] !== undefined) ratingDistribution[row._id] = row.count;
+    });
+
     res.render('pages/product_details_view', {
         product,
         relatedProducts,
+        ratingDistribution,
         userId: req.session.userId || null,
         title: `${product.name} | Luxe Scents`
     });
