@@ -26,56 +26,7 @@
 <body
   class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-body overflow-x-hidden transition-colors duration-300">
   <!-- Navigation Bar -->
-  <header class="sticky top-0 z-50 w-full border-b border-white/10 bg-background-dark/95 backdrop-blur-sm">
-    <div class="layout-container flex justify-center w-full">
-      <div class="w-full max-w-7xl px-4 md:px-8 py-4 flex items-center justify-between">
-        <!-- Logo & Brand -->
-        <div class="flex items-center gap-4">
-          <a class="flex items-center gap-3 text-white hover:text-primary transition-colors" href="/">
-            <span class="material-symbols-outlined text-primary text-[32px]">local_florist</span>
-            <h2 class="text-xl font-bold tracking-widest uppercase font-display">
-              <%= siteName %>
-            </h2>
-          </a>
-          <!-- Desktop Menu -->
-          <nav class="hidden md:flex items-center gap-8 ml-8">
-            <a class="text-white/80 hover:text-primary text-sm font-medium uppercase tracking-wide transition-colors"
-              href="/shop">Shop</a>
-            <a class="text-white/80 hover:text-primary text-sm font-medium uppercase tracking-wide transition-colors"
-              href="/shop">Collections</a>
-            <a class="text-white/80 hover:text-primary text-sm font-medium uppercase tracking-wide transition-colors"
-              href="#">About</a>
-          </nav>
-        </div>
-        <!-- Right Actions -->
-        <div class="flex items-center gap-6">
-          <!-- Search Input (Hidden on mobile) -->
-          <div
-            class="hidden lg:flex items-center bg-surface-dark rounded-full px-4 py-2 border border-white/5 focus-within:border-primary/50 transition-colors w-64">
-            <span class="material-symbols-outlined text-primary/70 text-xl">search</span>
-            <input class="bg-transparent border-none focus:ring-0 text-sm text-white placeholder-white/40 w-full ml-2"
-              placeholder="Search..." type="text" />
-          </div>
-          <div class="flex gap-4">
-            <a href="/cart" class="text-white hover:text-primary transition-colors relative" aria-label="Shopping cart">
-              <span class="material-symbols-outlined">shopping_bag</span>
-              <% if (typeof session !=='undefined' && session.cart && session.cart.totalQty> 0) { %>
-                <span
-                  class="cart-count absolute -top-1 -right-1 flex min-w-[1rem] h-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-background-dark">
-                  <%= session.cart.totalQty %>
-                </span>
-                <% } %>
-            </a>
-            <a href="<%= typeof session !== 'undefined' && session.userId ? '/dashboard' : '/login' %>"
-              class="text-white hover:text-primary transition-colors"
-              aria-label="<%= typeof session !== 'undefined' && session.userId ? 'My account' : 'Log in' %>">
-              <span class="material-symbols-outlined">person</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
+  <%- include('../partials/header') %>
   <!-- Main Content Area -->
   <main class="w-full flex justify-center min-h-screen py-8 md:py-12">
     <div class="w-full max-w-7xl px-4 md:px-8 flex flex-col gap-12">
