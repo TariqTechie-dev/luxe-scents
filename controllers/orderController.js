@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Order = require('../models/Order');
+const Product = require('../models/Product');
 
 const getSafeRedirectPath = (value, fallback = '/dashboard') => {
     return typeof value === 'string' && value.startsWith('/') && !value.startsWith('//')
@@ -69,6 +70,12 @@ exports.cancelOrder = async (req, res, next) => {
         if (!cancelledOrder) {
             req.flash('error', 'This order can no longer be cancelled.');
             return res.redirect(redirectPath);
+        }
+
+        if (Array.isArray(cancelledOrder.items)) {
+            for (const item of cancelledOrder.items) {
+                await Product.findByIdAndUpdate(item.product, { $inc: { stock: item.quantity } });
+            }
         }
 
         req.flash('success', 'Order cancelled successfully.');
