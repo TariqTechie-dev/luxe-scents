@@ -24,14 +24,7 @@
         <a href="/product/<%= product._id %>" class="flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-full bg-white/95 text-slate-900 font-semibold px-4 py-3 hover:bg-white transition-colors">
           View Details
         </a>
-        <form action="/wishlist/add" method="POST" class="shrink-0">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-          <input type="hidden" name="productId" value="<%= product._id %>">
-          <button type="submit" class="inline-flex items-center justify-center rounded-full bg-primary text-slate-900 font-semibold px-4 py-3 shadow-lg hover:bg-white transition-colors" aria-label="Save <%= product.name %> to wishlist">
-            <span class="material-symbols-outlined">favorite</span>
-          </button>
-        </form>
-      </div>
+        div>
     </div>
 
     <% const stockCount = Number(product.stock) || 0; %>
@@ -70,15 +63,7 @@
     </div>
     <div class="flex items-center justify-between gap-3">
       <span class="text-xl font-bold text-primary"><%= formatCurrency(product.price) %></span>
-      <form action="/wishlist/add" method="POST" class="sm:hidden">
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <input type="hidden" name="productId" value="<%= product._id %>">
-        <button type="submit" class="inline-flex items-center gap-1 text-sm font-semibold text-slate-600 dark:text-text-muted hover:text-primary transition-colors" aria-label="Save <%= product.name %> to wishlist">
-          <span class="material-symbols-outlined text-[20px]">favorite</span>
-          Save
-        </button>
-      </form>
-      <span class="hidden sm:inline text-xs text-gray-400">50ml</span>
+      <span clase text-xs text-gray-400">50ml</span>
     </div>
   </div>
 </article>
