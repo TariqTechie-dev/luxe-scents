@@ -21,8 +21,12 @@ router.get('/checkout', isAuthenticated, checkoutController.getCheckout);
 // POST /checkout  →  process the order (must be logged in)
 router.post('/checkout', isAuthenticated, checkoutValidation, checkoutController.postCheckout);
 
-// GET  /checkout/payment-return  →  back from SafePay after payment
+// GET  /checkout/payment-return  →  back from SafePay after payment (browser)
 router.get('/checkout/payment-return', isAuthenticated, checkoutController.safepayReturn);
+
+// POST /checkout/payment-return  →  SafePay server-to-server payment notification
+// (no session here, so no login check; HMAC signature is the authentication)
+router.post('/checkout/payment-return', checkoutController.safepayRedirectNotify);
 
 // GET  /checkout/payment-cancelled  →  user cancelled on SafePay
 router.get('/checkout/payment-cancelled', isAuthenticated, checkoutController.safepayCancel);
