@@ -359,3 +359,61 @@ exports.safepayWebhook = async (req, res) => {
         return res.sendStatus(500);
     }
 };
+
+// ─── POST /checkout/payment-return (SafePay server notification) ───────────────
+// SafePay POSTs server-to-server to our redirectUrl after payment with
+// { tracker, token, orderId, ref, sig }. The sig is HMAC-SHA256 of the tracker
+// (verified with the v1 secret). No session here, so no login/CSRF — the HMAC
+// is the authentication. Runs the same idempotent fulfillment as the webhook,
+// so payment completes even if the dashboard webhook endpoint isn't configured.
+exports.safepayRedirectNotify = async (req, res) => {
+    const safepay = safepayUtil.getClient();
+    if (!safepay) return res.sendStatus(503);
+
+    let valid = false;
+    try {
+        valid = safepay.verify.signature(req);
+    } catch (err) {
+        valid = false;
+    }
+
+    if (!valid) return res.sendStatus(401);
+
+    const body = req.body || {};
+    const tracker = body.tracker;
+    const ref = body.orderId || body.order_id;
+
+    try {
+        let order = null;
+
+        if (tracker) {
+            order = await Order.findOne({ safepayToken: tracker });
+        }
+
+        if (!order && ref && mongoose.isValidObjectId(ref)) {
+            order = await Order.findById(ref);
+        }
+
+        if (!order || order.paymentMethod !== 'safepay') return res.sendStatus(200);
+
+        const marked = await Order.findOneAndUpdate(
+            { _id: order._id, paymentStatus: 'Pending' },
+            { $set: { paymentStatus: 'Paid' } },
+            { new: true }
+        );
+
+        if (!marked) return res.sendStatus(200);
+
+        for (const item of marked.items) {
+            await Product.findOneAndUpdate(
+                { _id: item.product, stock: { $gte: item.quantity } },
+                { $inc: { stock: -item.quantity } }
+            );
+        }
+
+        return res.sendStatus(200);
+    } catch (err) {
+        console.error('[safepay] redirect-notify error:', err);
+        return res.sendStatus(500);
+    }
+};
