@@ -146,6 +146,12 @@ const { doubleCsrfProtection, generateToken } = doubleCsrf({
   size: 64,
   getTokenFromRequest: (req) => req.body?._csrf || req.headers['x-csrf-token']
 });
+
+// Webhooks come from external services that can't send CSRF tokens, so they
+// are mounted before the CSRF middleware. The webhook verifies its own HMAC.
+const webhookRoutes = require('./routes/webhookRoutes');
+app.use('/webhooks', webhookRoutes);
+
 app.use(doubleCsrfProtection);
 
 // ─── Global Template Variables ────────────────────────────────────────────────
