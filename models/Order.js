@@ -115,6 +115,15 @@ const orderSchema = new mongoose.Schema({
         enum: ['Pending', 'Paid', 'Refunded'],
         default: 'Pending'
     },
+    paymentMethod: {
+        type: String,
+        enum: ['cod', 'safepay'],
+        default: 'cod'
+    },
+    safepayToken: {
+        type: String,
+        sparse: true
+    },
     shippingAddress: {
         type: shippingAddressSchema,
         required: [true, 'Shipping address is required']
@@ -144,5 +153,6 @@ orderSchema.pre('validate', function () {
 orderSchema.index({ user: 1, createdAt: -1 });
 orderSchema.index({ status: 1 });
 orderSchema.index({ paymentStatus: 1 });
+orderSchema.index({ safepayToken: 1 }, { sparse: true });
 
 module.exports = mongoose.model('Order', orderSchema);
