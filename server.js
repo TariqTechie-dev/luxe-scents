@@ -152,7 +152,12 @@ const { doubleCsrfProtection, generateToken } = doubleCsrf({
 const webhookRoutes = require('./routes/webhookRoutes');
 app.use('/webhooks', webhookRoutes);
 
-app.use(doubleCsrfProtection);
+// SafePay also POSTs server-to-server to our redirect URL after payment.
+// That POST carries its own HMAC signature, so it skips CSRF as well.
+app.use((req, res, next) => {
+    if (req.method === 'POST' && req.path === '/checkout/payment-return') return next();
+    doubleCsrfProtection(req, res, next);
+});
 
 // ─── Global Template Variables ────────────────────────────────────────────────
 app.use((req, res, next) => {
