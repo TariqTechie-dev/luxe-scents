@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta http-equiv="refresh" content="4" />
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Manrope:wght@200..800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/tailwind-config.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+    <main class="flex-1 flex items-center justify-center px-6 py-16">
+        <div class="max-w-md w-full text-center rounded-xl border border-surface-border bg-surface-dark p-10">
+            <span class="material-symbols-outlined text-primary text-5xl animate-spin">progress_activity</span>
+            <h1 class="font-display text-3xl text-white mt-6">Confirming your payment…</h1>
+            <p class="text-zinc-400 text-sm mt-3">
+                SafePay is notifying our server about your payment.
+                This page refreshes automatically — please don't close it.
+            </p>
+            <p class="text-zinc-600 text-xs mt-4">Order: <%= orderId %></p>
+            <a href="/orders" class="inline-block mt-6 text-primary text-sm hover:underline">View my orders</a>
+        </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+</body>
+
+</html>

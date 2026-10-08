@@ -146,7 +146,18 @@ const { doubleCsrfProtection, generateToken } = doubleCsrf({
   size: 64,
   getTokenFromRequest: (req) => req.body?._csrf || req.headers['x-csrf-token']
 });
-app.use(doubleCsrfProtection);
+
+// Webhooks come from external services that can't send CSRF tokens, so they
+// are mounted before the CSRF middleware. The webhook verifies its own HMAC.
+const webhookRoutes = require('./routes/webhookRoutes');
+app.use('/webhooks', webhookRoutes);
+
+// SafePay also POSTs server-to-server to our redirect URL after payment.
+// That POST carries its own HMAC signature, so it skips CSRF as well.
+app.use((req, res, next) => {
+    if (req.method === 'POST' && req.path === '/checkout/payment-return') return next();
+    doubleCsrfProtection(req, res, next);
+});
 
 // ─── Global Template Variables ────────────────────────────────────────────────
 app.use((req, res, next) => {

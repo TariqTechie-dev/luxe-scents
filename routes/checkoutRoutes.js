@@ -10,7 +10,8 @@ const checkoutValidation = [
     body('city').trim().notEmpty().withMessage('City is required.').escape(),
     body('state').trim().optional().escape(),
     body('zip').trim().notEmpty().withMessage('Postal code is required.').escape(),
-    body('country').trim().notEmpty().withMessage('Country is required.').escape()
+    body('country').trim().notEmpty().withMessage('Country is required.').escape(),
+    body('paymentMethod').optional().isIn(['cod', 'safepay']).withMessage('Invalid payment method.')
 ];
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
@@ -19,5 +20,15 @@ router.get('/checkout', isAuthenticated, checkoutController.getCheckout);
 
 // POST /checkout  →  process the order (must be logged in)
 router.post('/checkout', isAuthenticated, checkoutValidation, checkoutController.postCheckout);
+
+// GET  /checkout/payment-return  →  back from SafePay after payment (browser)
+router.get('/checkout/payment-return', isAuthenticated, checkoutController.safepayReturn);
+
+// POST /checkout/payment-return  →  SafePay server-to-server payment notification
+// (no session here, so no login check; HMAC signature is the authentication)
+router.post('/checkout/payment-return', checkoutController.safepayRedirectNotify);
+
+// GET  /checkout/payment-cancelled  →  user cancelled on SafePay
+router.get('/checkout/payment-cancelled', isAuthenticated, checkoutController.safepayCancel);
 
 module.exports = router;

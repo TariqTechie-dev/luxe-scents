@@ -13,6 +13,7 @@
   "author": " Tariq Hussain",
   "license": "ISC",
   "dependencies": {
+    "@sfpy/node-sdk": "^3.0.1",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.5.1",
     "compression": "^1.7.5",
