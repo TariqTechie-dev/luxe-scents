@@ -266,14 +266,16 @@ const postSafepayCheckout = async (req, res, next, cart, shippingAddress) => {
 // source of truth — this page only decides what the customer sees.
 exports.safepayReturn = async (req, res, next) => {
     try {
+        let order = null;
         const orderId = req.query.order || req.session.pendingSafepayOrderId;
 
-        if (!mongoose.isValidObjectId(orderId)) {
-            req.flash('error', 'Order not found.');
-            return res.redirect('/orders');
+        if (orderId && mongoose.isValidObjectId(orderId)) {
+            order = await Order.findOne({ _id: orderId, user: req.session.userId }).lean();
         }
 
-        const order = await Order.findOne({ _id: orderId, user: req.session.userId }).lean();
+        if (!order) {
+            order = await Order.findOne({ user: req.session.userId, paymentMethod: 'safepay', paymentStatus: 'Pending' }).sort({ createdAt: -1 }).lean();
+        }
 
         if (!order) {
             req.flash('error', 'Order not found.');
@@ -325,7 +327,9 @@ exports.safepayWebhook = async (req, res) => {
     if (!valid) return res.sendStatus(401);
 
     const { type, data } = req.body || {};
-    if (type !== 'payment.succeeded' || !data) return res.sendStatus(200);
+    const eventType = String(type || '').toLowerCase();
+    const isPaid = data && String(data.state || '').toUpperCase() === 'PAID';
+    if (!data || !(isPaid || eventType === 'payment.succeeded')) return res.sendStatus(200);
 
     try {
         let order = null;
@@ -334,8 +338,9 @@ exports.safepayWebhook = async (req, res) => {
             order = await Order.findOne({ safepayToken: data.tracker });
         }
 
-        if (!order && data.metadata && mongoose.isValidObjectId(data.metadata.order_id)) {
-            order = await Order.findById(data.metadata.order_id);
+        const metaOrderId = (data.meta && data.meta.order_id) || (data.metadata && data.metadata.order_id);
+        if (!order && metaOrderId && mongoose.isValidObjectId(metaOrderId)) {
+            order = await Order.findById(metaOrderId);
         }
 
         if (!order || order.paymentMethod !== 'safepay') return res.sendStatus(200);
