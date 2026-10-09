@@ -244,7 +244,7 @@ const postSafepayCheckout = async (req, res, next, cart, shippingAddress) => {
             token,
             orderId: newOrder._id.toString(),
             cancelUrl: `${baseUrl}/checkout/payment-cancelled`,
-            redirectUrl: `${baseUrl}/checkout/payment-return?order=${newOrder._id.toString()}`,
+            redirectUrl: `${baseUrl}/checkout/payment-return`,
             webhooks: true
         });
 
