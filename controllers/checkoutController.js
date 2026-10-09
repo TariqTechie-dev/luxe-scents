@@ -230,12 +230,14 @@ const postSafepayCheckout = async (req, res, next, cart, shippingAddress) => {
         });
 
         const { token } = await safepay.payments.create({
-            amount: Math.round(newOrder.totalAmount * 100),
+            amount: Math.round(newOrder.totalAmount),
             currency: 'PKR'
         });
 
         newOrder.safepayToken = token;
         await newOrder.save();
+
+        req.session.pendingSafepayOrderId = newOrder._id.toString();
 
         const baseUrl = safepayUtil.getBaseUrl(req);
         const checkoutUrl = safepay.checkout.create({
@@ -246,7 +248,10 @@ const postSafepayCheckout = async (req, res, next, cart, shippingAddress) => {
             webhooks: true
         });
 
-        return res.redirect(checkoutUrl);
+        return req.session.save((saveErr) => {
+            if (saveErr) return next(saveErr);
+            return res.redirect(checkoutUrl);
+        });
     } catch (err) {
         if (err && err.statusCode === 409) {
             req.flash('error', err.message);
@@ -261,7 +266,7 @@ const postSafepayCheckout = async (req, res, next, cart, shippingAddress) => {
 // source of truth — this page only decides what the customer sees.
 exports.safepayReturn = async (req, res, next) => {
     try {
-        const orderId = req.query.order;
+        const orderId = req.query.order || req.session.pendingSafepayOrderId;
 
         if (!mongoose.isValidObjectId(orderId)) {
             req.flash('error', 'Order not found.');
@@ -274,6 +279,8 @@ exports.safepayReturn = async (req, res, next) => {
             req.flash('error', 'Order not found.');
             return res.redirect('/orders');
         }
+
+        delete req.session.pendingSafepayOrderId;
 
         if (order.paymentStatus === 'Paid') {
             clearCart(req.session);
@@ -333,8 +340,8 @@ exports.safepayWebhook = async (req, res) => {
 
         if (!order || order.paymentMethod !== 'safepay') return res.sendStatus(200);
 
-        if (Math.round(order.totalAmount * 100) !== Number(data.amount)) {
-            console.error(`[safepay] amount mismatch for order ${order._id}: expected ${Math.round(order.totalAmount * 100)}, got ${data.amount}`);
+        if (Math.round(order.totalAmount) !== Number(data.amount)) {
+            console.error(`[safepay] amount mismatch for order ${order._id}: expected ${Math.round(order.totalAmount)}, got ${data.amount}`);
             return res.sendStatus(200);
         }
 
