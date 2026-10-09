@@ -262,8 +262,8 @@ const postSafepayCheckout = async (req, res, next, cart, shippingAddress) => {
 };
 
 // ─── GET /checkout/payment-return ──────────────────────────────────────────────
-// SafePay sends the customer back here after payment. The webhook (below) is the
-// source of truth — this page only decides what the customer sees.
+// SafePay sends the customer back here after payment. If the return URL carries
+// the payment tracker matching our record, the order is marked Paid right here.
 exports.safepayReturn = async (req, res, next) => {
     try {
         let order = null;
@@ -293,6 +293,32 @@ exports.safepayReturn = async (req, res, next) => {
                 if (saveErr) return next(saveErr);
                 return res.redirect('/order-success');
             });
+        }
+
+        const returnTracker = req.query.tracker;
+        if (returnTracker && order.safepayToken && returnTracker === order.safepayToken) {
+            const marked = await Order.findOneAndUpdate(
+                { _id: order._id, paymentStatus: 'Pending' },
+                { $set: { paymentStatus: 'Paid' } },
+                { new: true }
+            );
+
+            if (marked) {
+                for (const item of marked.items) {
+                    await Product.findOneAndUpdate(
+                        { _id: item.product, stock: { $gte: item.quantity } },
+                        { $inc: { stock: -item.quantity } }
+                    );
+                }
+                clearCart(req.session);
+                req.session.lastOrderId = marked._id.toString();
+                req.flash('success', 'Payment received! Your order has been placed successfully.');
+
+                return req.session.save((saveErr) => {
+                    if (saveErr) return next(saveErr);
+                    return res.redirect('/order-success');
+                });
+            }
         }
 
         return res.render('checkout/payment_confirming', {
